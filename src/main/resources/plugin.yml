@@ -1,0 +1,15 @@
+name: ItemRepair
+version: "${project.version}"
+main: de.codeinfection.VoLLi.ItemRepair.ItemRepair
+#commands:
+depend: []
+softdepend: []
+database: false
+website: "http://parallel-universe.de"
+description: ""
+author: "VoLLi"
+authors:
+  - "VoLLi"
+  - "Quick_Wango"
+load: postworld
+#permissions:

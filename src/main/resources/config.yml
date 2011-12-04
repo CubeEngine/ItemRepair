@@ -1,0 +1,7 @@
+pricePerDamage: 0.5
+singleRepairBlock: 42
+allRepairBlock: 41
+cheapRepair:
+  block: 57
+  breakPercentage: 15
+  costPercentage: 70
