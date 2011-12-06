@@ -46,7 +46,7 @@ public class ItemRepairPlayerListener extends PlayerListener
                 String permission = repairBlock.getPermission();
                 if (permission != null)
                 {
-                    if (!player.hasPermission("itemrepair.all") || !player.hasPermission("itemrepair.block." + permission))
+                    if (!player.hasPermission("itemrepair.all") && !player.hasPermission("itemrepair.block." + permission))
                     {
                         return;
                     }
