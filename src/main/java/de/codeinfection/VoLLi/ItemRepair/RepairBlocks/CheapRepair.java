@@ -1,15 +1,14 @@
 package de.codeinfection.VoLLi.ItemRepair.RepairBlocks;
 
 import com.iCo6.iConomy;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.iCo6.system.Holdings;
+import de.codeinfection.VoLLi.ItemRepair.RepairRequest;
+import java.util.Arrays;
 import java.util.Random;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 /**
  *
@@ -20,8 +19,6 @@ public class CheapRepair extends GenericRepairBlock
     private final int breakPercentage;
     private final int costPercentage;
     
-    private List<Player> breakQueue;
-    
     private final Random rand;
     
     public CheapRepair(int blockId, double basePrice, int breakPercentage, int costPercentage)
@@ -30,14 +27,13 @@ public class CheapRepair extends GenericRepairBlock
         this.breakPercentage = breakPercentage;
         this.costPercentage = costPercentage;
         this.rand = new Random(System.currentTimeMillis());
-        this.breakQueue = Collections.synchronizedList(new ArrayList<Player>());
     }
     
     @Override
-    synchronized public List<ItemStack> getItems(Player player)
+    public RepairRequest requestRepair(Player player)
     {
-        List<ItemStack> items = new ArrayList<ItemStack>();
         ItemStack itemInHand = player.getItemInHand();
+        
         if (itemInHand != null) // -> hat ein item in der hand?
         {
             int currentDurability = itemInHand.getDurability();
@@ -45,49 +41,46 @@ public class CheapRepair extends GenericRepairBlock
             {
                 if (currentDurability > 0) // -> ist beschädigt?
                 {
-                    this.price = (double)itemInHand.getDurability() * this.pricePerDamage * ((double)this.costPercentage / 100.0D);
-                    if (this.rand.nextInt(100) > this.breakPercentage)
-                    {
-                        this.durability = 0;
-                        this.successMessage = ChatColor.GREEN + "Dein Item wurde für " + ChatColor.AQUA + iConomy.format(this.price) + ChatColor.GREEN + " (" + ChatColor.RED + this.costPercentage + "% " + ChatColor.GREEN + "des regulären Preises) repariert!";
-                    }
-                    else
-                    {
-                        this.successMessage = "Dein Item ist leider bei der Reparatur zerbrochen.. " + ChatColor.RED + ">>:->";
-                        this.durability = itemInHand.getType().getMaxDurability();
-                        this.breakQueue.add(player);
-                    }
-                    
-                    items.add(itemInHand);
+                    double price = (double)itemInHand.getDurability() * this.pricePerDamage * ((double)this.costPercentage / 100.0D);
+                    return new RepairRequest(player, Arrays.asList(itemInHand), price);
                 }
                 else
                 {
-                    this.failMessage = ChatColor.RED + "Das Item ist nicht beschädigt!";
+                    player.sendMessage(ChatColor.RED + "Das Item ist nicht beschädigt!");
                 }
             }
             else
             {
-                this.failMessage = ChatColor.RED + "Dieses Item kann man nicht reparieren!";
+                player.sendMessage(ChatColor.RED + "Dieses Item kann man nicht reparieren!");
             }
         }
         else
         {
-            this.failMessage = ChatColor.RED + "Du hast kein Item in der Hand!";
+            player.sendMessage(ChatColor.RED + "Du hast kein Item in der Hand!");
         }
-        return items;
+        return null;
     }
-    
+
     @Override
-    public void afterRepair(Player player)
+    public void repair(RepairRequest request)
     {
-        if (this.breakQueue.contains(player))
+        double price = request.getPrice();
+        Holdings holdings = request.getHoldings();
+        Player player = request.getPlayer();
+
+        if (holdings.hasEnough(price))
         {
-            player.playEffect(player.getLocation(), Effect.GHAST_SHRIEK, 0);
-            
-            PlayerInventory inventory = player.getInventory();
-            inventory.clear(inventory.getHeldItemSlot());
-            
-            this.breakQueue.remove(player);
+            if (this.rand.nextInt(100) > this.breakPercentage)
+            {
+                player.sendMessage(ChatColor.GREEN + "Dein Item wurde für " + ChatColor.AQUA + iConomy.format(price) + ChatColor.GREEN + " (" + ChatColor.RED + this.costPercentage + "% " + ChatColor.GREEN + "des regulären Preises) repariert!");
+                repairItems(request.getItems());
+            }
+            else
+            {
+                player.sendMessage("Dein Item ist leider bei der Reparatur zerbrochen.. " + ChatColor.RED + ">>:->");
+                player.playEffect(player.getLocation(), Effect.GHAST_SHRIEK, 0);
+                removeHeldItem(player);
+            }
         }
     }
 }

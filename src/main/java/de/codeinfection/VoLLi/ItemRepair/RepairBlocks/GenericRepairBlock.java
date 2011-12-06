@@ -1,10 +1,10 @@
 package de.codeinfection.VoLLi.ItemRepair.RepairBlocks;
 
 import com.iCo6.iConomy;
-import de.codeinfection.VoLLi.ItemRepair.ItemRepair;
+import com.iCo6.system.Holdings;
 import de.codeinfection.VoLLi.ItemRepair.RepairBlock;
-import java.util.ArrayList;
-import java.util.List;
+import de.codeinfection.VoLLi.ItemRepair.RepairRequest;
+import java.util.Arrays;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -21,40 +21,57 @@ public class GenericRepairBlock extends RepairBlock
     {
         super(blockId);
         this.pricePerDamage = basePrice;
-        this.permission = "singleRepair";
     }
 
-    @Override
-    public List<ItemStack> getItems(Player player)
+    public RepairRequest requestRepair(Player player)
     {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        ItemStack itemInHand = player.getItemInHand();
-        if (itemInHand != null) // -> hat ein item in der hand?
+        if (hasRepairPermission(player, "singleRepair"))
         {
-            int currentDurability = itemInHand.getDurability();
-            if (itemInHand.getType().getMaxDurability() > -1) // -> ist reparierbar?
+            ItemStack itemInHand = player.getItemInHand();
+            if (itemInHand != null) // -> hat ein item in der hand?
             {
-                if (currentDurability > 0) // -> ist beschädigt?
+                int currentDurability = itemInHand.getDurability();
+                if (itemInHand.getType().getMaxDurability() > -1) // -> ist reparierbar?
                 {
-                    this.price = itemInHand.getDurability() * this.pricePerDamage;
-                    items.add(itemInHand);
-                    
-                    this.successMessage = ChatColor.GREEN + "Dein Item wurde für " + ChatColor.AQUA + iConomy.format(this.price) + ChatColor.GREEN + " repariert!";
+                    if (currentDurability > 0) // -> ist beschädigt?
+                    {
+                        double price = itemInHand.getDurability() * this.pricePerDamage * itemInHand.getAmount() * this.getEnchantmentMultiplier(itemInHand);
+                        return new RepairRequest(player, Arrays.asList(itemInHand), price);
+                    }
+                    else
+                    {
+                        player.sendMessage(ChatColor.RED + "Das Item ist nicht beschädigt!");
+                    }
                 }
                 else
                 {
-                    this.failMessage = ChatColor.RED + "Das Item ist nicht beschädigt!";
+                    player.sendMessage(ChatColor.RED + "Dieses Item kann man nicht reparieren!");
                 }
             }
             else
             {
-                this.failMessage = ChatColor.RED + "Dieses Item kann man nicht reparieren!";
+                player.sendMessage(ChatColor.RED + "Du hast kein Item in der Hand!");
             }
         }
         else
         {
-            this.failMessage = ChatColor.RED + "Du hast kein Item in der Hand!";
+            player.sendMessage("You don't have the permission to repair a single item!");
         }
-        return items;
+        return null;
+    }
+
+    @Override
+    public void repair(RepairRequest request)
+    {
+        double price = request.getPrice();
+        Holdings holdings = request.getHoldings();
+        Player player = request.getPlayer();
+        
+        if (holdings.hasEnough(price))
+        {
+            holdings.subtract(price);
+            repairItems(request.getItems());
+            player.sendMessage(ChatColor.GREEN + "Your item has been repaired for " + ChatColor.AQUA + iConomy.format(price));
+        }
     }
 }

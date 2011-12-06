@@ -1,10 +1,14 @@
 package de.codeinfection.VoLLi.ItemRepair;
 
+import com.iCo6.system.Accounts;
+import com.iCo6.system.Holdings;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 /**
  *
@@ -13,71 +17,70 @@ import org.bukkit.inventory.ItemStack;
 public abstract class RepairBlock
 {
     private final static Map<Player, RepairBlock> repairingPlayers = new HashMap<Player, RepairBlock>();
+    private final static Accounts accounts = new Accounts();
     
     public final int blockId;
-    protected double price;
-    protected short durability;
-    protected String successMessage;
-    protected String failMessage;
-    protected String permission;
     
     public RepairBlock(int blockId)
     {
         this.blockId = blockId;
-        this.price = 0;
-        this.durability = 0;
-        this.successMessage = null;
-        this.failMessage = null;
-        this.permission = null;
     }
+
+    public abstract RepairRequest requestRepair(Player player);
     
-    public static boolean hasPlayerStartedRepairing(Player player)
+    public abstract void repair(RepairRequest request);
+
+
+    /*
+     * Utilities
+     */
+    
+    public static boolean hasRepairPermission(Player player, String permission)
     {
-        return repairingPlayers.containsKey(player);
+        return (!player.hasPermission("itemrepair.all") && !player.hasPermission("itemrepair.block." + permission));
     }
-    
-    public static void addRepairingPlayer(Player player, RepairBlock repairBlock)
-    {
-        repairingPlayers.put(player, repairBlock);
-    }
-    
-    public static void removeRepairingPlayer(Player player)
-    {
-        repairingPlayers.remove(player);
-    }
-    
-    public abstract List<ItemStack> getItems(Player player);
-    
-    public final String getSuccessMessage()
-    {
-        return this.successMessage;
-    }
-    
-    public final String getFailMessage()
-    {
-        return this.failMessage;
-    }
-    
-    public final double getPrice()
-    {
-        return this.price;
-    }
-    
-    public final short getDurability()
-    {
-        return this.durability;
-    }
-    
-    public final String getPermission()
-    {
-        return this.permission;
-    }
-    
-    public void afterRepair(Player player)
-    {}
     
     public static boolean isRepairable(ItemStack item)
     {
         return (item.getType().getMaxDurability() > -1);
+    }
+
+    public static double getEnchantmentMultiplier(ItemStack item)
+    {
+        double enchantmentLevel = 0;
+        for (Map.Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet())
+        {
+            enchantmentLevel += entry.getValue();
+        }
+
+        double enchantmentMultiplier = 6D * Math.pow(2, enchantmentLevel);
+
+        enchantmentMultiplier = enchantmentMultiplier / 100D + 1D;
+
+        return enchantmentMultiplier;
+    }
+
+    public static void repairItems(List<ItemStack> items)
+    {
+        repairItems(items, (short)0);
+    }
+
+    public static void repairItems(List<ItemStack> items, short durability)
+    {
+        for (ItemStack item : items)
+        {
+            item.setDurability(durability);
+        }
+    }
+
+    public static Holdings getHoldings(Player player)
+    {
+        return accounts.get(player.getName()).getHoldings();
+    }
+
+    public static void removeHeldItem(Player player)
+    {
+        PlayerInventory inventory = player.getInventory();
+        inventory.clear(inventory.getHeldItemSlot());
     }
 }

@@ -1,16 +1,12 @@
 package de.codeinfection.VoLLi.ItemRepair;
 
 import com.iCo6.iConomy;
-import com.iCo6.system.Accounts;
-import com.iCo6.system.Holdings;
-import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
-import org.bukkit.inventory.ItemStack;
 
 /**
  *
@@ -21,14 +17,10 @@ public class ItemRepairPlayerListener extends PlayerListener
     private final ItemRepairConfiguration config;
     private final RepairBlockManager rbm;
     
-    protected final Accounts accounts;
-    
     public ItemRepairPlayerListener(ItemRepairConfiguration config, iConomy iconomy)
     {
         this.config = config;
         this.rbm = RepairBlockManager.getInstance();
-        
-        this.accounts = new Accounts();
     }
     
     @Override
@@ -38,79 +30,72 @@ public class ItemRepairPlayerListener extends PlayerListener
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
         {
             Block block = event.getClickedBlock();
-
-            int blockId = block.getType().getId();
-            RepairBlock repairBlock = this.rbm.getBlock(blockId);
-            if (repairBlock != null)
+            if (block == null)
             {
-                String permission = repairBlock.getPermission();
-                if (permission != null)
+                return;
+            }
+
+            if (ItemRepair.addBlockChoiceRequests.contains(player))
+            {
+                ItemRepair.debug("Player " + player.getName() + " has to choose a block to add!");
+                ItemRepair.addBlockChoiceRequests.remove(player);
+                if (this.rbm.attachRepairBlock(block))
                 {
-                    if (!player.hasPermission("itemrepair.all") && !player.hasPermission("itemrepair.block." + permission))
-                    {
-                        return;
-                    }
-                }
-                
-                List<ItemStack> items = repairBlock.getItems(player);
-                if (!items.isEmpty())
-                {
-                    double price = repairBlock.getPrice();
-                    Holdings holding = this.accounts.get(player.getName()).getHoldings();
-
-                    if (RepairBlock.hasPlayerStartedRepairing(player))
-                    {
-                        ItemRepair.debug("Price: " + price);
-
-                        if (holding.hasEnough(price))
-                        {
-                            for (ItemStack item : items)
-                            {
-                                item.setDurability(repairBlock.getDurability());
-                            }
-                            player.updateInventory();
-                            holding.subtract(price);
-                            holding.showBalance(player);
-                            
-                            repairBlock.afterRepair(player);
-
-                            String successMessage = repairBlock.getSuccessMessage();
-                            if (successMessage != null)
-                            {
-                                player.sendMessage(successMessage);
-                            }
-                        }
-                        else
-                        {
-                            player.sendMessage(ChatColor.RED + "Du hast nicht genug Geld!");
-                        }
-                        
-                        RepairBlock.removeRepairingPlayer(player);
-                    }
-                    else
-                    {
-                        RepairBlock.addRepairingPlayer(player, repairBlock);
-                        player.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_RED + "ItemRepair" + ChatColor.GREEN + "]");
-                        player.sendMessage(ChatColor.AQUA + "Rechtsklicke" + ChatColor.WHITE + " noch einmal um die Reparatur auszuführen");
-                        player.sendMessage("Die Reparatur würde " + ChatColor.AQUA + iConomy.format(repairBlock.price) + ChatColor.WHITE + " kosten.");
-                        player.sendMessage("Du hast aktuell " + ChatColor.AQUA + iConomy.format(holding.getBalance()));
-                    }
+                    player.sendMessage(ChatColor.GREEN + "Repair block successfully added!");
                 }
                 else
                 {
-                    String failMessage = repairBlock.getFailMessage();
-                    if (failMessage != null)
-                    {
-                        player.sendMessage(failMessage);
-                    }
+                    player.sendMessage(ChatColor.RED + "This block can't be used as a repair block!");
                 }
-                return;
             }
-        }
-        if (RepairBlock.hasPlayerStartedRepairing(player))
-        {
-            player.sendMessage(ChatColor.YELLOW + "Die Reparatur wurde abgebrochen!");
-            RepairBlock.removeRepairingPlayer(player);
+            else if (ItemRepair.removeBlockChoiceRequests.contains(player))
+            {
+                ItemRepair.debug("Player " + player.getName() + " has to choose a block to remove!");
+                ItemRepair.removeBlockChoiceRequests.remove(player);
+                if (this.rbm.detachRepairBlock(block))
+                {
+                    player.sendMessage(ChatColor.GREEN + "Repair block successfully removed!");
+                }
+                else
+                {
+                    player.sendMessage(ChatColor.RED + "That block is not a repair block!");
+                }
+            }
+            else
+            {
+                ItemRepair.debug("Player " + player.getName() + " rightclicked a block!");
+                RepairBlock repairBlock = this.rbm.getRepairBlock(block);
+                if (repairBlock != null)
+                {
+                    ItemRepair.debug("Repair block found! - " + repairBlock.getClass().getSimpleName());
+                    if (RepairRequest.hasPlayerRequestedRepair(player))
+                    {
+                        repairBlock.repair(RepairRequest.getRepairRequest(player));
+
+                        player.updateInventory();
+
+                        RepairRequest.removeRepairRequest(player);
+                    }
+                    else
+                    {
+                        RepairRequest request = repairBlock.requestRepair(player);
+                        if (request != null)
+                        {
+                            player.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_RED + "ItemRepair" + ChatColor.GREEN + "]");
+                            player.sendMessage(ChatColor.AQUA + "Rechtsklicke" + ChatColor.WHITE + " noch einmal um die Reparatur auszuführen");
+                            player.sendMessage("Die Reparatur würde " + ChatColor.AQUA + iConomy.format(request.getPrice()) + ChatColor.WHITE + " kosten.");
+                            player.sendMessage("Du hast aktuell " + ChatColor.AQUA + iConomy.format(request.getHoldings().getBalance()));
+                            RepairRequest.requestRepair(player, request);
+                        }
+                    }
+                    return;
+                }
+            }
+            if (RepairRequest.hasPlayerRequestedRepair(player))
+            {
+                player.sendMessage(ChatColor.YELLOW + "Die Reparatur wurde abgebrochen!");
+                RepairRequest.removeRepairRequest(player);
+            }
         }
     }
 }

@@ -1,15 +1,19 @@
 name: ItemRepair
 version: "${project.version}"
 main: de.codeinfection.VoLLi.ItemRepair.ItemRepair
-#commands:
-depend: []
+commands:
+  itemrepair:
+    usage: "/<command> <add|remove>"
+    description: "Command to manage Repair Blocks"
+depend:
+  - iConomy
 softdepend: []
 database: false
 website: "http://parallel-universe.de"
 description: ""
 author: "VoLLi"
 authors:
-  - "VoLLi"
   - "Quick_Wango"
+  - "VoLLi"
 load: postworld
 #permissions:

@@ -1,7 +1,14 @@
-pricePerDamage: 0.5
-singleRepairBlock: 42
-allRepairBlock: 41
-cheapRepair:
-  block: 57
-  breakPercentage: 15
-  costPercentage: 70
+price:
+  perDamage: 0.5
+  multiplicator:
+    base: 2
+    factor: 6
+repairblocks:
+  singleRepair:
+    block: 42
+  completeRepair:
+    block: 41
+  cheapRepair:
+    block: 57
+    breakPercentage: 15
+    costPercentage: 70
