@@ -82,7 +82,7 @@ public class ItemRepair extends JavaPlugin
 
         RepairBlockManager rbm = RepairBlockManager.getInstance();
                 rbm.setPersister(new RepairBlockPersister(new File(dataFolder, "blocks.yml")))
-                .addRepairBlock(new SinglecRepair(
+                .addRepairBlock(new SingleRepair(
                         this.config.repairBlocks_singleRepair_block,
                         this.config
                 ))

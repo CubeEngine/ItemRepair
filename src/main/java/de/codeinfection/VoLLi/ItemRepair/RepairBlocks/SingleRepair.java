@@ -15,22 +15,22 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author VoLLi
  */
-public class SinglecRepair extends RepairBlock
+public class SingleRepair extends RepairBlock
 {
     private final ItemRepairConfiguration config;
     
-    public SinglecRepair(Material material, ItemRepairConfiguration config)
+    public SingleRepair(Material material, ItemRepairConfiguration config)
     {
         super(material);
         this.config = config;
     }
 
-    public SinglecRepair(int blockId, ItemRepairConfiguration config)
+    public SingleRepair(int blockId, ItemRepairConfiguration config)
     {
         this(Material.getMaterial(blockId), config);
     }
 
-    public SinglecRepair(String blockName, ItemRepairConfiguration config)
+    public SingleRepair(String blockName, ItemRepairConfiguration config)
     {
         this(Material.getMaterial(blockName), config);
     }
