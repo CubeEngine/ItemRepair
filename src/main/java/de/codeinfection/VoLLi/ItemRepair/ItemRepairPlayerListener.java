@@ -14,12 +14,10 @@ import org.bukkit.event.player.PlayerListener;
  */
 public class ItemRepairPlayerListener extends PlayerListener
 {
-    private final ItemRepairConfiguration config;
     private final RepairBlockManager rbm;
     
-    public ItemRepairPlayerListener(ItemRepairConfiguration config, iConomy iconomy)
+    public ItemRepairPlayerListener()
     {
-        this.config = config;
         this.rbm = RepairBlockManager.getInstance();
     }
     
@@ -39,13 +37,20 @@ public class ItemRepairPlayerListener extends PlayerListener
             {
                 ItemRepair.debug("Player " + player.getName() + " has to choose a block to add!");
                 ItemRepair.addBlockChoiceRequests.remove(player);
-                if (this.rbm.attachRepairBlock(block))
+                if (!this.rbm.isRepairBlock(block))
                 {
-                    player.sendMessage(ChatColor.GREEN + "Repair block successfully added!");
+                    if (this.rbm.attachRepairBlock(block))
+                    {
+                        player.sendMessage(ChatColor.GREEN + "Repair block successfully added!");
+                    }
+                    else
+                    {
+                        player.sendMessage(ChatColor.RED + "This block can't be used as a repair block!");
+                    }
                 }
                 else
                 {
-                    player.sendMessage(ChatColor.RED + "This block can't be used as a repair block!");
+                    player.sendMessage(ChatColor.RED + "This block is already a repair block!");
                 }
             }
             else if (ItemRepair.removeBlockChoiceRequests.contains(player))
@@ -91,11 +96,11 @@ public class ItemRepairPlayerListener extends PlayerListener
                     return;
                 }
             }
-            if (RepairRequest.hasPlayerRequestedRepair(player))
-            {
-                player.sendMessage(ChatColor.YELLOW + "Die Reparatur wurde abgebrochen!");
-                RepairRequest.removeRepairRequest(player);
-            }
+        }
+        if (RepairRequest.hasPlayerRequestedRepair(player))
+        {
+            player.sendMessage(ChatColor.YELLOW + "Die Reparatur wurde abgebrochen!");
+            RepairRequest.removeRepairRequest(player);
         }
     }
 }

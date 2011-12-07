@@ -2,9 +2,9 @@ package de.codeinfection.VoLLi.ItemRepair;
 
 import com.iCo6.system.Accounts;
 import com.iCo6.system.Holdings;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -16,14 +16,37 @@ import org.bukkit.inventory.PlayerInventory;
  */
 public abstract class RepairBlock
 {
-    private final static Map<Player, RepairBlock> repairingPlayers = new HashMap<Player, RepairBlock>();
     private final static Accounts accounts = new Accounts();
     
-    public final int blockId;
+    public final Material material;
     
-    public RepairBlock(int blockId)
+    public RepairBlock(Material material)
     {
-        this.blockId = blockId;
+        if (material != null)
+        {
+            if (material.isBlock())
+            {
+                this.material = material;
+            }
+            else
+            {
+                throw new IllegalArgumentException("material must be block!");
+            }
+        }
+        else
+        {
+            throw new IllegalArgumentException("material must not be null!");
+        }
+    }
+
+    public RepairBlock(String material)
+    {
+        this(Material.getMaterial(material));
+    }
+
+    public RepairBlock(int material)
+    {
+        this(Material.getMaterial(material));
     }
 
     public abstract RepairRequest requestRepair(Player player);
@@ -37,7 +60,7 @@ public abstract class RepairBlock
     
     public static boolean hasRepairPermission(Player player, String permission)
     {
-        return (!player.hasPermission("itemrepair.all") && !player.hasPermission("itemrepair.block." + permission));
+        return (player.hasPermission("itemrepair.allblocks") || player.hasPermission("itemrepair.block." + permission));
     }
     
     public static boolean isRepairable(ItemStack item)
@@ -45,7 +68,7 @@ public abstract class RepairBlock
         return (item.getType().getMaxDurability() > -1);
     }
 
-    public static double getEnchantmentMultiplier(ItemStack item)
+    public static double getEnchantmentMultiplier(ItemStack item, double factor, double base)
     {
         double enchantmentLevel = 0;
         for (Map.Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet())
@@ -53,11 +76,18 @@ public abstract class RepairBlock
             enchantmentLevel += entry.getValue();
         }
 
-        double enchantmentMultiplier = 6D * Math.pow(2, enchantmentLevel);
+        if (enchantmentLevel > 0)
+        {
+            double enchantmentMultiplier = factor * Math.pow(base, enchantmentLevel);
 
-        enchantmentMultiplier = enchantmentMultiplier / 100D + 1D;
+            enchantmentMultiplier = enchantmentMultiplier / 100D + 1D;
 
-        return enchantmentMultiplier;
+            return enchantmentMultiplier;
+        }
+        else
+        {
+            return 1D;
+        }
     }
 
     public static void repairItems(List<ItemStack> items)
@@ -67,9 +97,11 @@ public abstract class RepairBlock
 
     public static void repairItems(List<ItemStack> items, short durability)
     {
+        ItemRepair.debug("Items to repair: " + items.size());
         for (ItemStack item : items)
         {
             item.setDurability(durability);
+            ItemRepair.debug("Repaired itemstack: " + item.getType().toString());
         }
     }
 

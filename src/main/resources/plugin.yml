@@ -16,4 +16,19 @@ authors:
   - "Quick_Wango"
   - "VoLLi"
 load: postworld
-#permissions:
+permissions:
+  itemrepair.allblocks:
+    description: "Allows the player to use all repair blocks"
+    default: op
+  itemrepair.commands.*:
+    description: "Allows the player to use all commands"
+    default: op
+    children:
+      itemrepair.commands.add: true
+      itemrepair.commands.remove: true
+  itemrepair.commands.add:
+    description: "Allows the player to add repair blocks"
+    default: op
+  itemrepair.commands.remove:
+    description: "Allows the player to remove repair blocks"
+    default: op

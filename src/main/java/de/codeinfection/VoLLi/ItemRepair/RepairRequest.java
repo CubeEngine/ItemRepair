@@ -17,12 +17,16 @@ public class RepairRequest
     private final Holdings holdings;
     private final List<ItemStack> items;
     private final double price;
+    private final int heldItemSlot;
+    private final ItemStack heldItem;
 
     private final static Map<Player, RepairRequest> repairRequests = new HashMap<Player, RepairRequest>();
 
     public RepairRequest(Player player, List<ItemStack> items, double price)
     {
         this.player = player;
+        this.heldItem = player.getItemInHand();
+        this.heldItemSlot = player.getInventory().getHeldItemSlot();
         this.holdings = RepairBlock.getHoldings(player);
         this.items = items;
         this.price = price;
@@ -31,6 +35,16 @@ public class RepairRequest
     public Player getPlayer()
     {
         return this.player;
+    }
+
+    public int getHeldItemSlot()
+    {
+        return this.heldItemSlot;
+    }
+
+    public ItemStack getHeldItem()
+    {
+        return this.heldItem;
     }
 
     public Holdings getHoldings()

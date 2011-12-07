@@ -6,9 +6,7 @@ import de.codeinfection.VoLLi.ItemRepair.ItemRepairConfiguration;
 import de.codeinfection.VoLLi.ItemRepair.RepairBlock;
 import de.codeinfection.VoLLi.ItemRepair.RepairRequest;
 import java.util.Arrays;
-import java.util.Random;
 import org.bukkit.ChatColor;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -17,33 +15,29 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author VoLLi
  */
-public class CheapRepair extends RepairBlock
+public class SinglecRepair extends RepairBlock
 {
     private final ItemRepairConfiguration config;
     
-    private final Random rand;
-    
-    public CheapRepair(Material material, ItemRepairConfiguration config)
+    public SinglecRepair(Material material, ItemRepairConfiguration config)
     {
         super(material);
         this.config = config;
-        this.rand = new Random(System.currentTimeMillis());
     }
 
-    public CheapRepair(int blockId, ItemRepairConfiguration config)
+    public SinglecRepair(int blockId, ItemRepairConfiguration config)
     {
         this(Material.getMaterial(blockId), config);
     }
 
-    public CheapRepair(String blockName, ItemRepairConfiguration config)
+    public SinglecRepair(String blockName, ItemRepairConfiguration config)
     {
         this(Material.getMaterial(blockName), config);
     }
-    
-    @Override
+
     public RepairRequest requestRepair(Player player)
     {
-        if (hasRepairPermission(player, "cheapRepair"))
+        if (hasRepairPermission(player, "singleRepair"))
         {
             ItemStack itemInHand = player.getItemInHand();
             Material itemType = itemInHand.getType();
@@ -58,7 +52,7 @@ public class CheapRepair extends RepairBlock
                         price *= this.config.price_perDamage;
                         price *= itemInHand.getAmount();
                         price *= getEnchantmentMultiplier(itemInHand, this.config.price_enchantMultiplier_factor, this.config.price_enchantMultiplier_base);
-                        price *= (this.config.repairBlocks_cheapRepair_costPercentage / 100.0D);
+
                         return new RepairRequest(player, Arrays.asList(itemInHand), price);
                     }
                     else
@@ -78,7 +72,7 @@ public class CheapRepair extends RepairBlock
         }
         else
         {
-            player.sendMessage(ChatColor.RED + "You don't have the permission to repair your item cheap!");
+            player.sendMessage(ChatColor.RED + "You don't have the permission to repair a single item!");
         }
         return null;
     }
@@ -99,17 +93,10 @@ public class CheapRepair extends RepairBlock
                 {
                     if (holdings.hasEnough(price))
                     {
-                        if (this.rand.nextInt(100) > this.config.repairBlocks_cheapRepair_breakPercentage)
-                        {
-                            player.sendMessage(ChatColor.GREEN + "Dein Item wurde für " + ChatColor.AQUA + iConomy.format(price) + ChatColor.GREEN + " (" + ChatColor.RED + this.config.repairBlocks_cheapRepair_costPercentage + "% " + ChatColor.GREEN + "des regulären Preises) repariert!");
-                            repairItems(request.getItems());
-                        }
-                        else
-                        {
-                            player.sendMessage("Dein Item ist leider bei der Reparatur zerbrochen.. " + ChatColor.RED + ">>:->");
-                            player.playEffect(player.getLocation(), Effect.GHAST_SHRIEK, 0);
-                            removeHeldItem(player);
-                        }
+                        holdings.subtract(price);
+                        //itemInHand.setDurability((short)0);
+                        request.getItems().get(0).setDurability((short)0);
+                        player.sendMessage(ChatColor.GREEN + "Your item has been repaired for " + ChatColor.AQUA + iConomy.format(price));
                     }
                     else
                     {

@@ -1,9 +1,9 @@
 price:
   perDamage: 0.5
-  multiplicator:
-    base: 2
-    factor: 6
-repairblocks:
+  enchantMultiplier:
+    base: 2.0
+    factor: 6.0
+repairBlocks:
   singleRepair:
     block: 42
   completeRepair:

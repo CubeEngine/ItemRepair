@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.Location;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.Configuration;
@@ -77,23 +78,25 @@ public class ItemRepair extends JavaPlugin
         this.config = new ItemRepairConfiguration(configuration);
         this.saveConfig();
         
-        RepairBlockManager.getInstance()
-                .addRepairBlock(new GenericRepairBlock(
+        this.config.dump();
+
+        RepairBlockManager rbm = RepairBlockManager.getInstance();
+                rbm.setPersister(new RepairBlockPersister(new File(dataFolder, "blocks.yml")))
+                .addRepairBlock(new SinglecRepair(
                         this.config.repairBlocks_singleRepair_block,
-                        this.config.price_perDamage
+                        this.config
                 ))
-                .addRepairBlock(new GenericMultiRepairBlock(
+                .addRepairBlock(new CompleteRepair(
                         this.config.repairBlocks_completeRepair_block,
-                        this.config.price_perDamage
+                        this.config
                 ))
                 .addRepairBlock(new CheapRepair(
                         this.config.repairBlocks_cheapRepair_block,
-                        this.config.price_perDamage,
-                        this.config.repairBlocks_cheapRepair_breakPercentage,
-                        this.config.repairBlocks_cheapRepair_costPercentage
-                ));
-        
-        this.pm.registerEvent(Type.PLAYER_INTERACT, new ItemRepairPlayerListener(config, iconomy), Priority.Low, this);
+                        this.config
+                ))
+                .loadBlocks();
+
+        this.pm.registerEvent(Type.PLAYER_INTERACT, new ItemRepairPlayerListener(), Priority.Low, this);
 
         this.getCommand("itemrepair").setExecutor(new ItemrepairCommand());
 
