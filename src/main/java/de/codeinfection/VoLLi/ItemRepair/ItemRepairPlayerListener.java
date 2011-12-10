@@ -1,6 +1,5 @@
 package de.codeinfection.VoLLi.ItemRepair;
 
-import com.iCo6.iConomy;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.ChatColor;
@@ -40,7 +39,6 @@ public class ItemRepairPlayerListener extends PlayerListener
 
             if (ItemRepair.addBlockChoiceRequests.contains(player))
             {
-                ItemRepair.debug("Player " + player.getName() + " has to choose a block to add!");
                 ItemRepair.addBlockChoiceRequests.remove(player);
                 if (!this.rbm.isRepairBlock(block))
                 {
@@ -60,7 +58,6 @@ public class ItemRepairPlayerListener extends PlayerListener
             }
             else if (ItemRepair.removeBlockChoiceRequests.contains(player))
             {
-                ItemRepair.debug("Player " + player.getName() + " has to choose a block to remove!");
                 ItemRepair.removeBlockChoiceRequests.remove(player);
                 if (this.rbm.detachRepairBlock(block))
                 {
@@ -73,7 +70,6 @@ public class ItemRepairPlayerListener extends PlayerListener
             }
             else
             {
-                ItemRepair.debug("Player " + player.getName() + " rightclicked a block!");
                 RepairBlock repairBlock = this.rbm.getRepairBlock(block);
                 if (repairBlock != null)
                 {
@@ -96,10 +92,6 @@ public class ItemRepairPlayerListener extends PlayerListener
                         RepairRequest request = repairBlock.requestRepair(player);
                         if (request != null)
                         {
-                            player.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_RED + "ItemRepair" + ChatColor.GREEN + "]");
-                            player.sendMessage(ChatColor.AQUA + "Rechtsklicke" + ChatColor.WHITE + " noch einmal um die Reparatur auszuführen");
-                            player.sendMessage("Die Reparatur würde " + ChatColor.AQUA + iConomy.format(request.getPrice()) + ChatColor.WHITE + " kosten.");
-                            player.sendMessage("Du hast aktuell " + ChatColor.AQUA + iConomy.format(request.getHoldings().getBalance()));
                             this.requestRepair(player, request);
                             return;
                         }
@@ -114,12 +106,12 @@ public class ItemRepairPlayerListener extends PlayerListener
         }
     }
 
-    public boolean hasPlayerRequestedRepair(Player player)
+    private boolean hasPlayerRequestedRepair(Player player)
     {
         return repairRequests.containsKey(player);
     }
 
-    public void requestRepair(Player player, RepairRequest request)
+    private void requestRepair(Player player, RepairRequest request)
     {
         if (!hasPlayerRequestedRepair(player))
         {
@@ -127,12 +119,12 @@ public class ItemRepairPlayerListener extends PlayerListener
         }
     }
 
-    public void removeRepairRequest(Player player)
+    private void removeRepairRequest(Player player)
     {
         repairRequests.remove(player);
     }
 
-    public RepairRequest getRepairRequest(Player player)
+    private RepairRequest getRepairRequest(Player player)
     {
         return repairRequests.get(player);
     }

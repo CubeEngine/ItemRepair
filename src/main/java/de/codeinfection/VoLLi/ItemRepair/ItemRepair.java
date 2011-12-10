@@ -103,7 +103,6 @@ public class ItemRepair extends JavaPlugin
 
     public void onDisable()
     {
-
         log("Version " + this.getDescription().getVersion() + " disabled");
     }
 

@@ -59,6 +59,12 @@ public class CheapRepair extends RepairBlock
                         price *= itemInHand.getAmount();
                         price *= getEnchantmentMultiplier(itemInHand, this.config.price_enchantMultiplier_factor, this.config.price_enchantMultiplier_base);
                         price *= (this.config.repairBlocks_cheapRepair_costPercentage / 100.0D);
+                        
+                        player.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_RED + "ItemRepair" + ChatColor.GREEN + "]");
+                        player.sendMessage(ChatColor.AQUA + "Rightclick" + ChatColor.WHITE + " again to repair your item, with a chance of breaking it.");
+                        player.sendMessage("The repair would cost " + ChatColor.AQUA + iConomy.format(price) + ChatColor.WHITE + ".");
+                        player.sendMessage("You have currently " + ChatColor.AQUA + iConomy.format(getHoldings(player).getBalance()));
+
                         return new RepairRequest(this, player, Arrays.asList(itemInHand), price);
                     }
                     else

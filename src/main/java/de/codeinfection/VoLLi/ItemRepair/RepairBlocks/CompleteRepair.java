@@ -67,6 +67,12 @@ public class CompleteRepair extends RepairBlock
 
                 if (items.size() > 0)
                 {
+
+                    player.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_RED + "ItemRepair" + ChatColor.GREEN + "]");
+                    player.sendMessage(ChatColor.AQUA + "Rightclick" + ChatColor.WHITE + " again to repair all your damaged items.");
+                    player.sendMessage("The repair would cost " + ChatColor.AQUA + iConomy.format(price) + ChatColor.WHITE + ".");
+                    player.sendMessage("You have currently " + ChatColor.AQUA + iConomy.format(getHoldings(player).getBalance()));
+
                     return new RepairRequest(this, player, items, price);
                 }
                 else

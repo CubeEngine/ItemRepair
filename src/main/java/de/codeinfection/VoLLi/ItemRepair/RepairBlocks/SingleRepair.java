@@ -2,11 +2,10 @@ package de.codeinfection.VoLLi.ItemRepair.RepairBlocks;
 
 import com.iCo6.iConomy;
 import com.iCo6.system.Holdings;
-import de.codeinfection.VoLLi.ItemRepair.ItemRepair;
 import de.codeinfection.VoLLi.ItemRepair.ItemRepairConfiguration;
 import de.codeinfection.VoLLi.ItemRepair.RepairBlock;
 import de.codeinfection.VoLLi.ItemRepair.RepairRequest;
-import java.util.Arrays;
+import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -54,7 +53,15 @@ public class SingleRepair extends RepairBlock
                         price *= itemInHand.getAmount();
                         price *= getEnchantmentMultiplier(itemInHand, this.config.price_enchantMultiplier_factor, this.config.price_enchantMultiplier_base);
 
-                        RepairRequest request = new RepairRequest(this, player, Arrays.asList(itemInHand), price);
+                        ArrayList<ItemStack> items = new ArrayList<ItemStack>(1);
+                        items.add(itemInHand);
+
+                        player.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_RED + "ItemRepair" + ChatColor.GREEN + "]");
+                        player.sendMessage(ChatColor.AQUA + "Rightclick" + ChatColor.WHITE + " again to repair your item.");
+                        player.sendMessage("The repair would cost " + ChatColor.AQUA + iConomy.format(price) + ChatColor.WHITE + ".");
+                        player.sendMessage("You have currently " + ChatColor.AQUA + iConomy.format(getHoldings(player).getBalance()));
+
+                        RepairRequest request = new RepairRequest(this, player, items, price);
 
                         return request;
                     }
@@ -97,12 +104,8 @@ public class SingleRepair extends RepairBlock
                     if (holdings.hasEnough(price))
                     {
                         holdings.subtract(price);
-                        ItemRepair.debug("ItemInHand pointer: " + (player.getItemInHand() == request.getHeldItem() ? "OK" : "FUCK!!"));
-
-                        request.getHeldItem().setDurability((short)0);
-                        request.getHeldItem().setAmount(request.getHeldItem().getAmount() + 1);
-                        //itemInHand.setDurability((short)0);
-                        //request.getItems().get(0).setDurability((short)0);
+                        repairItems(request.getItems());
+                        
                         player.sendMessage(ChatColor.GREEN + "Your item has been repaired for " + ChatColor.AQUA + iConomy.format(price));
                     }
                     else
