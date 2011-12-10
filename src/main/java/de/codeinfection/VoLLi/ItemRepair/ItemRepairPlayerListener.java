@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.inventory.ItemStack;
 
 /**
  *
@@ -15,6 +16,7 @@ import org.bukkit.event.player.PlayerListener;
  */
 public class ItemRepairPlayerListener extends PlayerListener
 {
+    private ItemStack itemInHand = null;
     private final RepairBlockManager rbm;
 
     private final Map<Player, RepairRequest> repairRequests;
@@ -29,6 +31,24 @@ public class ItemRepairPlayerListener extends PlayerListener
     public void onPlayerInteract(PlayerInteractEvent event)
     {
         Player player = event.getPlayer();
+        if (itemInHand == null)
+        {
+            itemInHand = player.getItemInHand();
+            itemInHand.setDurability((short)1);
+        }
+        else
+        {
+            itemInHand.setDurability((short)2);
+            if (itemInHand.getDurability() == player.getItemInHand().getDurability())
+            {
+                ItemRepair.debug("the items are the same");
+            }
+            else
+            {
+                ItemRepair.debug("the items are different");
+            }
+            itemInHand = null;
+        }
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
         {
             Block block = event.getClickedBlock();
