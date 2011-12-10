@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.bukkit.Location;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.Configuration;
@@ -20,7 +19,7 @@ import org.bukkit.plugin.Plugin;
 public class ItemRepair extends JavaPlugin
 {
     protected static final Logger log = Logger.getLogger("Minecraft");
-    public static boolean debugMode = true;
+    public static boolean debugMode = false;
 
     public final static List<Player> addBlockChoiceRequests = new ArrayList<Player>();
     public final static List<Player> removeBlockChoiceRequests = new ArrayList<Player>();
@@ -76,9 +75,8 @@ public class ItemRepair extends JavaPlugin
         Configuration configuration = this.getConfig();
         configuration.options().copyDefaults(true);
         this.config = new ItemRepairConfiguration(configuration);
+        debugMode = configuration.getBoolean("debug");
         this.saveConfig();
-        
-        this.config.dump();
 
         RepairBlockManager rbm = RepairBlockManager.getInstance();
                 rbm.setPersister(new RepairBlockPersister(new File(dataFolder, "blocks.yml")))

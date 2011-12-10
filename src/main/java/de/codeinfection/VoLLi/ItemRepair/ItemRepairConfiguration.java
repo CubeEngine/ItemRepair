@@ -35,25 +35,4 @@ public class ItemRepairConfiguration
         this.repairBlocks_cheapRepair_breakPercentage   = config.getInt("repairBlocks.cheapRepair.breakPercentage");
         this.repairBlocks_cheapRepair_costPercentage    = config.getInt("repairBlocks.cheapRepair.costPercentage");
     }
-
-    public void dump()
-    {
-        if (ItemRepair.debugMode)
-        {
-            ItemRepair.debug(" ");
-            ItemRepair.debug("Configuration dump:");
-            for (Field field : this.getClass().getFields())
-            {
-                try
-                {
-                    ItemRepair.debug("Field: " + field.getName());
-                    ItemRepair.debug("Value: " + String.valueOf(field.get(this)));
-                }
-                catch (Exception e)
-                {
-                    ItemRepair.debug("Failed to read the value: " + e.getClass().getSimpleName());
-                }
-            }
-        }
-    }
 }

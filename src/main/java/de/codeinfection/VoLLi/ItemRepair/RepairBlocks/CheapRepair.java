@@ -59,21 +59,21 @@ public class CheapRepair extends RepairBlock
                         price *= itemInHand.getAmount();
                         price *= getEnchantmentMultiplier(itemInHand, this.config.price_enchantMultiplier_factor, this.config.price_enchantMultiplier_base);
                         price *= (this.config.repairBlocks_cheapRepair_costPercentage / 100.0D);
-                        return new RepairRequest(player, Arrays.asList(itemInHand), price);
+                        return new RepairRequest(this, player, Arrays.asList(itemInHand), price);
                     }
                     else
                     {
-                        player.sendMessage(ChatColor.RED + "Das Item ist nicht beschädigt!");
+                        player.sendMessage(ChatColor.RED + "This item isn't damaged!");
                     }
                 }
                 else
                 {
-                    player.sendMessage(ChatColor.RED + "Dieses Item kann man nicht reparieren!");
+                    player.sendMessage(ChatColor.RED + "This item can't be repaired!");
                 }
             }
             else
             {
-                player.sendMessage(ChatColor.RED + "Du hast kein Item in der Hand!");
+                player.sendMessage(ChatColor.RED + "You don't have a item in your hand!");
             }
         }
         else

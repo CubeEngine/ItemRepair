@@ -1,6 +1,8 @@
 package de.codeinfection.VoLLi.ItemRepair;
 
 import com.iCo6.iConomy;
+import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -15,10 +17,13 @@ import org.bukkit.event.player.PlayerListener;
 public class ItemRepairPlayerListener extends PlayerListener
 {
     private final RepairBlockManager rbm;
+
+    private final Map<Player, RepairRequest> repairRequests;
     
     public ItemRepairPlayerListener()
     {
         this.rbm = RepairBlockManager.getInstance();
+        this.repairRequests = new HashMap<Player, RepairRequest>();
     }
     
     @Override
@@ -73,13 +78,18 @@ public class ItemRepairPlayerListener extends PlayerListener
                 if (repairBlock != null)
                 {
                     ItemRepair.debug("Repair block found! - " + repairBlock.getClass().getSimpleName());
-                    if (RepairRequest.hasPlayerRequestedRepair(player))
+                    if (this.hasPlayerRequestedRepair(player))
                     {
-                        repairBlock.repair(RepairRequest.getRepairRequest(player));
+                        RepairRequest request = this.getRepairRequest(player);
+                        if (request.getRepairBlock() == repairBlock)
+                        {
+                            repairBlock.repair(request);
 
-                        player.updateInventory();
+                            player.updateInventory();
 
-                        RepairRequest.removeRepairRequest(player);
+                            this.removeRepairRequest(player);
+                            return;
+                        }
                     }
                     else
                     {
@@ -90,17 +100,40 @@ public class ItemRepairPlayerListener extends PlayerListener
                             player.sendMessage(ChatColor.AQUA + "Rechtsklicke" + ChatColor.WHITE + " noch einmal um die Reparatur auszuführen");
                             player.sendMessage("Die Reparatur würde " + ChatColor.AQUA + iConomy.format(request.getPrice()) + ChatColor.WHITE + " kosten.");
                             player.sendMessage("Du hast aktuell " + ChatColor.AQUA + iConomy.format(request.getHoldings().getBalance()));
-                            RepairRequest.requestRepair(player, request);
+                            this.requestRepair(player, request);
+                            return;
                         }
                     }
-                    return;
                 }
             }
         }
-        if (RepairRequest.hasPlayerRequestedRepair(player))
+        if (this.hasPlayerRequestedRepair(player))
         {
             player.sendMessage(ChatColor.YELLOW + "Die Reparatur wurde abgebrochen!");
-            RepairRequest.removeRepairRequest(player);
+            this.removeRepairRequest(player);
         }
+    }
+
+    public boolean hasPlayerRequestedRepair(Player player)
+    {
+        return repairRequests.containsKey(player);
+    }
+
+    public void requestRepair(Player player, RepairRequest request)
+    {
+        if (!hasPlayerRequestedRepair(player))
+        {
+            repairRequests.put(player, request);
+        }
+    }
+
+    public void removeRepairRequest(Player player)
+    {
+        repairRequests.remove(player);
+    }
+
+    public RepairRequest getRepairRequest(Player player)
+    {
+        return repairRequests.get(player);
     }
 }

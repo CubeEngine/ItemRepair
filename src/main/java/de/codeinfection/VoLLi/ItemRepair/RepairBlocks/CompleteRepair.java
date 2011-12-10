@@ -67,11 +67,11 @@ public class CompleteRepair extends RepairBlock
 
                 if (items.size() > 0)
                 {
-                    return new RepairRequest(player, items, price);
+                    return new RepairRequest(this, player, items, price);
                 }
                 else
                 {
-                    player.sendMessage(ChatColor.RED + "Du hast keine reparierbaren Items!");
+                    player.sendMessage(ChatColor.RED + "You don't have any items to repair!");
                 }
             }
         }

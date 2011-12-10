@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class RepairRequest
 {
+    private final RepairBlock repairBlock;
     private final Player player;
     private final Holdings holdings;
     private final List<ItemStack> items;
@@ -20,16 +21,24 @@ public class RepairRequest
     private final int heldItemSlot;
     private final ItemStack heldItem;
 
-    private final static Map<Player, RepairRequest> repairRequests = new HashMap<Player, RepairRequest>();
-
-    public RepairRequest(Player player, List<ItemStack> items, double price)
+    public RepairRequest(RepairBlock repairBlock, Player player, List<ItemStack> items, double price)
     {
+        if (repairBlock == null)
+        {
+            throw new IllegalArgumentException("repairBlock must not be null!");
+        }
+        this.repairBlock = repairBlock;
         this.player = player;
         this.heldItem = player.getItemInHand();
         this.heldItemSlot = player.getInventory().getHeldItemSlot();
         this.holdings = RepairBlock.getHoldings(player);
         this.items = items;
         this.price = price;
+    }
+
+    public RepairBlock getRepairBlock()
+    {
+        return this.repairBlock;
     }
 
     public Player getPlayer()
@@ -60,28 +69,5 @@ public class RepairRequest
     public double getPrice()
     {
         return this.price;
-    }
-
-    public static boolean hasPlayerRequestedRepair(Player player)
-    {
-        return repairRequests.containsKey(player);
-    }
-
-    public static void requestRepair(Player player, RepairRequest request)
-    {
-        if (!hasPlayerRequestedRepair(player))
-        {
-            repairRequests.put(player, request);
-        }
-    }
-
-    public static void removeRepairRequest(Player player)
-    {
-        repairRequests.remove(player);
-    }
-
-    public static RepairRequest getRepairRequest(Player player)
-    {
-        return repairRequests.get(player);
     }
 }
