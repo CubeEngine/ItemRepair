@@ -104,7 +104,7 @@ public class SingleRepair extends RepairBlock
                     if (holdings.hasEnough(price))
                     {
                         holdings.subtract(price);
-                        repairItems(request.getItems());
+                        player.getItemInHand().setDurability((short)0);
                         
                         player.sendMessage(ChatColor.GREEN + "Your item has been repaired for " + ChatColor.AQUA + iConomy.format(price));
                     }

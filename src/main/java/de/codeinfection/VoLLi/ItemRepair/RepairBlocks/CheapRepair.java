@@ -108,7 +108,7 @@ public class CheapRepair extends RepairBlock
                         if (this.rand.nextInt(100) > this.config.repairBlocks_cheapRepair_breakPercentage)
                         {
                             player.sendMessage(ChatColor.GREEN + "Dein Item wurde für " + ChatColor.AQUA + iConomy.format(price) + ChatColor.GREEN + " (" + ChatColor.RED + this.config.repairBlocks_cheapRepair_costPercentage + "% " + ChatColor.GREEN + "des regulären Preises) repariert!");
-                            repairItems(request.getItems());
+                            player.getItemInHand().setDurability((short)0);
                         }
                         else
                         {

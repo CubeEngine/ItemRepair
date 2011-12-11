@@ -65,7 +65,7 @@ public abstract class RepairBlock
     
     public static boolean isRepairable(ItemStack item)
     {
-        return (item.getType().getMaxDurability() > -1);
+        return (item.getType().getMaxDurability() > -1 && !item.getType().isBlock() && !item.getType().isEdible());
     }
 
     public static double getEnchantmentMultiplier(ItemStack item, double factor, double base)
@@ -97,11 +97,9 @@ public abstract class RepairBlock
 
     public static void repairItems(List<ItemStack> items, short durability)
     {
-        ItemRepair.debug("Items to repair: " + items.size());
         for (ItemStack item : items)
         {
             item.setDurability(durability);
-            ItemRepair.debug("Repaired itemstack: " + item.getType().toString());
         }
     }
 

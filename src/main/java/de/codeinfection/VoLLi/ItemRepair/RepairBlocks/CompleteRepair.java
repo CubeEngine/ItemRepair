@@ -93,8 +93,14 @@ public class CompleteRepair extends RepairBlock
 
         if (holdings.hasEnough(price))
         {
+            List<ItemStack> items = request.getItems();
+            ItemStack itemInHand = player.getItemInHand();
+            if (isRepairable(itemInHand))
+            {
+                items.add(itemInHand);
+            }
             request.getHoldings().subtract(price);
-            repairItems(request.getItems());
+            repairItems(items);
             player.sendMessage(ChatColor.GREEN + "Your items have been repaired for " + ChatColor.AQUA + iConomy.format(price));
         }
         else
