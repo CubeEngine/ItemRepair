@@ -3,7 +3,7 @@
 
     <groupId>de.codeinfection</groupId>
     <artifactId>ItemRepair</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>ItemRepair</name>
     <url>http://code-infection.de</url>
     <packaging>jar</packaging>
@@ -30,7 +30,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.0.0-R1-SNAPSHOT</version>
+            <version>1.0.1-R2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.nijikokun</groupId>

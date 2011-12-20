@@ -107,12 +107,13 @@ public class CheapRepair extends RepairBlock
                     {
                         if (this.rand.nextInt(100) > this.config.repairBlocks_cheapRepair_breakPercentage)
                         {
-                            player.sendMessage(ChatColor.GREEN + "Dein Item wurde für " + ChatColor.AQUA + iConomy.format(price) + ChatColor.GREEN + " (" + ChatColor.RED + this.config.repairBlocks_cheapRepair_costPercentage + "% " + ChatColor.GREEN + "des regulären Preises) repariert!");
+                            player.sendMessage(ChatColor.GREEN + "Your item has been repaired for " + ChatColor.AQUA + iConomy.format(price) + ChatColor.GREEN + " (" + ChatColor.RED + this.config.repairBlocks_cheapRepair_costPercentage + "% " + ChatColor.GREEN + "of the regular price)!");
                             player.getItemInHand().setDurability((short)0);
+                            holdings.subtract(price);
                         }
                         else
                         {
-                            player.sendMessage("Dein Item ist leider bei der Reparatur zerbrochen.. " + ChatColor.RED + ">>:->");
+                            player.sendMessage("Sorry, but your item broke... " + ChatColor.RED + ">>:->");
                             player.playEffect(player.getLocation(), Effect.GHAST_SHRIEK, 0);
                             removeHeldItem(player);
                         }

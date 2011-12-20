@@ -65,7 +65,20 @@ public abstract class RepairBlock
     
     public static boolean isRepairable(ItemStack item)
     {
-        return (item.getType().getMaxDurability() > -1 && !item.getType().isBlock() && !item.getType().isEdible());
+        Material type = item.getType();
+
+        if (type.isBlock() || type.getMaxDurability() == -1 || type.isEdible())
+        {
+            return false;
+        }
+        switch (type)
+        {
+            case POTION:
+                return false;
+            case INK_SACK:
+                return false;
+        }
+        return true;
     }
 
     public static double getEnchantmentMultiplier(ItemStack item, double factor, double base)
@@ -88,6 +101,11 @@ public abstract class RepairBlock
         {
             return 1D;
         }
+    }
+
+    public static void repairItems(RepairRequest request)
+    {
+        repairItems(request.getItems());
     }
 
     public static void repairItems(List<ItemStack> items)

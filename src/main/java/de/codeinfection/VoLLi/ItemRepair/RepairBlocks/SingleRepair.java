@@ -41,12 +41,12 @@ public class SingleRepair extends RepairBlock
         {
             ItemStack itemInHand = player.getItemInHand();
             Material itemType = itemInHand.getType();
-            if (itemType != Material.AIR) // -> hat ein item in der hand?
+            if (itemType != Material.AIR) // -> has a item in hand?
             {
                 int currentDurability = itemInHand.getDurability();
-                if (itemInHand.getType().getMaxDurability() > -1) // -> ist reparierbar?
+                if (itemInHand.getType().getMaxDurability() > -1) // -> item is repairable?
                 {
-                    if (currentDurability > 0) // -> ist beschädigt?
+                    if (currentDurability > 0) // -> item is damaged?
                     {
                         double price = itemInHand.getDurability();
                         price *= this.config.price_perDamage;

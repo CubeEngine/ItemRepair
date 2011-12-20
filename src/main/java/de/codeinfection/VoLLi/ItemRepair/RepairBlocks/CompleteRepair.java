@@ -53,7 +53,7 @@ public class CompleteRepair extends RepairBlock
             {
                 for (ItemStack item : allItems)
                 {
-                    if (item != null && item.getDurability() > 0)
+                    if (item != null && isRepairable(item) && item.getDurability() > 0)
                     {
                         price += (
                                 item.getDurability()
