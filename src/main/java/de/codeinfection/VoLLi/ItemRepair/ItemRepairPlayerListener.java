@@ -5,15 +5,17 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerListener;
 
 /**
  *
  * @author VoLLi
  */
-public class ItemRepairPlayerListener extends PlayerListener
+public class ItemRepairPlayerListener implements Listener
 {
     private final RepairBlockManager rbm;
 
@@ -25,7 +27,7 @@ public class ItemRepairPlayerListener extends PlayerListener
         this.repairRequests = new HashMap<Player, RepairRequest>();
     }
     
-    @Override
+    @EventHandler( event=PlayerInteractEvent.class, priority=EventPriority.LOW)
     public void onPlayerInteract(PlayerInteractEvent event)
     {
         Player player = event.getPlayer();
@@ -55,6 +57,7 @@ public class ItemRepairPlayerListener extends PlayerListener
                 {
                     player.sendMessage(ChatColor.RED + "This block is already a repair block!");
                 }
+                event.setCancelled(true);
             }
             else if (ItemRepair.removeBlockChoiceRequests.contains(player))
             {
@@ -67,12 +70,14 @@ public class ItemRepairPlayerListener extends PlayerListener
                 {
                     player.sendMessage(ChatColor.RED + "That block is not a repair block!");
                 }
+                event.setCancelled(true);
             }
             else
             {
                 RepairBlock repairBlock = this.rbm.getRepairBlock(block);
                 if (repairBlock != null)
                 {
+                    event.setCancelled(true);
                     ItemRepair.debug("Repair block found! - " + repairBlock.getClass().getSimpleName());
                     if (this.hasPlayerRequestedRepair(player))
                     {
@@ -103,6 +108,7 @@ public class ItemRepairPlayerListener extends PlayerListener
         {
             player.sendMessage(ChatColor.YELLOW + "Die Reparatur wurde abgebrochen!");
             this.removeRepairRequest(player);
+            event.setCancelled(true);
         }
     }
 
