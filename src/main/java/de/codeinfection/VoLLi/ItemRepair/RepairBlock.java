@@ -1,9 +1,8 @@
 package de.codeinfection.VoLLi.ItemRepair;
 
-import com.iCo6.system.Accounts;
-import com.iCo6.system.Holdings;
 import java.util.List;
 import java.util.Map;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -16,7 +15,7 @@ import org.bukkit.inventory.PlayerInventory;
  */
 public abstract class RepairBlock
 {
-    private final static Accounts accounts = new Accounts();
+    private static final Economy economy = ItemRepair.getEconomy();
     
     public final Material material;
     
@@ -37,6 +36,11 @@ public abstract class RepairBlock
         {
             throw new IllegalArgumentException("material must not be null!");
         }
+    }
+
+    public Economy getEconomy()
+    {
+        return economy;
     }
 
     public RepairBlock(String material)
@@ -119,11 +123,6 @@ public abstract class RepairBlock
         {
             item.setDurability(durability);
         }
-    }
-
-    public static Holdings getHoldings(Player player)
-    {
-        return accounts.get(player.getName()).getHoldings();
     }
 
     public static void removeHeldItem(Player player)

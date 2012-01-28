@@ -3,7 +3,7 @@
 
     <groupId>de.codeinfection</groupId>
     <artifactId>ItemRepair</artifactId>
-    <version>1.0.1</version>
+    <version>1.1-SNAPSHOT</version>
     <name>ItemRepair</name>
     <url>http://code-infection.de</url>
     <packaging>jar</packaging>
@@ -22,7 +22,7 @@
     <repositories>
         <repository>
             <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/artifactory/repo</url>
+            <url>http://repo.bukkit.org/content/groups/public</url>
         </repository>
     </repositories>
 
@@ -30,12 +30,12 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.1-R1-SNAPSHOT</version>
+            <version>1.1-R1</version>
         </dependency>
         <dependency>
-            <groupId>com.nijikokun</groupId>
-            <artifactId>iconomy</artifactId>
-            <version>6.0</version>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>Vault</artifactId>
+            <version>1.2.6</version>
         </dependency>
     </dependencies>
 

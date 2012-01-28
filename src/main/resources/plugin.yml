@@ -6,16 +6,12 @@ commands:
     usage: "/<command> <add|remove>"
     description: "Command to manage Repair Blocks"
 depend:
-  - iConomy
-softdepend: []
-database: false
+  - Vault
 website: "http://parallel-universe.de"
-description: ""
-author: "VoLLi"
+description: "Adds repair functionality to minecraft"
 authors:
   - "Quick_Wango"
   - "VoLLi"
-load: postworld
 permissions:
   itemrepair.allblocks:
     description: "Allows the player to use all repair blocks"

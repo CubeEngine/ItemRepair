@@ -1,7 +1,5 @@
 package de.codeinfection.VoLLi.ItemRepair.RepairBlocks;
 
-import com.iCo6.iConomy;
-import com.iCo6.system.Holdings;
 import de.codeinfection.VoLLi.ItemRepair.ItemRepairConfiguration;
 import de.codeinfection.VoLLi.ItemRepair.RepairBlock;
 import de.codeinfection.VoLLi.ItemRepair.RepairRequest;
@@ -62,8 +60,8 @@ public class CheapRepair extends RepairBlock
                         
                         player.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_RED + "ItemRepair" + ChatColor.GREEN + "]");
                         player.sendMessage(ChatColor.AQUA + "Rightclick" + ChatColor.WHITE + " again to repair your item, with a chance of breaking it.");
-                        player.sendMessage("The repair would cost " + ChatColor.AQUA + iConomy.format(price) + ChatColor.WHITE + ".");
-                        player.sendMessage("You have currently " + ChatColor.AQUA + iConomy.format(getHoldings(player).getBalance()));
+                        player.sendMessage("The repair would cost " + ChatColor.AQUA + getEconomy().format(price) + ChatColor.WHITE + ".");
+                        player.sendMessage("You have currently " + ChatColor.AQUA + getEconomy().format(getEconomy().getBalance(player.getName())));
 
                         return new RepairRequest(this, player, Arrays.asList(itemInHand), price);
                     }
@@ -93,7 +91,6 @@ public class CheapRepair extends RepairBlock
     public void repair(RepairRequest request)
     {
         double price = request.getPrice();
-        Holdings holdings = request.getHoldings();
         Player player = request.getPlayer();
 
         if (player.getInventory().getHeldItemSlot() == request.getHeldItemSlot())
@@ -103,13 +100,13 @@ public class CheapRepair extends RepairBlock
             {
                 if (itemInHand.equals(request.getHeldItem()))
                 {
-                    if (holdings.hasEnough(price))
+                    if (getEconomy().getBalance(player.getName()) >= price)
                     {
                         if (this.rand.nextInt(100) > this.config.repairBlocks_cheapRepair_breakPercentage)
                         {
-                            player.sendMessage(ChatColor.GREEN + "Your item has been repaired for " + ChatColor.AQUA + iConomy.format(price) + ChatColor.GREEN + " (" + ChatColor.RED + this.config.repairBlocks_cheapRepair_costPercentage + "% " + ChatColor.GREEN + "of the regular price)!");
+                            player.sendMessage(ChatColor.GREEN + "Your item has been repaired for " + ChatColor.AQUA + getEconomy().format(price) + ChatColor.GREEN + " (" + ChatColor.RED + this.config.repairBlocks_cheapRepair_costPercentage + "% " + ChatColor.GREEN + "of the regular price)!");
                             player.getItemInHand().setDurability((short)0);
-                            holdings.subtract(price);
+                            getEconomy().depositPlayer(player.getName(), -price);
                         }
                         else
                         {

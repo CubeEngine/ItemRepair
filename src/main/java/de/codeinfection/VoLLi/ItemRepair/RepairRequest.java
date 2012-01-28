@@ -1,9 +1,6 @@
 package de.codeinfection.VoLLi.ItemRepair;
 
-import com.iCo6.system.Holdings;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -15,7 +12,6 @@ public class RepairRequest
 {
     private final RepairBlock repairBlock;
     private final Player player;
-    private final Holdings holdings;
     private final List<ItemStack> items;
     private final double price;
     private final int heldItemSlot;
@@ -31,7 +27,6 @@ public class RepairRequest
         this.player = player;
         this.heldItem = player.getItemInHand();
         this.heldItemSlot = player.getInventory().getHeldItemSlot();
-        this.holdings = RepairBlock.getHoldings(player);
         this.items = items;
         this.price = price;
     }
@@ -54,11 +49,6 @@ public class RepairRequest
     public ItemStack getHeldItem()
     {
         return this.heldItem;
-    }
-
-    public Holdings getHoldings()
-    {
-        return this.holdings;
     }
 
     public List<ItemStack> getItems()

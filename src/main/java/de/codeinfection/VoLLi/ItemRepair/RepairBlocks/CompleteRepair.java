@@ -1,7 +1,5 @@
 package de.codeinfection.VoLLi.ItemRepair.RepairBlocks;
 
-import com.iCo6.iConomy;
-import com.iCo6.system.Holdings;
 import de.codeinfection.VoLLi.ItemRepair.ItemRepairConfiguration;
 import de.codeinfection.VoLLi.ItemRepair.RepairBlock;
 import de.codeinfection.VoLLi.ItemRepair.RepairRequest;
@@ -70,8 +68,8 @@ public class CompleteRepair extends RepairBlock
 
                     player.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_RED + "ItemRepair" + ChatColor.GREEN + "]");
                     player.sendMessage(ChatColor.AQUA + "Rightclick" + ChatColor.WHITE + " again to repair all your damaged items.");
-                    player.sendMessage("The repair would cost " + ChatColor.AQUA + iConomy.format(price) + ChatColor.WHITE + ".");
-                    player.sendMessage("You have currently " + ChatColor.AQUA + iConomy.format(getHoldings(player).getBalance()));
+                    player.sendMessage("The repair would cost " + ChatColor.AQUA + getEconomy().format(price) + ChatColor.WHITE + ".");
+                    player.sendMessage("You have currently " + ChatColor.AQUA + getEconomy().format(getEconomy().getBalance(player.getName())));
 
                     return new RepairRequest(this, player, items, price);
                 }
@@ -88,10 +86,9 @@ public class CompleteRepair extends RepairBlock
     public void repair(RepairRequest request)
     {
         double price = request.getPrice();
-        Holdings holdings = request.getHoldings();
         Player player = request.getPlayer();
 
-        if (holdings.hasEnough(price))
+        if (getEconomy().getBalance(player.getName()) >= price)
         {
             List<ItemStack> items = request.getItems();
             ItemStack itemInHand = player.getItemInHand();
@@ -99,9 +96,9 @@ public class CompleteRepair extends RepairBlock
             {
                 items.add(itemInHand);
             }
-            request.getHoldings().subtract(price);
+            getEconomy().depositPlayer(player.getName(), -price);
             repairItems(items);
-            player.sendMessage(ChatColor.GREEN + "Your items have been repaired for " + ChatColor.AQUA + iConomy.format(price));
+            player.sendMessage(ChatColor.GREEN + "Your items have been repaired for " + ChatColor.AQUA + getEconomy().format(price));
         }
         else
         {

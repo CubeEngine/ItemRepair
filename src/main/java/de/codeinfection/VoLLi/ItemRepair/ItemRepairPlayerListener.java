@@ -27,7 +27,7 @@ public class ItemRepairPlayerListener implements Listener
         this.repairRequests = new HashMap<Player, RepairRequest>();
     }
     
-    @EventHandler( event=PlayerInteractEvent.class, priority=EventPriority.LOW)
+    @EventHandler( priority=EventPriority.LOW )
     public void onPlayerInteract(PlayerInteractEvent event)
     {
         Player player = event.getPlayer();

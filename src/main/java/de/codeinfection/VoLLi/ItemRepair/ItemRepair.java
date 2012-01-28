@@ -1,82 +1,55 @@
 package de.codeinfection.VoLLi.ItemRepair;
 
-import com.iCo6.iConomy;
-import de.codeinfection.VoLLi.ItemRepair.RepairBlocks.*;
+import de.codeinfection.VoLLi.ItemRepair.RepairBlocks.CheapRepair;
+import de.codeinfection.VoLLi.ItemRepair.RepairBlocks.CompleteRepair;
+import de.codeinfection.VoLLi.ItemRepair.RepairBlocks.SingleRepair;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.configuration.Configuration;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Server;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class ItemRepair extends JavaPlugin
 {
-    protected static final Logger log = Logger.getLogger("Minecraft");
+    protected static Logger logger = null;
     public static boolean debugMode = false;
 
     public final static List<Player> addBlockChoiceRequests = new ArrayList<Player>();
     public final static List<Player> removeBlockChoiceRequests = new ArrayList<Player>();
     
-    protected Server server;
-    protected PluginManager pm;
-    protected ItemRepairConfiguration config;
-    protected File dataFolder;
-    
+    private Server server;
+    private PluginManager pm;
+    private ItemRepairConfiguration config;
+    private File dataFolder;
+    private static Economy economy = null;
 
     public ItemRepair()
     {}
 
     public void onEnable()
     {
+        logger = this.getLogger();
         this.server = this.getServer();
         this.pm = this.server.getPluginManager();
         
         this.dataFolder = this.getDataFolder();
 
         this.dataFolder.mkdirs();
-
-        iConomy iconomy = null;
-        Plugin iconomyPlugin = this.pm.getPlugin("iConomy");
-        if (iconomyPlugin != null)
-        {
-            if (iconomyPlugin instanceof iConomy)
-            {
-                String version = iconomyPlugin.getDescription().getVersion();
-                if (version != null && version.length() > 0)
-                {
-                    String firstChar = version.substring(0, 1);
-                    try
-                    {
-                        int majorVersion = Integer.valueOf(firstChar);
-                        if (majorVersion >= 6)
-                        {
-                            iconomy = (iConomy)iconomy;
-                        }
-                    }
-                    catch (NumberFormatException e)
-                    {}
-                }
-            }
-        }
-        if (iconomy != null)
-        {
-            error("Could not hook into iConomy 6");
-            error("Staying in a zombie state...");
-            return;
-        }
         
         Configuration configuration = this.getConfig();
         configuration.options().copyDefaults(true);
         this.config = new ItemRepairConfiguration(configuration);
         debugMode = configuration.getBoolean("debug");
         this.saveConfig();
+
+        economy = this.setupEconomy();
 
         RepairBlockManager rbm = RepairBlockManager.getInstance();
                 rbm.setPersister(new RepairBlockPersister(new File(dataFolder, "blocks.yml")))
@@ -106,19 +79,41 @@ public class ItemRepair extends JavaPlugin
         log("Version " + this.getDescription().getVersion() + " disabled");
     }
 
+    private Economy setupEconomy()
+    {
+        if (this.pm.getPlugin("Vault") != null)
+        {
+            RegisteredServiceProvider<Economy> rsp = this.server.getServicesManager().getRegistration(Economy.class);
+            if (rsp != null)
+            {
+                Economy eco = rsp.getProvider();
+                if (eco != null)
+                {
+                    return eco;
+                }
+            }
+        }
+        throw new IllegalStateException("Failed to initialize with Vault!");
+    }
+
+    public static Economy getEconomy()
+    {
+        return economy;
+    }
+
     public static void log(String msg)
     {
-        log.log(Level.INFO, "[ItemRepair] " + msg);
+        logger.log(Level.INFO, msg);
     }
 
     public static void error(String msg)
     {
-        log.log(Level.SEVERE, "[ItemRepair] " + msg);
+        logger.log(Level.SEVERE, msg);
     }
 
     public static void error(String msg, Throwable t)
     {
-        log.log(Level.SEVERE, "[ItemRepair] " + msg, t);
+        logger.log(Level.SEVERE, msg, t);
     }
 
     public static void debug(String msg)
