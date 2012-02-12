@@ -29,3 +29,6 @@ Permissions:
     - itemrepair.commands.add - *Allows the player to add repair blocks*
     - itemrepair.commands.remove - *Allows the player to remove repair blocks*
 
+***[Source on Github](https://github.com/quickwango/ItemRepair)***
+
+Plugin developed by Quick_Wango - [Parallel Universe](http://parallel-universe.de)

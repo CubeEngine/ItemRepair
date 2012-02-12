@@ -3,8 +3,9 @@ Changes
 
 Version 1.1.0
 -------------
-- Updated for latest Bukkit builds
+- Updated for Bukkit 1.1-R1+
 - cancelled the interact event in some places to prevent unintended blockplacing
+- switched from iConomy to Vault to support more economy systems
 
 Version 1.0.1
 -------------
