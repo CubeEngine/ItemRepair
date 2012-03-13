@@ -1,8 +1,8 @@
-package de.codeinfection.VoLLi.ItemRepair;
+package de.codeinfection.quickwango.ItemRepair;
 
-import de.codeinfection.VoLLi.ItemRepair.RepairBlocks.CheapRepair;
-import de.codeinfection.VoLLi.ItemRepair.RepairBlocks.CompleteRepair;
-import de.codeinfection.VoLLi.ItemRepair.RepairBlocks.SingleRepair;
+import de.codeinfection.quickwango.ItemRepair.RepairBlocks.CheapRepair;
+import de.codeinfection.quickwango.ItemRepair.RepairBlocks.CompleteRepair;
+import de.codeinfection.quickwango.ItemRepair.RepairBlocks.SingleRepair;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

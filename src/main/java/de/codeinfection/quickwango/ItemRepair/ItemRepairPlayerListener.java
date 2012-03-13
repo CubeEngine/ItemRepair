@@ -1,4 +1,4 @@
-package de.codeinfection.VoLLi.ItemRepair;
+package de.codeinfection.quickwango.ItemRepair;
 
 import java.util.HashMap;
 import java.util.Map;

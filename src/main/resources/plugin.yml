@@ -1,6 +1,6 @@
 name: ItemRepair
 version: "${project.version}"
-main: de.codeinfection.VoLLi.ItemRepair.ItemRepair
+main: de.codeinfection.quickwango.ItemRepair.ItemRepair
 dev-url: http://dev.bukkit.org/server-mods/ItemRepair
 commands:
   itemrepair:

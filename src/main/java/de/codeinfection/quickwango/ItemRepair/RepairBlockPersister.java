@@ -1,4 +1,4 @@
-package de.codeinfection.VoLLi.ItemRepair;
+package de.codeinfection.quickwango.ItemRepair;
 
 import java.io.File;
 import java.io.IOException;

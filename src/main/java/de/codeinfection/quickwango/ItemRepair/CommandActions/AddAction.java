@@ -1,6 +1,6 @@
-package de.codeinfection.VoLLi.ItemRepair.CommandActions;
+package de.codeinfection.quickwango.ItemRepair.CommandActions;
 
-import de.codeinfection.VoLLi.ItemRepair.ItemRepair;
+import de.codeinfection.quickwango.ItemRepair.ItemRepair;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

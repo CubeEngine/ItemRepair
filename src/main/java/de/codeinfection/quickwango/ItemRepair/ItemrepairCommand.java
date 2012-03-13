@@ -1,6 +1,7 @@
-package de.codeinfection.VoLLi.ItemRepair;
+package de.codeinfection.quickwango.ItemRepair;
 
-import de.codeinfection.VoLLi.ItemRepair.CommandActions.*;
+import de.codeinfection.quickwango.ItemRepair.CommandActions.AddAction;
+import de.codeinfection.quickwango.ItemRepair.CommandActions.RemoveAction;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;

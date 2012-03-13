@@ -1,8 +1,8 @@
-package de.codeinfection.VoLLi.ItemRepair.RepairBlocks;
+package de.codeinfection.quickwango.ItemRepair.RepairBlocks;
 
-import de.codeinfection.VoLLi.ItemRepair.ItemRepairConfiguration;
-import de.codeinfection.VoLLi.ItemRepair.RepairBlock;
-import de.codeinfection.VoLLi.ItemRepair.RepairRequest;
+import de.codeinfection.quickwango.ItemRepair.ItemRepairConfiguration;
+import de.codeinfection.quickwango.ItemRepair.RepairBlock;
+import de.codeinfection.quickwango.ItemRepair.RepairRequest;
 import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
