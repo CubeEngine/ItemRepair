@@ -78,6 +78,8 @@ public class ItemRepair extends JavaPlugin
     @Override
     public void onDisable()
     {
+        addBlockChoiceRequests.clear();
+        removeBlockChoiceRequests.clear();
         log("Version " + this.getDescription().getVersion() + " disabled");
     }
 
