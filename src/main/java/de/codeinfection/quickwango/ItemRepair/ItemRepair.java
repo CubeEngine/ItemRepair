@@ -52,7 +52,7 @@ public class ItemRepair extends JavaPlugin
 
         economy = this.setupEconomy();
 
-        RepairBlockManager rbm = RepairBlockManager.getInstance();
+        RepairBlockManager rbm = RepairBlockManager.initialize(this);
                 rbm.setPersister(new RepairBlockPersister(new File(dataFolder, "blocks.yml")))
                 .addRepairBlock(new SingleRepair(
                         this.config.repairBlocks_singleRepair_block,
@@ -70,7 +70,7 @@ public class ItemRepair extends JavaPlugin
 
         this.pm.registerEvents(new ItemRepairPlayerListener(), this);
 
-        this.getCommand("itemrepair").setExecutor(new ItemrepairCommand());
+        this.getCommand("itemrepair").setExecutor(new ItemrepairCommand(this));
 
         log("Version " + this.getDescription().getVersion() + " enabled");
     }

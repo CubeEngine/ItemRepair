@@ -8,6 +8,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 /**
  *
@@ -15,12 +17,16 @@ import org.bukkit.inventory.PlayerInventory;
  */
 public abstract class RepairBlock
 {
+
+    public static final String PERMISSION_BASE = "itemrepair.block.";
     private static final Economy economy = ItemRepair.getEconomy();
-    
+    public final String name;
     public final Material material;
-    
-    public RepairBlock(Material material)
+    public final Permission permission;
+
+    public RepairBlock(String name, Material material)
     {
+        this.name = name;
         if (material != null)
         {
             if (material.isBlock())
@@ -36,6 +42,7 @@ public abstract class RepairBlock
         {
             throw new IllegalArgumentException("material must not be null!");
         }
+        this.permission = new Permission(PERMISSION_BASE + name, PermissionDefault.OP);
     }
 
     public Economy getEconomy()
@@ -43,30 +50,29 @@ public abstract class RepairBlock
         return economy;
     }
 
-    public RepairBlock(String material)
+    public RepairBlock(String name, String material)
     {
-        this(Material.getMaterial(material));
+        this(name, Material.getMaterial(material));
     }
 
-    public RepairBlock(int material)
+    public RepairBlock(String name, int material)
     {
-        this(Material.getMaterial(material));
+        this(name, Material.getMaterial(material));
     }
 
     public abstract RepairRequest requestRepair(Player player);
-    
+
     public abstract void repair(RepairRequest request);
 
 
     /*
      * Utilities
      */
-    
     public static boolean hasRepairPermission(Player player, String permission)
     {
         return (player.hasPermission("itemrepair.allblocks") || player.hasPermission("itemrepair.block." + permission));
     }
-    
+
     public static boolean isRepairable(ItemStack item)
     {
         Material type = item.getType();
@@ -114,7 +120,7 @@ public abstract class RepairBlock
 
     public static void repairItems(List<ItemStack> items)
     {
-        repairItems(items, (short)0);
+        repairItems(items, (short) 0);
     }
 
     public static void repairItems(List<ItemStack> items, short durability)

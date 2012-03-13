@@ -9,6 +9,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 
 /**
  *
@@ -16,13 +20,21 @@ import org.bukkit.command.CommandSender;
  */
 public class ItemrepairCommand implements CommandExecutor
 {
-    private Map<String, CommandExecutor> actions;
 
-    public ItemrepairCommand()
+    private Map<String, CommandExecutor> actions;
+    private final Permission parentPermission;
+    private final PluginManager pm;
+    private static final String PERMISSION_BASE = "itemrepair.commands.";
+
+    public ItemrepairCommand(Plugin plugin)
     {
+        this.pm = plugin.getServer().getPluginManager();
+        this.parentPermission = new Permission(PERMISSION_BASE + "*", PermissionDefault.OP);
+        this.pm.addPermission(this.parentPermission);
+
         this.actions = new HashMap<String, CommandExecutor>();
-        this.actions.put("add", new AddAction());
-        this.actions.put("remove", new RemoveAction());
+        this.registerAction("add", new AddAction());
+        this.registerAction("remove", new RemoveAction());
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
@@ -33,7 +45,7 @@ public class ItemrepairCommand implements CommandExecutor
             CommandExecutor action = this.actions.get(actionName);
             if (action != null)
             {
-                if (sender.hasPermission("ItemRepair.commands." + actionName))
+                if (sender.hasPermission(PERMISSION_BASE + actionName))
                 {
                     return action.onCommand(sender, null, actionName, Arrays.copyOfRange(args, 0, args.length - 1));
                 }
@@ -52,5 +64,15 @@ public class ItemrepairCommand implements CommandExecutor
             return false;
         }
         return true;
+    }
+
+    public final ItemrepairCommand registerAction(String name, CommandExecutor action)
+    {
+        Permission actionPermission = new Permission(PERMISSION_BASE + name, PermissionDefault.OP);
+        this.pm.addPermission(actionPermission);
+        actionPermission.addParent(this.parentPermission, true);
+        this.actions.put(name, action);
+
+        return this;
     }
 }

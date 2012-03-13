@@ -17,11 +17,12 @@ import org.bukkit.inventory.ItemStack;
  */
 public class CompleteRepair extends RepairBlock
 {
+
     private final ItemRepairConfiguration config;
 
     public CompleteRepair(Material material, ItemRepairConfiguration config)
     {
-        super(material);
+        super("complete", material);
         this.config = config;
     }
 
@@ -53,12 +54,10 @@ public class CompleteRepair extends RepairBlock
                 {
                     if (item != null && isRepairable(item) && item.getDurability() > 0)
                     {
-                        price += (
-                                item.getDurability()
-                              * this.config.price_perDamage
-                              * item.getAmount()
-                              * getEnchantmentMultiplier(item, this.config.price_enchantMultiplier_factor, this.config.price_enchantMultiplier_base)
-                        );
+                        price += (item.getDurability()
+                                * this.config.price_perDamage
+                                * item.getAmount()
+                                * getEnchantmentMultiplier(item, this.config.price_enchantMultiplier_factor, this.config.price_enchantMultiplier_base));
                         items.add(item);
                     }
                 }

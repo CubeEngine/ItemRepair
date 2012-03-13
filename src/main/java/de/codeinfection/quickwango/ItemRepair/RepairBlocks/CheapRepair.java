@@ -23,7 +23,7 @@ public class CheapRepair extends RepairBlock
 
     public CheapRepair(Material material, ItemRepairConfiguration config)
     {
-        super(material);
+        super("cheap", material);
         this.config = config;
         this.rand = new Random(System.currentTimeMillis());
     }

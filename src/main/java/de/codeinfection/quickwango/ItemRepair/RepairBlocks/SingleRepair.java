@@ -20,7 +20,7 @@ public class SingleRepair extends RepairBlock
 
     public SingleRepair(Material material, ItemRepairConfiguration config)
     {
-        super(material);
+        super("single", material);
         this.config = config;
     }
 
