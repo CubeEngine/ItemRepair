@@ -17,17 +17,17 @@ import org.bukkit.event.player.PlayerInteractEvent;
  */
 public class ItemRepairPlayerListener implements Listener
 {
-    private final RepairBlockManager rbm;
 
+    private final RepairBlockManager rbm;
     private final Map<Player, RepairRequest> repairRequests;
-    
+
     public ItemRepairPlayerListener()
     {
         this.rbm = RepairBlockManager.getInstance();
         this.repairRequests = new HashMap<Player, RepairRequest>();
     }
-    
-    @EventHandler( priority=EventPriority.LOW )
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event)
     {
         Player player = event.getPlayer();
@@ -106,7 +106,7 @@ public class ItemRepairPlayerListener implements Listener
         }
         if (this.hasPlayerRequestedRepair(player))
         {
-            player.sendMessage(ChatColor.YELLOW + "Die Reparatur wurde abgebrochen!");
+            player.sendMessage(ChatColor.YELLOW + "The repair has been cancelled!");
             this.removeRepairRequest(player);
             event.setCancelled(true);
         }

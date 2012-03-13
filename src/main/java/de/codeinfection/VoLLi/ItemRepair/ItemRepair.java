@@ -33,6 +33,7 @@ public class ItemRepair extends JavaPlugin
     public ItemRepair()
     {}
 
+    @Override
     public void onEnable()
     {
         logger = this.getLogger();
@@ -74,6 +75,7 @@ public class ItemRepair extends JavaPlugin
         log("Version " + this.getDescription().getVersion() + " enabled");
     }
 
+    @Override
     public void onDisable()
     {
         log("Version " + this.getDescription().getVersion() + " disabled");

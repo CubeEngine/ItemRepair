@@ -15,8 +15,9 @@ import org.bukkit.inventory.ItemStack;
  */
 public class SingleRepair extends RepairBlock
 {
+
     private final ItemRepairConfiguration config;
-    
+
     public SingleRepair(Material material, ItemRepairConfiguration config)
     {
         super(material);
@@ -101,8 +102,8 @@ public class SingleRepair extends RepairBlock
                     if (getEconomy().getBalance(player.getName()) >= price)
                     {
                         getEconomy().depositPlayer(player.getName(), -price);
-                        player.getItemInHand().setDurability((short)0);
-                        
+                        player.getItemInHand().setDurability((short) 0);
+
                         player.sendMessage(ChatColor.GREEN + "Your item has been repaired for " + ChatColor.AQUA + ChatColor.AQUA + getEconomy().format(price));
                     }
                     else
@@ -122,7 +123,7 @@ public class SingleRepair extends RepairBlock
         }
         else
         {
-            player.sendMessage(ChatColor.RED + "You switched to anoter item slot, repair has been cancelled!");
+            player.sendMessage(ChatColor.RED + "You switched to another item slot, repair has been cancelled!");
         }
     }
 }

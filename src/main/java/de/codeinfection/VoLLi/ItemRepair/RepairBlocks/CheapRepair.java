@@ -17,10 +17,10 @@ import org.bukkit.inventory.ItemStack;
  */
 public class CheapRepair extends RepairBlock
 {
+
     private final ItemRepairConfiguration config;
-    
     private final Random rand;
-    
+
     public CheapRepair(Material material, ItemRepairConfiguration config)
     {
         super(material);
@@ -37,7 +37,7 @@ public class CheapRepair extends RepairBlock
     {
         this(Material.getMaterial(blockName), config);
     }
-    
+
     @Override
     public RepairRequest requestRepair(Player player)
     {
@@ -57,7 +57,7 @@ public class CheapRepair extends RepairBlock
                         price *= itemInHand.getAmount();
                         price *= getEnchantmentMultiplier(itemInHand, this.config.price_enchantMultiplier_factor, this.config.price_enchantMultiplier_base);
                         price *= (this.config.repairBlocks_cheapRepair_costPercentage / 100.0D);
-                        
+
                         player.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_RED + "ItemRepair" + ChatColor.GREEN + "]");
                         player.sendMessage(ChatColor.AQUA + "Rightclick" + ChatColor.WHITE + " again to repair your item, with a chance of breaking it.");
                         player.sendMessage("The repair would cost " + ChatColor.AQUA + getEconomy().format(price) + ChatColor.WHITE + ".");
@@ -105,7 +105,7 @@ public class CheapRepair extends RepairBlock
                         if (this.rand.nextInt(100) > this.config.repairBlocks_cheapRepair_breakPercentage)
                         {
                             player.sendMessage(ChatColor.GREEN + "Your item has been repaired for " + ChatColor.AQUA + getEconomy().format(price) + ChatColor.GREEN + " (" + ChatColor.RED + this.config.repairBlocks_cheapRepair_costPercentage + "% " + ChatColor.GREEN + "of the regular price)!");
-                            player.getItemInHand().setDurability((short)0);
+                            player.getItemInHand().setDurability((short) 0);
                             getEconomy().depositPlayer(player.getName(), -price);
                         }
                         else
@@ -132,7 +132,7 @@ public class CheapRepair extends RepairBlock
         }
         else
         {
-            player.sendMessage(ChatColor.RED + "You switched to anoter item slot, repair has been cancelled!");
+            player.sendMessage(ChatColor.RED + "You switched to another item slot, repair has been cancelled!");
         }
     }
 }
