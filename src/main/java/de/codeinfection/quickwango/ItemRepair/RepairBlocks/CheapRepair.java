@@ -48,7 +48,7 @@ public class CheapRepair extends RepairBlock
             if (itemType != Material.AIR) // -> hat ein item in der hand?
             {
                 int currentDurability = itemInHand.getDurability();
-                if (itemInHand.getType().getMaxDurability() > -1) // -> ist reparierbar?
+                if (isRepairable(itemInHand)) // -> ist reparierbar?
                 {
                     if (currentDurability > 0) // -> ist beschädigt?
                     {

@@ -43,7 +43,7 @@ public class SingleRepair extends RepairBlock
             if (itemType != Material.AIR) // -> has a item in hand?
             {
                 int currentDurability = itemInHand.getDurability();
-                if (itemInHand.getType().getMaxDurability() > -1) // -> item is repairable?
+                if (isRepairable(itemInHand)) // -> item is repairable?
                 {
                     if (currentDurability > 0) // -> item is damaged?
                     {

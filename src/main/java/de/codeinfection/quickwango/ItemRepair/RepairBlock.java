@@ -68,27 +68,29 @@ public abstract class RepairBlock
     /*
      * Utilities
      */
-    public static boolean hasRepairPermission(Player player, String permission)
+    public boolean hasRepairPermission(Player player, String permission)
     {
-        return (player.hasPermission("itemrepair.allblocks") || player.hasPermission("itemrepair.block." + permission));
+        return player.hasPermission(this.permission);
     }
 
-    public static boolean isRepairable(ItemStack item)
+    public static boolean isRepairable(Material material)
     {
-        Material type = item.getType();
-
-        if (type.isBlock() || type.getMaxDurability() == -1 || type.isEdible())
+        if (material.isBlock() || material.getMaxDurability() < 0 || material.isEdible())
         {
             return false;
         }
-        switch (type)
+        switch (material)
         {
             case POTION:
-                return false;
             case INK_SACK:
                 return false;
         }
         return true;
+    }
+
+    public static boolean isRepairable(ItemStack item)
+    {
+        return isRepairable(item.getType());
     }
 
     public static double getEnchantmentMultiplier(ItemStack item, double factor, double base)
