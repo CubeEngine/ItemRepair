@@ -1,6 +1,10 @@
 Changes
 =======
 
+Version 1.1.2
+-------------
+- fixed a bug with BOSE7
+
 Version 1.1.1
 -------------
 - Added support for CraftBukkitUpToDate
