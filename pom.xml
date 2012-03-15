@@ -4,7 +4,7 @@
 
     <groupId>de.codeinfection</groupId>
     <artifactId>ItemRepair</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <name>ItemRepair</name>
     <url>http://code-infection.de</url>
     <packaging>jar</packaging>

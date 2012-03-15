@@ -101,10 +101,16 @@ public class SingleRepair extends RepairBlock
                 {
                     if (getEconomy().getBalance(player.getName()) >= price)
                     {
-                        getEconomy().depositPlayer(player.getName(), -price);
-                        player.getItemInHand().setDurability((short) 0);
+                        if (getEconomy().withdrawPlayer(player.getName(), price).transactionSuccess())
+                        {
+                            player.getItemInHand().setDurability((short) 0);
 
-                        player.sendMessage(ChatColor.GREEN + "Your item has been repaired for " + ChatColor.AQUA + ChatColor.AQUA + getEconomy().format(price));
+                            player.sendMessage(ChatColor.GREEN + "Your item has been repaired for " + ChatColor.AQUA + ChatColor.AQUA + getEconomy().format(price));
+                        }
+                        else
+                        {
+                            player.sendMessage(ChatColor.RED + "Something went wrong, report this failure to your administrator!");
+                        }
                     }
                     else
                     {

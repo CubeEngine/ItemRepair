@@ -104,9 +104,15 @@ public class CheapRepair extends RepairBlock
                     {
                         if (this.rand.nextInt(100) > this.config.repairBlocks_cheapRepair_breakPercentage)
                         {
-                            player.sendMessage(ChatColor.GREEN + "Your item has been repaired for " + ChatColor.AQUA + getEconomy().format(price) + ChatColor.GREEN + " (" + ChatColor.RED + this.config.repairBlocks_cheapRepair_costPercentage + "% " + ChatColor.GREEN + "of the regular price)!");
-                            player.getItemInHand().setDurability((short) 0);
-                            getEconomy().depositPlayer(player.getName(), -price);
+                            if (getEconomy().withdrawPlayer(player.getName(), price).transactionSuccess())
+                            {
+                                player.getItemInHand().setDurability((short) 0);
+                                player.sendMessage(ChatColor.GREEN + "Your item has been repaired for " + ChatColor.AQUA + getEconomy().format(price) + ChatColor.GREEN + " (" + ChatColor.RED + this.config.repairBlocks_cheapRepair_costPercentage + "% " + ChatColor.GREEN + "of the regular price)!");
+                            }
+                            else
+                            {
+                                player.sendMessage(ChatColor.RED + "Something went wrong, report this failure to your administrator!");
+                            }
                         }
                         else
                         {

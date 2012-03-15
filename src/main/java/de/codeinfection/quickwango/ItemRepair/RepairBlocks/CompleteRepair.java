@@ -95,9 +95,15 @@ public class CompleteRepair extends RepairBlock
             {
                 items.add(itemInHand);
             }
-            getEconomy().depositPlayer(player.getName(), -price);
-            repairItems(items);
-            player.sendMessage(ChatColor.GREEN + "Your items have been repaired for " + ChatColor.AQUA + getEconomy().format(price));
+            if (getEconomy().withdrawPlayer(player.getName(), price).transactionSuccess())
+            {
+                repairItems(items);
+                player.sendMessage(ChatColor.GREEN + "Your items have been repaired for " + ChatColor.AQUA + getEconomy().format(price));
+            }
+            else
+            {
+                player.sendMessage(ChatColor.RED + "Something went wrong, report this failure to your administrator!");
+            }
         }
         else
         {
