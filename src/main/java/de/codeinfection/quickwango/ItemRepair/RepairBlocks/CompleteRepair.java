@@ -1,5 +1,6 @@
 package de.codeinfection.quickwango.ItemRepair.RepairBlocks;
 
+import de.codeinfection.quickwango.ItemRepair.Item;
 import de.codeinfection.quickwango.ItemRepair.ItemRepairConfiguration;
 import de.codeinfection.quickwango.ItemRepair.RepairBlock;
 import de.codeinfection.quickwango.ItemRepair.RepairRequest;
@@ -47,18 +48,21 @@ public class CompleteRepair extends RepairBlock
             Collections.addAll(allItems, player.getInventory().getContents());
             List<ItemStack> items = new ArrayList<ItemStack>();
             ItemStack itemInHand = player.getItemInHand();
+            Item item = Item.getByMaterial(itemInHand.getType());
 
-            if (itemInHand != null && isRepairable(itemInHand))
+            if (itemInHand != null && item != null)
             {
-                for (ItemStack item : allItems)
+                Item currentItem;
+                for (ItemStack itemStack : allItems)
                 {
-                    if (item != null && isRepairable(item) && item.getDurability() > 0)
+                    currentItem = Item.getByMaterial(itemStack.getType());
+                    if (itemStack != null && currentItem != null && itemStack.getDurability() > 0)
                     {
-                        price += (item.getDurability()
+                        price += (itemStack.getDurability()
                                 * this.config.price_perDamage
-                                * item.getAmount()
-                                * getEnchantmentMultiplier(item, this.config.price_enchantMultiplier_factor, this.config.price_enchantMultiplier_base));
-                        items.add(item);
+                                * itemStack.getAmount()
+                                * getEnchantmentMultiplier(itemStack, this.config.price_enchantMultiplier_factor, this.config.price_enchantMultiplier_base));
+                        items.add(itemStack);
                     }
                 }
 
@@ -91,7 +95,7 @@ public class CompleteRepair extends RepairBlock
         {
             List<ItemStack> items = request.getItems();
             ItemStack itemInHand = player.getItemInHand();
-            if (isRepairable(itemInHand))
+            if (Item.getByMaterial(itemInHand.getType()) != null)
             {
                 items.add(itemInHand);
             }

@@ -1,5 +1,6 @@
 package de.codeinfection.quickwango.ItemRepair.RepairBlocks;
 
+import de.codeinfection.quickwango.ItemRepair.Item;
 import de.codeinfection.quickwango.ItemRepair.ItemRepairConfiguration;
 import de.codeinfection.quickwango.ItemRepair.RepairBlock;
 import de.codeinfection.quickwango.ItemRepair.RepairRequest;
@@ -45,10 +46,11 @@ public class CheapRepair extends RepairBlock
         {
             ItemStack itemInHand = player.getItemInHand();
             Material itemType = itemInHand.getType();
-            if (itemType != Material.AIR) // -> hat ein item in der hand?
+            if (itemType != Material.AIR) // -> holding an item?
             {
+                Item item = Item.getByMaterial(itemType);
                 int currentDurability = itemInHand.getDurability();
-                if (isRepairable(itemInHand)) // -> ist reparierbar?
+                if (item != null) // -> known item?
                 {
                     if (currentDurability > 0) // -> ist beschädigt?
                     {

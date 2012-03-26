@@ -73,26 +73,6 @@ public abstract class RepairBlock
         return player.hasPermission(this.permission);
     }
 
-    public static boolean isRepairable(Material material)
-    {
-        if (material.isBlock() || material.getMaxDurability() < 0 || material.isEdible())
-        {
-            return false;
-        }
-        switch (material)
-        {
-            case POTION:
-            case INK_SACK:
-                return false;
-        }
-        return true;
-    }
-
-    public static boolean isRepairable(ItemStack item)
-    {
-        return isRepairable(item.getType());
-    }
-
     public static double getEnchantmentMultiplier(ItemStack item, double factor, double base)
     {
         double enchantmentLevel = 0;

@@ -1,5 +1,6 @@
 package de.codeinfection.quickwango.ItemRepair.RepairBlocks;
 
+import de.codeinfection.quickwango.ItemRepair.Item;
 import de.codeinfection.quickwango.ItemRepair.ItemRepairConfiguration;
 import de.codeinfection.quickwango.ItemRepair.RepairBlock;
 import de.codeinfection.quickwango.ItemRepair.RepairRequest;
@@ -42,8 +43,9 @@ public class SingleRepair extends RepairBlock
             Material itemType = itemInHand.getType();
             if (itemType != Material.AIR) // -> has a item in hand?
             {
+                Item item = Item.getByMaterial(itemType);
                 int currentDurability = itemInHand.getDurability();
-                if (isRepairable(itemInHand)) // -> item is repairable?
+                if (item != null) // -> item is repairable?
                 {
                     if (currentDurability > 0) // -> item is damaged?
                     {
