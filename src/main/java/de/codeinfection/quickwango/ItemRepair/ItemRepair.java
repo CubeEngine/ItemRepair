@@ -68,7 +68,7 @@ public class ItemRepair extends JavaPlugin
                 ))
                 .loadBlocks();
 
-        this.pm.registerEvents(new ItemRepairPlayerListener(), this);
+        this.pm.registerEvents(new ItemRepairListener(), this);
 
         this.getCommand("itemrepair").setExecutor(new ItemrepairCommand(this));
 

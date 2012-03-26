@@ -15,13 +15,13 @@ import org.bukkit.event.player.PlayerInteractEvent;
  *
  * @author VoLLi
  */
-public class ItemRepairPlayerListener implements Listener
+public class ItemRepairListener implements Listener
 {
 
     private final RepairBlockManager rbm;
     private final Map<Player, RepairRequest> repairRequests;
 
-    public ItemRepairPlayerListener()
+    public ItemRepairListener()
     {
         this.rbm = RepairBlockManager.getInstance();
         this.repairRequests = new HashMap<Player, RepairRequest>();
