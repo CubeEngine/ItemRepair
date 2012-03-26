@@ -1,6 +1,11 @@
 Changes
 =======
 
+Version 2.0.0
+-------------
+- implemented a new price calculation
+- changed some internal things
+
 Version 1.1.2
 -------------
 - fixed a bug with BOSE7
