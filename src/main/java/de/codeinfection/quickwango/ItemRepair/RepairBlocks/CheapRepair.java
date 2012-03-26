@@ -13,8 +13,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 /**
+ * Repairs blocks cheaper
  *
- * @author VoLLi
+ * @author Phillip Schichtel
  */
 public class CheapRepair extends RepairBlock
 {

@@ -7,13 +7,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 /**
+ * Reloads the plugin
  *
- * @author CodeInfection
- */
-
-/**
- *
- * @author CodeInfection
+ * @author Phillip Schichtel
  */
 public class ReloadAction implements CommandExecutor
 {

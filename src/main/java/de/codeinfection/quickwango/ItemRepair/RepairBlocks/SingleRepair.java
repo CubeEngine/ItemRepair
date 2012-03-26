@@ -11,12 +11,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 /**
+ * Repairs the currently held item
  *
- * @author VoLLi
+ * @author Phillip Schichtel
  */
 public class SingleRepair extends RepairBlock
 {
-
     private final ItemRepairConfiguration config;
 
     public SingleRepair(Material material, ItemRepairConfiguration config)

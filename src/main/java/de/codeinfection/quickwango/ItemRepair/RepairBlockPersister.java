@@ -69,7 +69,7 @@ public class RepairBlockPersister
     public RepairBlockPersister persist(Collection<Block> blocks)
     {
         List<List<Object>> entries = new ArrayList<List<Object>>(blocks.size());
-        List<Object> tmp = null;
+        List<Object> tmp;
         for (Block block : blocks)
         {
             tmp = new ArrayList<Object>(4);

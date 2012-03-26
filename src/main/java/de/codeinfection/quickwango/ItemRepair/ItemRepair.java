@@ -19,7 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ItemRepair extends JavaPlugin
 {
     private static ItemRepair instance = null;
-
     private static Logger logger = null;
     public static boolean debugMode = false;
 
@@ -30,7 +29,7 @@ public class ItemRepair extends JavaPlugin
     private PluginManager pm;
     private ItemRepairConfiguration config;
     private File dataFolder;
-    private static Economy economy = null;
+    private Economy economy = null;
 
     public ItemRepair()
     {
@@ -59,7 +58,7 @@ public class ItemRepair extends JavaPlugin
         debugMode = configuration.getBoolean("debug");
         this.saveConfig();
 
-        economy = this.setupEconomy();
+        this.economy = this.setupEconomy();
 
         RepairBlockManager rbm = RepairBlockManager.initialize(this);
                 rbm.setPersister(new RepairBlockPersister(new File(dataFolder, "blocks.yml")))
@@ -109,9 +108,14 @@ public class ItemRepair extends JavaPlugin
         throw new IllegalStateException("Failed to initialize with Vault!");
     }
 
+    /**
+     * Returns the economy API
+     *
+     * @return the economy API
+     */
     public Economy getEconomy()
     {
-        return economy;
+        return this.economy;
     }
 
     public static void log(String msg)

@@ -5,8 +5,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 /**
+ * Represents a repair request
  *
- * @author CodeInfection
+ * @author Phillip Schichtel
  */
 public class RepairRequest
 {

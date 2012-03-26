@@ -12,8 +12,9 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 /**
+ * 
  *
- * @author VoLLi
+ * @author Phillip Schichtel
  */
 public abstract class RepairBlock
 {

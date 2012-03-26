@@ -1,8 +1,9 @@
 package de.codeinfection.quickwango.ItemRepair;
 
 /**
+ * Base materials for items
  *
- * @author CodeInfection
+ * @author Phillip Schichtel
  */
 public enum BaseMaterial
 {

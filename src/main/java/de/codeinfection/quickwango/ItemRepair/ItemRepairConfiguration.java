@@ -4,10 +4,10 @@ import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
 
 /**
-*
-* @author VoLLi
-* @und Baeume Faithcaio
-*/
+ * Hols the configuration
+ *
+ * @author Phillip Schichtel
+ */
 public class ItemRepairConfiguration
 {
     public final double price_perDamage;

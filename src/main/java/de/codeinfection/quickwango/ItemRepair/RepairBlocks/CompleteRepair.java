@@ -13,8 +13,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 /**
+ * Repairs all blocks
  *
- * @author VoLLi
+ * @author Phillip Schichtel
  */
 public class CompleteRepair extends RepairBlock
 {

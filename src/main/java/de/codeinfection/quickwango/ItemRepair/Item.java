@@ -5,8 +5,9 @@ import java.util.Map;
 import org.bukkit.Material;
 
 /**
+ * Maps items to thair base materials
  *
- * @author CodeInfection
+ * @author Phillip Schichtel
  */
 public enum Item
 {
@@ -73,21 +74,42 @@ public enum Item
         this.baseMaterialCount = baseMaterialCount;
     }
 
+    /**
+     * Returns the material of this item
+     *
+     * @return the material
+     */
     public Material getMaterial()
     {
         return this.material;
     }
 
+    /**
+     * Returns the base material of this item
+     *
+     * @return the base material
+     */
     public BaseMaterial getBaseMaterial()
     {
         return this.baseMaterial;
     }
 
-    public int getbaseMaterialCount()
+    /**
+     * Returns the count of the required base materials
+     *
+     * @return the count the the required base materials
+     */
+    public int getBaseMaterialCount()
     {
         return this.baseMaterialCount;
     }
 
+    /**
+     * Returns an item by it's material
+     *
+     * @param material the material of the item
+     * @return the item or null if not found
+     */
     public static Item getByMaterial(Material material)
     {
         return BY_MATERIAL.get(material);

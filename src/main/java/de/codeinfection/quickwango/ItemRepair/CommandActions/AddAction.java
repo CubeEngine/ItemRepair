@@ -8,8 +8,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
+ * Adds a repair block
  *
- * @author CodeInfection
+ * @author Phillip Schichtel
  */
 public class AddAction implements CommandExecutor
 {

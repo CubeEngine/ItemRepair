@@ -12,8 +12,9 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 /**
+ * Listens for a few player related events
  *
- * @author VoLLi
+ * @author Phillip Schichtel
  */
 public class ItemRepairListener implements Listener
 {

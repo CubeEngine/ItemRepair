@@ -11,8 +11,9 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 /**
+ * Manages the repair blocks
  *
- * @author VoLLi
+ * @author Phillip Schichtel
  */
 public class RepairBlockManager
 {
@@ -54,6 +55,9 @@ public class RepairBlockManager
         return this;
     }
 
+    /**
+     * Loads the blocks from a persister
+     */
     public void loadBlocks()
     {
         if (this.persister != null)
@@ -65,6 +69,12 @@ public class RepairBlockManager
         }
     }
 
+    /**
+     * Adds a repair block
+     *
+     * @param block the repair block
+     * @return fluent interface
+     */
     public RepairBlockManager addRepairBlock(RepairBlock block)
     {
         this.pm.addPermission(block.permission);
@@ -74,21 +84,45 @@ public class RepairBlockManager
         return this;
     }
 
+    /**
+     * Returns a repair block by its material's ID
+     *
+     * @param materialId the material ID
+     * @return the repair block
+     */
     public RepairBlock getRepairBlock(int materialId)
     {
         return this.getRepairBlock(Material.getMaterial(materialId));
     }
 
+    /**
+     * Returns a repair block by its material's name
+     *
+     * @param materialName the name of the material
+     * @return the repair block
+     */
     public RepairBlock getRepairBlock(String materialName)
     {
         return this.getRepairBlock(Material.getMaterial(materialName));
     }
 
+    /**
+     * Returns a repair block by it's materials
+     *
+     * @param material the material
+     * @return the repair block
+     */
     public RepairBlock getRepairBlock(Material material)
     {
         return this.repairBlocks.get(material);
     }
 
+    /**
+     * Returns the attached repair block of a block
+     * 
+     * @param block the block
+     * @return the attached repair block
+     */
     public RepairBlock getRepairBlock(Block block)
     {
         Material repairBlockMaterial = this.blockMap.get(block);
@@ -99,11 +133,23 @@ public class RepairBlockManager
         return null;
     }
 
+    /**
+     * Checks whether the given block is a repair block
+     *
+     * @param block the block to check
+     * @return true if it is one
+     */
     public boolean isRepairBlock(Block block)
     {
         return this.blockMap.containsKey(block);
     }
 
+    /**
+     * Attaches a repair block to a block
+     *
+     * @param block the block to attach to
+     * @return true on success
+     */
     public boolean attachRepairBlock(Block block)
     {
         Material material = block.getType();
@@ -122,6 +168,12 @@ public class RepairBlockManager
         return false;
     }
 
+    /**
+     * Detaches a repair block from a block
+     *
+     * @param block the block to detach from
+     * @return true on success
+     */
     public boolean detachRepairBlock(Block block)
     {
         if (this.isRepairBlock(block))

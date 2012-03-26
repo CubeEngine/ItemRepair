@@ -14,12 +14,12 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 /**
+ * The base command
  *
- * @author CodeInfection
+ * @author Phillip Schichtel
  */
 public class ItemrepairCommand implements CommandExecutor
 {
-
     private Map<String, CommandExecutor> actions;
     private final Permission parentPermission;
     private final PluginManager pm;
