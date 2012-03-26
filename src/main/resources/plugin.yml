@@ -6,6 +6,8 @@ commands:
   itemrepair:
     usage: "/<command> <add|remove>"
     description: "Command to manage Repair Blocks"
+    aliases:
+      - ip
 depend:
   - Vault
 website: "http://parallel-universe.de"
