@@ -6,7 +6,7 @@ Version 2.0.0
 - implemented a new price calculation
 - changed some internal things
 - added a reload command (/itemrepair reload)
-- added an alias to the base command: /ip <action>
+- added an alias to the base command: /ir <action>
 
 Version 1.1.2
 -------------

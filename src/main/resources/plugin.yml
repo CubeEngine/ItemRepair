@@ -7,7 +7,7 @@ commands:
     usage: "/<command> <add|remove>"
     description: "Command to manage Repair Blocks"
     aliases:
-      - ip
+      - ir
 depend:
   - Vault
 website: "http://parallel-universe.de"
