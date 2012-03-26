@@ -19,7 +19,7 @@ public abstract class RepairBlock
 {
 
     public static final String PERMISSION_BASE = "itemrepair.block.";
-    private static final Economy economy = ItemRepair.getEconomy();
+    private static final Economy economy = ItemRepair.getInstance().getEconomy();
     public final String name;
     public final Material material;
     public final Permission permission;

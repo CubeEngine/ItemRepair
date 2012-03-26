@@ -18,7 +18,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class ItemRepair extends JavaPlugin
 {
-    protected static Logger logger = null;
+    private static ItemRepair instance = null;
+
+    private static Logger logger = null;
     public static boolean debugMode = false;
 
     public final static List<Player> addBlockChoiceRequests = new ArrayList<Player>();
@@ -31,7 +33,14 @@ public class ItemRepair extends JavaPlugin
     private static Economy economy = null;
 
     public ItemRepair()
-    {}
+    {
+        instance = this;
+    }
+
+    public static ItemRepair getInstance()
+    {
+        return instance;
+    }
 
     @Override
     public void onEnable()
@@ -100,7 +109,7 @@ public class ItemRepair extends JavaPlugin
         throw new IllegalStateException("Failed to initialize with Vault!");
     }
 
-    public static Economy getEconomy()
+    public Economy getEconomy()
     {
         return economy;
     }

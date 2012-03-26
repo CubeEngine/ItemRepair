@@ -1,7 +1,6 @@
 package de.codeinfection.quickwango.ItemRepair;
 
-import de.codeinfection.quickwango.ItemRepair.CommandActions.AddAction;
-import de.codeinfection.quickwango.ItemRepair.CommandActions.RemoveAction;
+import de.codeinfection.quickwango.ItemRepair.CommandActions.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +34,7 @@ public class ItemrepairCommand implements CommandExecutor
         this.actions = new HashMap<String, CommandExecutor>();
         this.registerAction("add", new AddAction());
         this.registerAction("remove", new RemoveAction());
+        this.registerAction("reload", new ReloadAction());
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
