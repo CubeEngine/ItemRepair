@@ -41,7 +41,7 @@ public class CheapRepair extends RepairBlock
     @Override
     public RepairRequest requestRepair(Player player)
     {
-        if (hasRepairPermission(player, "cheapRepair"))
+        if (hasPermission(player))
         {
             ItemStack itemInHand = player.getItemInHand();
             Material itemType = itemInHand.getType();

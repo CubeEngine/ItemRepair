@@ -68,7 +68,7 @@ public abstract class RepairBlock
     /*
      * Utilities
      */
-    public boolean hasRepairPermission(Player player, String permission)
+    public boolean hasPermission(Player player)
     {
         return player.hasPermission(this.permission);
     }

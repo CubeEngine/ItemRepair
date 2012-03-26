@@ -36,7 +36,7 @@ public class SingleRepair extends RepairBlock
 
     public RepairRequest requestRepair(Player player)
     {
-        if (hasRepairPermission(player, "singleRepair"))
+        if (hasPermission(player))
         {
             ItemStack itemInHand = player.getItemInHand();
             Material itemType = itemInHand.getType();

@@ -39,7 +39,7 @@ public class CompleteRepair extends RepairBlock
     @Override
     public RepairRequest requestRepair(Player player)
     {
-        if (hasRepairPermission(player, "multiRepair"))
+        if (hasPermission(player))
         {
             double price = 0;
             ArrayList<ItemStack> allItems = new ArrayList<ItemStack>();
