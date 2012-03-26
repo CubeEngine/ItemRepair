@@ -4,7 +4,7 @@ main: de.codeinfection.quickwango.ItemRepair.ItemRepair
 dev-url: http://dev.bukkit.org/server-mods/ItemRepair
 commands:
   itemrepair:
-    usage: "/<command> <add|remove>"
+    usage: "/<command> <add|remove|reload>"
     description: "Command to manage Repair Blocks"
     aliases:
       - ir
