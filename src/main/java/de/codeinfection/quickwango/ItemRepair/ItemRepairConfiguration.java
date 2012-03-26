@@ -13,13 +13,14 @@ public class ItemRepairConfiguration
     public final double price_perDamage;
     public final double price_enchantMultiplier_base;
     public final double price_enchantMultiplier_factor;
-    public final double price_wood;
-    public final double price_stone;
-    public final double price_leather;
-    public final double price_iron;
-    public final double price_fire
-    public final double price_gold;
-    public final double price_diamond;
+    
+    public final double price_materials_wood;
+    public final double price_materials_stone;
+    public final double price_materials_leather;
+    public final double price_materials_iron;
+    public final double price_materials_fire;
+    public final double price_materials_gold;
+    public final double price_materials_diamond;
 
     public final Material repairBlocks_singleRepair_block;
     public final Material repairBlocks_completeRepair_block;
@@ -33,13 +34,14 @@ public class ItemRepairConfiguration
         this.price_perDamage = config.getDouble("price.perDamage");
         this.price_enchantMultiplier_base = config.getDouble("price.enchantMultiplier.base");
         this.price_enchantMultiplier_factor = config.getDouble("price.enchantMultiplier.factor");
-        this.price_wood = config.getDouble("price.price_wood");
-        this.price_stone = config.getDouble("price.price_stone");
-        this.price_leather = config.getDouble("price.price_leather");
-        this.price_iron = config.getDouble("price.price_iron");
-        this.price_fire = config.getDouble("price.price_fire");
-        this.price_gold = config.getDouble("price.price_gold");
-        this.price_diamond = config.getDouble("price.price_diamond");
+
+        this.price_materials_wood = config.getDouble("price.materials.wood");
+        this.price_materials_stone = config.getDouble("price.materials.stone");
+        this.price_materials_leather = config.getDouble("price.materials.leather");
+        this.price_materials_iron = config.getDouble("price.materials.iron");
+        this.price_materials_fire = config.getDouble("price.materials.fire");
+        this.price_materials_gold = config.getDouble("price.materials.gold");
+        this.price_materials_diamond = config.getDouble("price.materials.diamond");
 
         this.repairBlocks_singleRepair_block = Material.getMaterial(config.getInt("repairBlocks.singleRepair.block"));
         this.repairBlocks_completeRepair_block = Material.getMaterial(config.getInt("repairBlocks.completeRepair.block"));
