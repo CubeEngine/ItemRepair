@@ -1,6 +1,9 @@
 debug: false
 price:
   perDamage: 0.5
+  materials:
+    wood: 123
+    stone: 123
   enchantMultiplier:
     base: 2.0
     factor: 6.0
