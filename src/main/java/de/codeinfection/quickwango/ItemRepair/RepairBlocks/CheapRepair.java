@@ -5,6 +5,7 @@ import de.codeinfection.quickwango.ItemRepair.ItemRepairConfiguration;
 import de.codeinfection.quickwango.ItemRepair.RepairBlock;
 import de.codeinfection.quickwango.ItemRepair.RepairRequest;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -49,24 +50,20 @@ public class CheapRepair extends RepairBlock
             Material itemType = itemInHand.getType();
             if (itemType != Material.AIR) // -> holding an item?
             {
-                Item item = Item.getByMaterial(itemType);
                 int currentDurability = itemInHand.getDurability();
-                if (item != null) // -> known item?
+                if (Item.getByMaterial(itemType) != null) // -> known item?
                 {
                     if (currentDurability > 0) // -> ist beschädigt?
                     {
-                        double price = itemInHand.getDurability();
-                        price *= this.config.price_perDamage;
-                        price *= itemInHand.getAmount();
-                        price *= getEnchantmentMultiplier(itemInHand, this.config.price_enchantMultiplier_factor, this.config.price_enchantMultiplier_base);
-                        price *= (this.config.repairBlocks_cheapRepair_costPercentage / 100.0D);
+                        List<ItemStack> itemList = Arrays.asList(itemInHand);
+                        double price = calculatePrice(itemList);
 
                         player.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_RED + "ItemRepair" + ChatColor.GREEN + "]");
                         player.sendMessage(ChatColor.AQUA + "Rightclick" + ChatColor.WHITE + " again to repair your item, with a chance of breaking it.");
                         player.sendMessage("The repair would cost " + ChatColor.AQUA + getEconomy().format(price) + ChatColor.WHITE + ".");
                         player.sendMessage("You have currently " + ChatColor.AQUA + getEconomy().format(getEconomy().getBalance(player.getName())));
 
-                        return new RepairRequest(this, player, Arrays.asList(itemInHand), price);
+                        return new RepairRequest(this, player, itemList, price);
                     }
                     else
                     {

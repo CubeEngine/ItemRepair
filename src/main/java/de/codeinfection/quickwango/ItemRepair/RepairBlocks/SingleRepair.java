@@ -4,7 +4,8 @@ import de.codeinfection.quickwango.ItemRepair.Item;
 import de.codeinfection.quickwango.ItemRepair.ItemRepairConfiguration;
 import de.codeinfection.quickwango.ItemRepair.RepairBlock;
 import de.codeinfection.quickwango.ItemRepair.RepairRequest;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -43,19 +44,15 @@ public class SingleRepair extends RepairBlock
             Material itemType = itemInHand.getType();
             if (itemType != Material.AIR) // -> has a item in hand?
             {
-                Item item = Item.getByMaterial(itemType);
                 int currentDurability = itemInHand.getDurability();
-                if (item != null) // -> item is repairable?
+                if (Item.getByMaterial(itemType) != null) // -> item is repairable?
                 {
                     if (currentDurability > 0) // -> item is damaged?
                     {
-                        double price = itemInHand.getDurability();
-                        price *= this.config.price_perDamage;
-                        price *= itemInHand.getAmount();
-                        price *= getEnchantmentMultiplier(itemInHand, this.config.price_enchantMultiplier_factor, this.config.price_enchantMultiplier_base);
 
-                        ArrayList<ItemStack> items = new ArrayList<ItemStack>(1);
-                        items.add(itemInHand);
+                        List<ItemStack> items = Arrays.asList(itemInHand);
+
+                        double price = calculatePrice(items);
 
                         player.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_RED + "ItemRepair" + ChatColor.GREEN + "]");
                         player.sendMessage(ChatColor.AQUA + "Rightclick" + ChatColor.WHITE + " again to repair your item.");

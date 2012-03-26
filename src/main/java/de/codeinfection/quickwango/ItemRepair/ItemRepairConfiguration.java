@@ -13,7 +13,6 @@ import org.bukkit.configuration.Configuration;
  */
 public class ItemRepairConfiguration
 {
-    public final double price_perDamage;
     public final double price_enchantMultiplier_base;
     public final double price_enchantMultiplier_factor;
     
@@ -40,7 +39,6 @@ public class ItemRepairConfiguration
         }
         this.materialPrices = Collections.unmodifiableMap(tempMap);
 
-        this.price_perDamage = config.getDouble("price.perDamage");
         this.price_enchantMultiplier_base = config.getDouble("price.enchantMultiplier.base");
         this.price_enchantMultiplier_factor = config.getDouble("price.enchantMultiplier.factor");
 

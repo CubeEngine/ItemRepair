@@ -43,32 +43,26 @@ public class CompleteRepair extends RepairBlock
     {
         if (hasPermission(player))
         {
-            double price = 0;
+            double price;
             ArrayList<ItemStack> allItems = new ArrayList<ItemStack>();
             Collections.addAll(allItems, player.getInventory().getArmorContents());
             Collections.addAll(allItems, player.getInventory().getContents());
             List<ItemStack> items = new ArrayList<ItemStack>();
             ItemStack itemInHand = player.getItemInHand();
-            Item item = Item.getByMaterial(itemInHand.getType());
 
-            if (itemInHand != null && item != null)
+            if (itemInHand != null && Item.getByMaterial(itemInHand.getType()) != null)
             {
-                Item currentItem;
                 for (ItemStack itemStack : allItems)
                 {
-                    currentItem = Item.getByMaterial(itemStack.getType());
-                    if (itemStack != null && currentItem != null && itemStack.getDurability() > 0)
+                    if (itemStack != null && Item.getByMaterial(itemStack.getType()) != null && itemStack.getDurability() > 0)
                     {
-                        price += (itemStack.getDurability()
-                                * this.config.price_perDamage
-                                * itemStack.getAmount()
-                                * getEnchantmentMultiplier(itemStack, this.config.price_enchantMultiplier_factor, this.config.price_enchantMultiplier_base));
                         items.add(itemStack);
                     }
                 }
 
                 if (items.size() > 0)
                 {
+                    price = calculatePrice(items);
 
                     player.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_RED + "ItemRepair" + ChatColor.GREEN + "]");
                     player.sendMessage(ChatColor.AQUA + "Rightclick" + ChatColor.WHITE + " again to repair all your damaged items.");
