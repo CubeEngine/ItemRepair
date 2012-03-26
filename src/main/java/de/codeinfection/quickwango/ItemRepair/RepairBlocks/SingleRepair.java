@@ -18,12 +18,9 @@ import org.bukkit.inventory.ItemStack;
  */
 public class SingleRepair extends RepairBlock
 {
-    private final ItemRepairConfiguration config;
-
     public SingleRepair(Material material, ItemRepairConfiguration config)
     {
         super("single", material);
-        this.config = config;
     }
 
     public SingleRepair(int blockId, ItemRepairConfiguration config)

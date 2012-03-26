@@ -10,6 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
  * Listens for a few player related events
@@ -26,6 +27,12 @@ public class ItemRepairListener implements Listener
     {
         this.rbm = RepairBlockManager.getInstance();
         this.repairRequests = new HashMap<Player, RepairRequest>();
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerQuit(PlayerQuitEvent event)
+    {
+        this.removeRepairRequest(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
