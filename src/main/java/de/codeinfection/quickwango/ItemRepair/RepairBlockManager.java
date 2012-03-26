@@ -32,7 +32,12 @@ public class RepairBlockManager
         this.persister = null;
         this.pm = plugin.getServer().getPluginManager();
         this.parentPermission = new Permission("itemrepair.allblocks", PermissionDefault.OP);
-        this.pm.addPermission(this.parentPermission);
+        try
+        {
+            this.pm.addPermission(this.parentPermission);
+        }
+        catch (IllegalArgumentException e)
+        {}
     }
 
     public static RepairBlockManager initialize(Plugin plugin)
@@ -77,7 +82,12 @@ public class RepairBlockManager
      */
     public RepairBlockManager addRepairBlock(RepairBlock block)
     {
-        this.pm.addPermission(block.permission);
+        try
+        {
+            this.pm.addPermission(block.permission);
+        }
+        catch (IllegalArgumentException e)
+        {}
         block.permission.addParent(this.parentPermission, true);
         this.repairBlocks.put(block.material, block);
         ItemRepair.debug("Added a repair block: " + block.getClass().getSimpleName() + " on ID: " + block.material);

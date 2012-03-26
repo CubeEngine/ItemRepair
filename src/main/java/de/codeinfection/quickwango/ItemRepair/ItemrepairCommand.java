@@ -29,7 +29,12 @@ public class ItemrepairCommand implements CommandExecutor
     {
         this.pm = plugin.getServer().getPluginManager();
         this.parentPermission = new Permission(PERMISSION_BASE + "*", PermissionDefault.OP);
-        this.pm.addPermission(this.parentPermission);
+        try
+        {
+            this.pm.addPermission(this.parentPermission);
+        }
+        catch (IllegalArgumentException e)
+        {}
 
         this.actions = new HashMap<String, CommandExecutor>();
         this.registerAction("add", new AddAction());
@@ -69,7 +74,12 @@ public class ItemrepairCommand implements CommandExecutor
     public final ItemrepairCommand registerAction(String name, CommandExecutor action)
     {
         Permission actionPermission = new Permission(PERMISSION_BASE + name, PermissionDefault.OP);
-        this.pm.addPermission(actionPermission);
+        try
+        {
+            this.pm.addPermission(actionPermission);
+        }
+        catch (IllegalArgumentException e)
+        {}
         actionPermission.addParent(this.parentPermission, true);
         this.actions.put(name, action);
 
