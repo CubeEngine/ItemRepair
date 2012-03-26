@@ -93,8 +93,8 @@ public abstract class RepairBlock
             currentPrice = item.getBaseMaterialCount() * config.materialPrices.get(baseMaterial);
             currentPrice *= (double)Math.min(itemStack.getDurability(), type.getMaxDurability()) / (double)type.getMaxDurability();
             currentPrice *= getEnchantmentMultiplier(itemStack,
-                config.price_enchantMultiplier_base,
-                config.price_enchantMultiplier_factor
+                config.price_enchantMultiplier_factor,
+                config.price_enchantMultiplier_base
             );
 
             price += currentPrice;
