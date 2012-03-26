@@ -12,15 +12,17 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 /**
- * 
+ * Represents a repair block
  *
  * @author Phillip Schichtel
  */
 public abstract class RepairBlock
 {
-
     public static final String PERMISSION_BASE = "itemrepair.block.";
-    private static final Economy economy = ItemRepair.getInstance().getEconomy();
+    private static final ItemRepair plugin = ItemRepair.getInstance();
+    private static final ItemRepairConfiguration config = plugin.getConfiguration();
+    private static final Economy economy = plugin.getEconomy();
+
     public final String name;
     public final Material material;
     public final Permission permission;
@@ -74,6 +76,33 @@ public abstract class RepairBlock
         return player.hasPermission(this.permission);
     }
 
+    public static double calculatePrice(List<ItemStack> items)
+    {
+        double price = 0.0;
+
+        Material type;
+        Item item;
+        BaseMaterial baseMaterial;
+        double currentPrice;
+        for (ItemStack itemStack : items)
+        {
+            type = itemStack.getType();
+            item = Item.getByMaterial(type);
+            baseMaterial = item.getBaseMaterial();
+            
+            currentPrice = item.getBaseMaterialCount() * config.materialPrices.get(baseMaterial);
+            currentPrice *= itemStack.getDurability() / type.getMaxDurability();
+            currentPrice *= getEnchantmentMultiplier(itemStack,
+                config.price_enchantMultiplier_base,
+                config.price_enchantMultiplier_factor
+            );
+
+            price += currentPrice;
+        }
+
+        return price;
+    }
+
     public static double getEnchantmentMultiplier(ItemStack item, double factor, double base)
     {
         double enchantmentLevel = 0;
@@ -86,13 +115,13 @@ public abstract class RepairBlock
         {
             double enchantmentMultiplier = factor * Math.pow(base, enchantmentLevel);
 
-            enchantmentMultiplier = enchantmentMultiplier / 100D + 1D;
+            enchantmentMultiplier = enchantmentMultiplier / 100.0 + 1.0;
 
             return enchantmentMultiplier;
         }
         else
         {
-            return 1D;
+            return 1.0;
         }
     }
 

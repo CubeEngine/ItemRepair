@@ -118,6 +118,11 @@ public class ItemRepair extends JavaPlugin
         return this.economy;
     }
 
+    public ItemRepairConfiguration getConfiguration()
+    {
+        return this.config;
+    }
+
     public static void log(String msg)
     {
         logger.log(Level.INFO, msg);
