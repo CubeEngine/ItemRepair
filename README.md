@@ -35,9 +35,9 @@ Installation:
 Permissions:
 ------------
 - **itemrepair.allblocks** -- Allows the player to use all blocks
-    - **itemrepair.block.singleRepair** -- Allows the player to use single repair blocks
-    - **itemrepair.block.completeRepair** -- Allows the player to use complete repair blocks
-    - **itemrepair.block.cheapRepair** -- Allows the player to use cheap repair blocks
+    - **itemrepair.block.single** -- Allows the player to use single repair blocks
+    - **itemrepair.block.complete** -- Allows the player to use complete repair blocks
+    - **itemrepair.block.cheap** -- Allows the player to use cheap repair blocks
 - **itemrepair.commands.\*** -- Allows the player to use all commands
     - **itemrepair.commands.add** -- Allows the player to add repair blocks
     - **itemrepair.commands.remove** -- Allows the player to remove repair blocks
@@ -45,7 +45,7 @@ Permissions:
 ***IMPORTANT***
 ===============
 
-I'm searching for e Java developer who continues this plugin! Please contact me if you're interessted.
+I'm searching for a Java developer who continues this plugin! Please contact me if you're interessted.
 
 ***README***
 ============
