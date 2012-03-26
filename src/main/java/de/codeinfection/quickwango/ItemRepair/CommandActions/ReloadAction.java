@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.PluginManager;
 
 /**
  * Reloads the plugin
@@ -15,13 +16,13 @@ public class ReloadAction implements CommandExecutor
 {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        ItemRepair plugin = ItemRepair.getInstance();
+        final ItemRepair plugin = ItemRepair.getInstance();
+        final PluginManager pm = plugin.getServer().getPluginManager();
 
-        plugin.onDisable();
-        plugin.onEnable();
+        pm.disablePlugin(plugin);
+        pm.enablePlugin(plugin);
 
         sender.sendMessage(ChatColor.GREEN + "ItemRepair successfully reloaded!");
-
         return true;
     }
 }
