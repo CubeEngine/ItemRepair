@@ -29,7 +29,7 @@ public class ItemRepairListener implements Listener
         this.repairRequests = new HashMap<Player, RepairRequest>();
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event)
     {
         this.removeRepairRequest(event.getPlayer());
