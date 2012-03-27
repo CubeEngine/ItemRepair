@@ -57,6 +57,7 @@ public class CheapRepair extends RepairBlock
                     {
                         List<ItemStack> itemList = Arrays.asList(itemInHand);
                         double price = calculatePrice(itemList);
+                        price *= (this.config.repairBlocks_cheapRepair_costPercentage / 100.0);
 
                         player.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_RED + "ItemRepair" + ChatColor.GREEN + "]");
                         player.sendMessage(ChatColor.AQUA + "Rightclick" + ChatColor.WHITE + " again to repair your item, with a chance of breaking it.");
