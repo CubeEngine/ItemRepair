@@ -16,7 +16,7 @@ Features:
 - different repair blocks:
     - single item repair: repairs the item in your hand (default: iron block)
     - complete repair: repairs **all** your items (default: gold block)
-    - cheap repair: repairs the item in your hand cheaper, but the itme may break (chances configurable, default: diamond block)
+    - cheap repair: repairs the item in your hand cheaper, but the item may break (chances configurable, default: diamond block)
 - uses [Vault](http://dev.bukkit.org/server-mods/Vault/)
 - dynamic pricing
 
@@ -24,6 +24,7 @@ Commands:
 ---------
 - **/itemrepair add** -- registers a block as a repair block
 - **/itemrepair remove** -- unregisters a repair block
+- **/itemrepair reload** -- reloads the plugin
 
 Installation:
 -------------
