@@ -1,7 +1,7 @@
 name: ItemRepair
 version: "${project.version}"
 main: de.codeinfection.quickwango.ItemRepair.ItemRepair
-dev-url: http://dev.bukkit.org/server-mods/ItemRepair
+dev-url: http://dev.bukkit.org/server-mods/itemrepair
 commands:
   itemrepair:
     usage: "/<command> <add|remove|reload>"

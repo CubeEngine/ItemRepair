@@ -51,7 +51,8 @@ public class ItemRepair extends JavaPlugin
         this.dataFolder = this.getDataFolder();
 
         this.dataFolder.mkdirs();
-        
+
+        this.reloadConfig();
         Configuration configuration = this.getConfig();
         configuration.options().copyDefaults(true);
         this.config = new ItemRepairConfiguration(configuration);
