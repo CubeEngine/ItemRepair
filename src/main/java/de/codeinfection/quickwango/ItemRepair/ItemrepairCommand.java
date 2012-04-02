@@ -3,11 +3,14 @@ package de.codeinfection.quickwango.ItemRepair;
 import de.codeinfection.quickwango.ItemRepair.CommandActions.*;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
@@ -37,8 +40,11 @@ public class ItemrepairCommand implements CommandExecutor
         {}
 
         this.actions = new HashMap<String, CommandExecutor>();
-        this.registerAction("add", new AddAction());
-        this.registerAction("remove", new RemoveAction());
+
+        final Set<Player> addRequests = new HashSet<Player>();
+        final Set<Player> removeRequests = new HashSet<Player>();
+        this.registerAction("add", new AddAction(plugin, addRequests, removeRequests));
+        this.registerAction("remove", new RemoveAction(plugin, addRequests, removeRequests));
         this.registerAction("reload", new ReloadAction());
     }
 

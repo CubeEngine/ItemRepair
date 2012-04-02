@@ -1,10 +1,13 @@
 package de.codeinfection.quickwango.ItemRepair;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.permissions.Permission;
@@ -26,6 +29,8 @@ public abstract class RepairBlock
     private final String name;
     private final Material material;
     private final Permission permission;
+
+    private final Map<Player, Inventory> inventoryMap;
 
     public RepairBlock(RepairPlugin plugin, String name, String material)
     {
@@ -61,6 +66,7 @@ public abstract class RepairBlock
             throw new IllegalArgumentException("material must not be null!");
         }
         this.permission = new Permission(this.permissionBase + name, PermissionDefault.OP);
+        this.inventoryMap = new HashMap<Player, Inventory>();
     }
 
     public final Economy getEconomy()
@@ -120,6 +126,21 @@ public abstract class RepairBlock
         }
 
         return price;
+    }
+
+    public Inventory getInventory(final Player player)
+    {
+        if (player == null)
+        {
+            return null;
+        }
+        Inventory inventory = this.inventoryMap.get(player);
+        if (inventory == null)
+        {
+            inventory = this.server.createInventory(player, 9 * 4, this.name);
+            this.inventoryMap.put(player, inventory);
+        }
+        return inventory;
     }
 
     public abstract RepairRequest requestRepair(Player player);

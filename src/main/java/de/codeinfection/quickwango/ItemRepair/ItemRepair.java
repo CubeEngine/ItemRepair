@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Server;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,9 +19,6 @@ public class ItemRepair extends JavaPlugin implements RepairPlugin
     private static ItemRepair instance = null;
     private static Logger logger = null;
     public static boolean debugMode = false;
-
-    public final static List<Player> addBlockChoiceRequests = new ArrayList<Player>();
-    public final static List<Player> removeBlockChoiceRequests = new ArrayList<Player>();
     
     private Server server;
     private PluginManager pm;
@@ -76,18 +72,12 @@ public class ItemRepair extends JavaPlugin implements RepairPlugin
         this.pm.registerEvents(new ItemRepairListener(), this);
 
         this.getCommand("itemrepair").setExecutor(new ItemrepairCommand(this));
-
-        log("Version " + this.getDescription().getVersion() + " enabled");
     }
 
     @Override
     public void onDisable()
     {
-        addBlockChoiceRequests.clear();
-        removeBlockChoiceRequests.clear();
         RepairBlockManager.getInstance().clearBlocks();
-
-        log("Version " + this.getDescription().getVersion() + " disabled");
     }
 
     private Economy setupEconomy()

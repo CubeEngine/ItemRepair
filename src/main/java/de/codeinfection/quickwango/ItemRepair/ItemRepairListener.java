@@ -1,26 +1,16 @@
 package de.codeinfection.quickwango.ItemRepair;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.DoubleChest;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.DoubleChestInventory;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * Listens for a few player related events
@@ -57,69 +47,31 @@ public class ItemRepairListener implements Listener
                 return;
             }
 
-            player.openInventory(Bukkit.createInventory(player, InventoryType.CHEST));
-
-            if (ItemRepair.addBlockChoiceRequests.contains(player))
+            RepairBlock repairBlock = this.rbm.getRepairBlock(block);
+            if (repairBlock != null)
             {
-                ItemRepair.addBlockChoiceRequests.remove(player);
-                if (!this.rbm.isRepairBlock(block))
+                event.setCancelled(true);
+                ItemRepair.debug("Repair block found! - " + repairBlock.getClass().getSimpleName());
+                if (this.hasPlayerRequestedRepair(player))
                 {
-                    if (this.rbm.attachRepairBlock(block))
+                    RepairRequest request = this.getRepairRequest(player);
+                    if (request.getRepairBlock() == repairBlock)
                     {
-                        player.sendMessage(ChatColor.GREEN + "Repair block successfully added!");
-                    }
-                    else
-                    {
-                        player.sendMessage(ChatColor.RED + "This block can't be used as a repair block!");
+                        repairBlock.repair(request);
+
+                        player.updateInventory();
+
+                        this.removeRepairRequest(player);
+                        return;
                     }
                 }
                 else
                 {
-                    player.sendMessage(ChatColor.RED + "This block is already a repair block!");
-                }
-                event.setCancelled(true);
-            }
-            else if (ItemRepair.removeBlockChoiceRequests.contains(player))
-            {
-                ItemRepair.removeBlockChoiceRequests.remove(player);
-                if (this.rbm.detachRepairBlock(block))
-                {
-                    player.sendMessage(ChatColor.GREEN + "Repair block successfully removed!");
-                }
-                else
-                {
-                    player.sendMessage(ChatColor.RED + "That block is not a repair block!");
-                }
-                event.setCancelled(true);
-            }
-            else
-            {
-                RepairBlock repairBlock = this.rbm.getRepairBlock(block);
-                if (repairBlock != null)
-                {
-                    event.setCancelled(true);
-                    ItemRepair.debug("Repair block found! - " + repairBlock.getClass().getSimpleName());
-                    if (this.hasPlayerRequestedRepair(player))
+                    RepairRequest request = repairBlock.requestRepair(player);
+                    if (request != null)
                     {
-                        RepairRequest request = this.getRepairRequest(player);
-                        if (request.getRepairBlock() == repairBlock)
-                        {
-                            repairBlock.repair(request);
-
-                            player.updateInventory();
-
-                            this.removeRepairRequest(player);
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        RepairRequest request = repairBlock.requestRepair(player);
-                        if (request != null)
-                        {
-                            this.requestRepair(player, request);
-                            return;
-                        }
+                        this.requestRepair(player, request);
+                        return;
                     }
                 }
             }
