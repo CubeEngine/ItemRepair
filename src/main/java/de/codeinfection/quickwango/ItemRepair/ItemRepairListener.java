@@ -1,16 +1,26 @@
 package de.codeinfection.quickwango.ItemRepair;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.DoubleChest;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.DoubleChestInventory;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Listens for a few player related events
@@ -46,6 +56,8 @@ public class ItemRepairListener implements Listener
             {
                 return;
             }
+
+            player.openInventory(Bukkit.createInventory(player, InventoryType.CHEST));
 
             if (ItemRepair.addBlockChoiceRequests.contains(player))
             {

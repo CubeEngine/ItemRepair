@@ -84,13 +84,13 @@ public class RepairBlockManager
     {
         try
         {
-            this.pm.addPermission(block.permission);
+            this.pm.addPermission(block.getPermission());
         }
         catch (IllegalArgumentException e)
         {}
-        block.permission.addParent(this.parentPermission, true);
-        this.repairBlocks.put(block.material, block);
-        ItemRepair.debug("Added a repair block: " + block.getClass().getSimpleName() + " on ID: " + block.material);
+        block.getPermission().addParent(this.parentPermission, true);
+        this.repairBlocks.put(block.getMaterial(), block);
+        ItemRepair.debug("Added a repair block: " + block.getClass().getSimpleName() + " on ID: " + block.getMaterial());
         return this;
     }
 
@@ -196,5 +196,11 @@ public class RepairBlockManager
             return true;
         }
         return false;
+    }
+
+    public RepairBlockManager clearBlocks()
+    {
+        this.repairBlocks.clear();
+        return this;
     }
 }

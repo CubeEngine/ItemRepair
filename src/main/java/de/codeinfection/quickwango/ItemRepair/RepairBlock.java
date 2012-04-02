@@ -1,10 +1,9 @@
 package de.codeinfection.quickwango.ItemRepair;
 
 import java.util.List;
-import java.util.Map;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -18,17 +17,33 @@ import org.bukkit.permissions.PermissionDefault;
  */
 public abstract class RepairBlock
 {
-    public static final String PERMISSION_BASE = "itemrepair.block.";
-    private static final ItemRepair plugin = ItemRepair.getInstance();
-    private static final ItemRepairConfiguration config = plugin.getConfiguration();
-    private static final Economy economy = plugin.getEconomy();
+    private final String permissionBase;
+    private final RepairPlugin plugin;
+    private final Economy economy;
+    private final Server server;
+    private final MaterialPriceProvider priceProvider;
 
-    public final String name;
-    public final Material material;
-    public final Permission permission;
+    private final String name;
+    private final Material material;
+    private final Permission permission;
 
-    public RepairBlock(String name, Material material)
+    public RepairBlock(RepairPlugin plugin, String name, String material)
     {
+        this(plugin, name, Material.matchMaterial(material));
+    }
+
+    public RepairBlock(RepairPlugin plugin, String name, int material)
+    {
+        this(plugin, name, Material.getMaterial(material));
+    }
+
+    public RepairBlock(RepairPlugin plugin, String name, Material material)
+    {
+        this.plugin = plugin;
+        this.economy = plugin.getEconomy();
+        this.server = plugin.getServer();
+        this.priceProvider = plugin.getMaterialPriceProvider();
+        this.permissionBase = this.plugin.getName() + ".block.";
         this.name = name;
         if (material != null)
         {
@@ -45,38 +60,45 @@ public abstract class RepairBlock
         {
             throw new IllegalArgumentException("material must not be null!");
         }
-        this.permission = new Permission(PERMISSION_BASE + name, PermissionDefault.OP);
+        this.permission = new Permission(this.permissionBase + name, PermissionDefault.OP);
     }
 
-    public Economy getEconomy()
+    public final Economy getEconomy()
     {
         return economy;
     }
 
-    public RepairBlock(String name, String material)
+    public final String getName()
     {
-        this(name, Material.getMaterial(material));
+        return this.name;
     }
 
-    public RepairBlock(String name, int material)
+    public final Permission getPermission()
     {
-        this(name, Material.getMaterial(material));
+        return this.permission;
     }
 
-    public abstract RepairRequest requestRepair(Player player);
+    public final Material getMaterial()
+    {
+        return this.material;
+    }
 
-    public abstract void repair(RepairRequest request);
-
-
-    /*
-     * Utilities
-     */
+    public final Server getServer()
+    {
+        return this.server;
+    }
+    
     public boolean hasPermission(Player player)
     {
         return player.hasPermission(this.permission);
     }
 
-    public static double calculatePrice(List<ItemStack> items)
+    public double calculatePrice(List<ItemStack> items)
+    {
+        return this.calculatePrice(items, 1, 1);
+    }
+
+    public double calculatePrice(List<ItemStack> items, double enchantmentFactor, double enchantmentBase)
     {
         double price = 0.0;
 
@@ -89,13 +111,10 @@ public abstract class RepairBlock
             type = itemStack.getType();
             item = Item.getByMaterial(type);
             baseMaterial = item.getBaseMaterial();
-            
-            currentPrice = item.getBaseMaterialCount() * config.materialPrices.get(baseMaterial);
+
+            currentPrice = item.getBaseMaterialCount() * this.priceProvider.getPrice(baseMaterial);
             currentPrice *= (double)Math.min(itemStack.getDurability(), type.getMaxDurability()) / (double)type.getMaxDurability();
-            currentPrice *= getEnchantmentMultiplier(itemStack,
-                config.price_enchantMultiplier_factor,
-                config.price_enchantMultiplier_base
-            );
+            currentPrice *= getEnchantmentMultiplier(itemStack, enchantmentFactor, enchantmentBase);
 
             price += currentPrice;
         }
@@ -103,12 +122,21 @@ public abstract class RepairBlock
         return price;
     }
 
+    public abstract RepairRequest requestRepair(Player player);
+
+    public abstract void repair(RepairRequest request);
+
+
+    /*
+     * Utilities
+     */
+
     public static double getEnchantmentMultiplier(ItemStack item, double factor, double base)
     {
         double enchantmentLevel = 0;
-        for (Map.Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet())
+        for (Integer level : item.getEnchantments().values())
         {
-            enchantmentLevel += entry.getValue();
+            enchantmentLevel += level;
         }
 
         if (enchantmentLevel > 0)

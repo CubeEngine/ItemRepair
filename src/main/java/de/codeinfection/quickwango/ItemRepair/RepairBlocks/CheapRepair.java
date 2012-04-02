@@ -1,6 +1,7 @@
 package de.codeinfection.quickwango.ItemRepair.RepairBlocks;
 
 import de.codeinfection.quickwango.ItemRepair.Item;
+import de.codeinfection.quickwango.ItemRepair.ItemRepair;
 import de.codeinfection.quickwango.ItemRepair.ItemRepairConfiguration;
 import de.codeinfection.quickwango.ItemRepair.RepairBlock;
 import de.codeinfection.quickwango.ItemRepair.RepairRequest;
@@ -26,7 +27,7 @@ public class CheapRepair extends RepairBlock
 
     public CheapRepair(Material material, ItemRepairConfiguration config)
     {
-        super("cheap", material);
+        super(ItemRepair.getInstance(), "cheap", material);
         this.config = config;
         this.rand = new Random(System.currentTimeMillis());
     }

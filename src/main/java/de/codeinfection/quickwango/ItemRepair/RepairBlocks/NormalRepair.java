@@ -1,7 +1,7 @@
 package de.codeinfection.quickwango.ItemRepair.RepairBlocks;
 
 import de.codeinfection.quickwango.ItemRepair.Item;
-import de.codeinfection.quickwango.ItemRepair.ItemRepairConfiguration;
+import de.codeinfection.quickwango.ItemRepair.ItemRepair;
 import de.codeinfection.quickwango.ItemRepair.RepairBlock;
 import de.codeinfection.quickwango.ItemRepair.RepairRequest;
 import java.util.ArrayList;
@@ -17,25 +17,22 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author Phillip Schichtel
  */
-public class CompleteRepair extends RepairBlock
+public class NormalRepair extends RepairBlock
 {
 
-    private final ItemRepairConfiguration config;
-
-    public CompleteRepair(Material material, ItemRepairConfiguration config)
+    public NormalRepair(Material material)
     {
-        super("complete", material);
-        this.config = config;
+        super(ItemRepair.getInstance(), "complete", material);
     }
 
-    public CompleteRepair(int blockId, ItemRepairConfiguration config)
+    public NormalRepair(int blockId)
     {
-        this(Material.getMaterial(blockId), config);
+        this(Material.getMaterial(blockId));
     }
 
-    public CompleteRepair(String blockName, ItemRepairConfiguration config)
+    public NormalRepair(String blockName)
     {
-        this(Material.getMaterial(blockName), config);
+        this(Material.getMaterial(blockName));
     }
 
     @Override

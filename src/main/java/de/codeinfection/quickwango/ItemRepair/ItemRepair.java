@@ -1,8 +1,7 @@
 package de.codeinfection.quickwango.ItemRepair;
 
 import de.codeinfection.quickwango.ItemRepair.RepairBlocks.CheapRepair;
-import de.codeinfection.quickwango.ItemRepair.RepairBlocks.CompleteRepair;
-import de.codeinfection.quickwango.ItemRepair.RepairBlocks.SingleRepair;
+import de.codeinfection.quickwango.ItemRepair.RepairBlocks.NormalRepair;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class ItemRepair extends JavaPlugin
+public class ItemRepair extends JavaPlugin implements RepairPlugin
 {
     private static ItemRepair instance = null;
     private static Logger logger = null;
@@ -30,6 +29,7 @@ public class ItemRepair extends JavaPlugin
     private ItemRepairConfiguration config;
     private File dataFolder;
     private Economy economy = null;
+    private MaterialPriceProvider priceProvider;
 
     public ItemRepair()
     {
@@ -60,16 +60,12 @@ public class ItemRepair extends JavaPlugin
         this.saveConfig();
 
         this.economy = this.setupEconomy();
+        this.priceProvider = new ItemrepairMaterialPriceProvider(this.config);
 
         RepairBlockManager rbm = RepairBlockManager.initialize(this);
                 rbm.setPersister(new RepairBlockPersister(new File(dataFolder, "blocks.yml")))
-                .addRepairBlock(new SingleRepair(
-                        this.config.repairBlocks_singleRepair_block,
-                        this.config
-                ))
-                .addRepairBlock(new CompleteRepair(
-                        this.config.repairBlocks_completeRepair_block,
-                        this.config
+                .addRepairBlock(new NormalRepair(
+                        this.config.repairBlocks_completeRepair_block
                 ))
                 .addRepairBlock(new CheapRepair(
                         this.config.repairBlocks_cheapRepair_block,
@@ -89,6 +85,8 @@ public class ItemRepair extends JavaPlugin
     {
         addBlockChoiceRequests.clear();
         removeBlockChoiceRequests.clear();
+        RepairBlockManager.getInstance().clearBlocks();
+
         log("Version " + this.getDescription().getVersion() + " disabled");
     }
 
@@ -117,6 +115,11 @@ public class ItemRepair extends JavaPlugin
     public Economy getEconomy()
     {
         return this.economy;
+    }
+
+    public MaterialPriceProvider getMaterialPriceProvider()
+    {
+        return this.priceProvider;
     }
 
     public ItemRepairConfiguration getConfiguration()
