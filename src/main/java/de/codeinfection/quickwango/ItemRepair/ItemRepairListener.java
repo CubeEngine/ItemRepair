@@ -19,7 +19,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
  */
 public class ItemRepairListener implements Listener
 {
-
     private final RepairBlockManager rbm;
     private final Map<Player, RepairRequest> repairRequests;
 
@@ -32,78 +31,67 @@ public class ItemRepairListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event)
     {
-        this.removeRepairRequest(event.getPlayer());
+        this.repairRequests.remove(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event)
     {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
+        final Block block = event.getClickedBlock();
+        if (block == null)
+        {
+            return;
+        }
+        RepairBlock repairBlock = this.rbm.getRepairBlock(block);
+        if (repairBlock == null)
+        {
+            return;
+        }
+        
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
         {
-            Block block = event.getClickedBlock();
-            if (block == null)
+            player.openInventory(repairBlock.getInventory(player));
+        }
+        else if (event.getAction() == Action.LEFT_CLICK_BLOCK)
+        {
+            event.setCancelled(true);
+            if (this.repairRequests.containsKey(player))
             {
-                return;
-            }
-
-            RepairBlock repairBlock = this.rbm.getRepairBlock(block);
-            if (repairBlock != null)
-            {
-                event.setCancelled(true);
-                ItemRepair.debug("Repair block found! - " + repairBlock.getClass().getSimpleName());
-                if (this.hasPlayerRequestedRepair(player))
+                RepairRequest request = this.repairRequests.get(player);
+                if (request.getRepairBlock() == repairBlock)
                 {
-                    RepairRequest request = this.getRepairRequest(player);
-                    if (request.getRepairBlock() == repairBlock)
-                    {
-                        repairBlock.repair(request);
+                    repairBlock.repair(request);
 
-                        player.updateInventory();
-
-                        this.removeRepairRequest(player);
-                        return;
-                    }
+                    this.repairRequests.remove(player);
                 }
-                else
+            }
+            else
+            {
+                if (!this.repairRequests.containsKey(player))
                 {
                     RepairRequest request = repairBlock.requestRepair(player);
                     if (request != null)
                     {
-                        this.requestRepair(player, request);
-                        return;
+                        this.repairRequests.put(player, request);
                     }
                 }
             }
         }
-        if (this.hasPlayerRequestedRepair(player))
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onCancelRepair(PlayerInteractEvent event)
+    {
+        if (event.getAction() != Action.PHYSICAL)
         {
-            player.sendMessage(ChatColor.YELLOW + "The repair has been cancelled!");
-            this.removeRepairRequest(player);
-            event.setCancelled(true);
+            final Player player = event.getPlayer();
+            if (this.repairRequests.containsKey(player))
+            {
+                player.sendMessage(ChatColor.YELLOW + "The repair has been cancelled!");
+                this.repairRequests.remove(player);
+                event.setCancelled(true);
+            }
         }
-    }
-
-    private boolean hasPlayerRequestedRepair(Player player)
-    {
-        return repairRequests.containsKey(player);
-    }
-
-    private void requestRepair(Player player, RepairRequest request)
-    {
-        if (!hasPlayerRequestedRepair(player))
-        {
-            repairRequests.put(player, request);
-        }
-    }
-
-    private void removeRepairRequest(Player player)
-    {
-        repairRequests.remove(player);
-    }
-
-    private RepairRequest getRepairRequest(Player player)
-    {
-        return repairRequests.get(player);
     }
 }
