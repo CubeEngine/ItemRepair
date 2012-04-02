@@ -18,12 +18,11 @@ public class ItemRepairConfiguration
     
     public final Map<BaseMaterial, Double> materialPrices;
 
-    public final Material repairBlocks_singleRepair_block;
-    public final Material repairBlocks_completeRepair_block;
+    public final Material repairBlocks_normal_block;
     
-    public final Material repairBlocks_cheapRepair_block;
-    public final int repairBlocks_cheapRepair_breakPercentage;
-    public final int repairBlocks_cheapRepair_costPercentage;
+    public final Material repairBlocks_cheap_block;
+    public final int repairBlocks_cheap_breakPercentage;
+    public final int repairBlocks_cheap_costPercentage;
     
     public ItemRepairConfiguration(Configuration config)
     {
@@ -42,11 +41,10 @@ public class ItemRepairConfiguration
         this.price_enchantMultiplier_base = config.getDouble("price.enchantMultiplier.base");
         this.price_enchantMultiplier_factor = config.getDouble("price.enchantMultiplier.factor");
 
-        this.repairBlocks_singleRepair_block = Material.getMaterial(config.getInt("repairBlocks.singleRepair.block"));
-        this.repairBlocks_completeRepair_block = Material.getMaterial(config.getInt("repairBlocks.completeRepair.block"));
+        this.repairBlocks_normal_block = Material.getMaterial(config.getInt("repairBlocks.normalRepair.block"));
 
-        this.repairBlocks_cheapRepair_block = Material.getMaterial(config.getInt("repairBlocks.cheapRepair.block"));
-        this.repairBlocks_cheapRepair_breakPercentage = config.getInt("repairBlocks.cheapRepair.breakPercentage");
-        this.repairBlocks_cheapRepair_costPercentage = config.getInt("repairBlocks.cheapRepair.costPercentage");
+        this.repairBlocks_cheap_block = Material.getMaterial(config.getInt("repairBlocks.cheap.block"));
+        this.repairBlocks_cheap_breakPercentage = config.getInt("repairBlocks.cheap.breakPercentage");
+        this.repairBlocks_cheap_costPercentage = config.getInt("repairBlocks.cheap.costPercentage");
     }
 }

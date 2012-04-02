@@ -58,7 +58,7 @@ public class CheapRepair extends RepairBlock
                     {
                         List<ItemStack> itemList = Arrays.asList(itemInHand);
                         double price = calculatePrice(itemList);
-                        price *= (this.config.repairBlocks_cheapRepair_costPercentage / 100.0);
+                        price *= (this.config.repairBlocks_cheap_costPercentage / 100.0);
 
                         player.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_RED + "ItemRepair" + ChatColor.GREEN + "]");
                         player.sendMessage(ChatColor.AQUA + "Rightclick" + ChatColor.WHITE + " again to repair your item, with a chance of breaking it.");
@@ -104,12 +104,12 @@ public class CheapRepair extends RepairBlock
                 {
                     if (getEconomy().getBalance(player.getName()) >= price)
                     {
-                        if (this.rand.nextInt(100) > this.config.repairBlocks_cheapRepair_breakPercentage)
+                        if (this.rand.nextInt(100) > this.config.repairBlocks_cheap_breakPercentage)
                         {
                             if (getEconomy().withdrawPlayer(player.getName(), price).transactionSuccess())
                             {
                                 player.getItemInHand().setDurability((short) 0);
-                                player.sendMessage(ChatColor.GREEN + "Your item has been repaired for " + ChatColor.AQUA + getEconomy().format(price) + ChatColor.GREEN + " (" + ChatColor.RED + this.config.repairBlocks_cheapRepair_costPercentage + "% " + ChatColor.GREEN + "of the regular price)!");
+                                player.sendMessage(ChatColor.GREEN + "Your item has been repaired for " + ChatColor.AQUA + getEconomy().format(price) + ChatColor.GREEN + " (" + ChatColor.RED + this.config.repairBlocks_cheap_costPercentage + "% " + ChatColor.GREEN + "of the regular price)!");
                             }
                             else
                             {

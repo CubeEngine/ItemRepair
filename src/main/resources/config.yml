@@ -4,11 +4,9 @@ price:
     base: 2.0
     factor: 6.0
 repairBlocks:
-  singleRepair:
+  normal:
     block: 42
-  completeRepair:
-    block: 41
-  cheapRepair:
+  cheap:
     block: 57
     breakPercentage: 15
     costPercentage: 70

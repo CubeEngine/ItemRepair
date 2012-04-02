@@ -65,10 +65,10 @@ public class ItemRepair extends JavaPlugin implements RepairPlugin
         RepairBlockManager rbm = RepairBlockManager.initialize(this);
                 rbm.setPersister(new RepairBlockPersister(new File(dataFolder, "blocks.yml")))
                 .addRepairBlock(new NormalRepair(
-                        this.config.repairBlocks_completeRepair_block
+                        this.config.repairBlocks_normal_block
                 ))
                 .addRepairBlock(new CheapRepair(
-                        this.config.repairBlocks_cheapRepair_block,
+                        this.config.repairBlocks_cheap_block,
                         this.config
                 ))
                 .loadBlocks();
