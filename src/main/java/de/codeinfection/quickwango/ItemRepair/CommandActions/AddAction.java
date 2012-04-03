@@ -1,16 +1,15 @@
 package de.codeinfection.quickwango.ItemRepair.CommandActions;
 
-import de.codeinfection.quickwango.ItemRepair.ItemRepair;
 import de.codeinfection.quickwango.ItemRepair.RepairBlockManager;
-import java.util.HashSet;
+import static de.codeinfection.quickwango.Translation.Translator.t;
 import java.util.Set;
-import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -45,27 +44,27 @@ public class AddAction implements CommandExecutor, Listener
                 if (!this.removeRequests.contains(player))
                 {
                     this.addRequests.add(player);
-                    player.sendMessage(ChatColor.YELLOW + "Rightclick the block.");
+                    player.sendMessage(t("rightclickBlock"));
                 }
                 else
                 {
-                    player.sendMessage(ChatColor.RED + "You can't add a repair block while you're removing one!");
+                    player.sendMessage(t("alreadyRemoving"));
                 }
             }
             else
             {
-                player.sendMessage(ChatColor.RED + "You are already adding a repair block!");
+                player.sendMessage(t("alreadyAdding"));
             }
         }
         else
         {
-            sender.sendMessage(ChatColor.RED + "Only players can add repair blocks!");
+            sender.sendMessage(t("onlyPlayersAdd"));
         }
 
         return true;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onInteraction(PlayerInteractEvent event)
     {
         final Player player = event.getPlayer();
@@ -78,16 +77,16 @@ public class AddAction implements CommandExecutor, Listener
                 {
                     if (this.rbm.attachRepairBlock(block))
                     {
-                        player.sendMessage(ChatColor.GREEN + "Repair block successfully added!");
+                        player.sendMessage(t("addSuccess"));
                     }
                     else
                     {
-                        player.sendMessage(ChatColor.RED + "This block can't be used as a repair block!");
+                        player.sendMessage(t("cantBeUsed"));
                     }
                 }
                 else
                 {
-                    player.sendMessage(ChatColor.RED + "This block is already a repair block!");
+                    player.sendMessage(t("alreadyARepairBlock"));
                 }
             }
             if (event.getAction() != Action.PHYSICAL)

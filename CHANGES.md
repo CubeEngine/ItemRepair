@@ -7,6 +7,8 @@ Version 2.0.0
 - changed some internal things
 - added a reload command (/itemrepair reload)
 - added an alias to the base command: /ir <action>
+- completely reworked the repair blocks to use their own inventory instead of the player's
+- added translations (available languages: en, de)
 
 Version 1.1.2
 -------------

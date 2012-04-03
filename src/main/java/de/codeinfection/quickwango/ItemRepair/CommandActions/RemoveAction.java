@@ -1,13 +1,14 @@
 package de.codeinfection.quickwango.ItemRepair.CommandActions;
 
 import de.codeinfection.quickwango.ItemRepair.RepairBlockManager;
+import static de.codeinfection.quickwango.Translation.Translator.t;
 import java.util.Set;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -42,27 +43,27 @@ public class RemoveAction implements CommandExecutor, Listener
                 if (!this.addRequests.contains(player))
                 {
                     this.removeRequests.add(player);
-                    player.sendMessage(ChatColor.YELLOW + "Rightclick the block.");
+                    player.sendMessage(t("rightclickBlock"));
                 }
                 else
                 {
-                    player.sendMessage(ChatColor.RED + "You can't remove a repair block while you're adding one!");
+                    player.sendMessage(t("alreadyAdding"));
                 }
             }
             else
             {
-                player.sendMessage(ChatColor.RED + "You are already removing a repair block!");
+                player.sendMessage(t("alreadyRemoving"));
             }
         }
         else
         {
-            sender.sendMessage(ChatColor.RED + "Only players can add repair blocks!");
+            sender.sendMessage(t("onlyPlayersRemove"));
         }
 
         return true;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onInteraction(PlayerInteractEvent event)
     {
         final Player player = event.getPlayer();
@@ -72,11 +73,11 @@ public class RemoveAction implements CommandExecutor, Listener
             {
                 if (this.rbm.detachRepairBlock(event.getClickedBlock()))
                 {
-                    player.sendMessage(ChatColor.GREEN + "Repair block successfully removed!");
+                    player.sendMessage(t("removeSuccess"));
                 }
                 else
                 {
-                    player.sendMessage(ChatColor.RED + "This block is not a repair block!");
+                    player.sendMessage(t("notARepairBlock"));
                 }
             }
             if (event.getAction() != Action.PHYSICAL)

@@ -1,17 +1,16 @@
 package de.codeinfection.quickwango.ItemRepair.RepairBlocks;
 
-import de.codeinfection.quickwango.ItemRepair.Item;
 import de.codeinfection.quickwango.ItemRepair.ItemRepair;
 import de.codeinfection.quickwango.ItemRepair.ItemRepairConfiguration;
 import de.codeinfection.quickwango.ItemRepair.RepairBlock;
 import de.codeinfection.quickwango.ItemRepair.RepairRequest;
-import java.util.Arrays;
-import java.util.List;
+import static de.codeinfection.quickwango.Translation.Translator.t;
+import java.util.Map;
 import java.util.Random;
-import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -27,7 +26,7 @@ public class CheapRepair extends RepairBlock
 
     public CheapRepair(Material material, ItemRepairConfiguration config)
     {
-        super(ItemRepair.getInstance(), "cheap", material);
+        super(ItemRepair.getInstance(), t("cheapRepair"), material);
         this.config = config;
         this.rand = new Random(System.currentTimeMillis());
     }
@@ -43,48 +42,24 @@ public class CheapRepair extends RepairBlock
     }
 
     @Override
-    public RepairRequest requestRepair(Player player)
+    public RepairRequest requestRepair(Inventory inventory)
     {
-        if (hasPermission(player))
+        final Player player = (Player)inventory.getHolder();
+        Map<Integer, ItemStack> items = getRepairableItems(inventory);
+        if (items.size() > 0)
         {
-            ItemStack itemInHand = player.getItemInHand();
-            Material itemType = itemInHand.getType();
-            if (itemType != Material.AIR) // -> holding an item?
-            {
-                int currentDurability = itemInHand.getDurability();
-                if (Item.getByMaterial(itemType) != null) // -> known item?
-                {
-                    if (currentDurability > 0) // -> ist beschädigt?
-                    {
-                        List<ItemStack> itemList = Arrays.asList(itemInHand);
-                        double price = calculatePrice(itemList);
-                        price *= (this.config.repairBlocks_cheap_costPercentage / 100.0);
+            double price = calculatePrice(items.values()) * (this.config.repairBlocks_cheap_costPercentage / 100.0);
 
-                        player.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_RED + "ItemRepair" + ChatColor.GREEN + "]");
-                        player.sendMessage(ChatColor.AQUA + "Rightclick" + ChatColor.WHITE + " again to repair your item, with a chance of breaking it.");
-                        player.sendMessage("The repair would cost " + ChatColor.AQUA + getEconomy().format(price) + ChatColor.WHITE + ".");
-                        player.sendMessage("You have currently " + ChatColor.AQUA + getEconomy().format(getEconomy().getBalance(player.getName())));
+            player.sendMessage(t("headline"));
+            player.sendMessage(t("rightClickAgain"));
+            player.sendMessage(t("repairWouldCost", getEconomy().format(price)));
+            player.sendMessage(t("youCurrentlyHave", getEconomy().format(getEconomy().getBalance(player.getName()))));
 
-                        return new RepairRequest(this, player, itemList, price);
-                    }
-                    else
-                    {
-                        player.sendMessage(ChatColor.RED + "This item isn't damaged!");
-                    }
-                }
-                else
-                {
-                    player.sendMessage(ChatColor.RED + "This item can't be repaired!");
-                }
-            }
-            else
-            {
-                player.sendMessage(ChatColor.RED + "You don't have a item in your hand!");
-            }
+            return new RepairRequest(this, inventory, items, price);
         }
         else
         {
-            player.sendMessage(ChatColor.RED + "You don't have the permission to repair your item cheap!");
+            player.sendMessage(t("noItems"));
         }
         return null;
     }
@@ -92,55 +67,54 @@ public class CheapRepair extends RepairBlock
     @Override
     public void repair(RepairRequest request)
     {
-        double price = request.getPrice();
-        Player player = request.getPlayer();
+        final double price = request.getPrice();
+        final Inventory inventory = request.getInventory();
+        final Player player = (Player)inventory.getHolder();
 
-        if (player.getInventory().getHeldItemSlot() == request.getHeldItemSlot())
+        if (getEconomy().getBalance(player.getName()) >= price)
         {
-            ItemStack itemInHand = player.getItemInHand();
-            if (itemInHand != null)
+            if (getEconomy().withdrawPlayer(player.getName(), price).transactionSuccess())
             {
-                if (itemInHand.equals(request.getHeldItem()))
+                boolean itemsBroken = false;
+                ItemStack item;
+                int amount;
+                for (Map.Entry<Integer, ItemStack> entry : request.getItems().entrySet())
                 {
-                    if (getEconomy().getBalance(player.getName()) >= price)
+                    item = entry.getValue();
+                    if (this.rand.nextInt(100) > this.config.repairBlocks_cheap_breakPercentage)
                     {
-                        if (this.rand.nextInt(100) > this.config.repairBlocks_cheap_breakPercentage)
-                        {
-                            if (getEconomy().withdrawPlayer(player.getName(), price).transactionSuccess())
-                            {
-                                player.getItemInHand().setDurability((short) 0);
-                                player.sendMessage(ChatColor.GREEN + "Your item has been repaired for " + ChatColor.AQUA + getEconomy().format(price) + ChatColor.GREEN + " (" + ChatColor.RED + this.config.repairBlocks_cheap_costPercentage + "% " + ChatColor.GREEN + "of the regular price)!");
-                            }
-                            else
-                            {
-                                player.sendMessage(ChatColor.RED + "Something went wrong, report this failure to your administrator!");
-                            }
-                        }
-                        else
-                        {
-                            player.sendMessage("Sorry, but your item broke... " + ChatColor.RED + ">>:->");
-                            player.playEffect(player.getLocation(), Effect.GHAST_SHRIEK, 0);
-                            removeHeldItem(player);
-                        }
+                        repairItem(entry.getValue());
                     }
                     else
                     {
-                        player.sendMessage(ChatColor.RED + "You don't have enough money!");
+                        itemsBroken = true;
+                        amount = item.getAmount();
+                        if (amount == 1)
+                        {
+                            inventory.clear(entry.getKey());
+                        }
+                        else
+                        {
+                            item.setAmount(amount - 1);
+                            repairItem(item);
+                        }
                     }
                 }
-                else
+                if (itemsBroken)
                 {
-                    player.sendMessage(ChatColor.RED + "The item in your hand has changed, repair has been cancelled!");
+                    player.sendMessage(t("someItemsBroke"));
+                    player.playEffect(player.getLocation(), Effect.GHAST_SHRIEK, 0);
                 }
+                player.sendMessage(t("itemsRepairedCheap", getEconomy().format(price), this.config.repairBlocks_cheap_costPercentage));
             }
             else
             {
-                player.sendMessage(ChatColor.RED + "Your hands are suddenly empty, repair has been cancelled!");
+                player.sendMessage(t("somethingWentWrong"));
             }
         }
         else
         {
-            player.sendMessage(ChatColor.RED + "You switched to another item slot, repair has been cancelled!");
+            player.sendMessage(t("notEnoughMoney"));
         }
     }
 }

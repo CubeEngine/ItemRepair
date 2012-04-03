@@ -1,4 +1,5 @@
 debug: false
+language: en
 price:
   enchantMultiplier:
     base: 2.0

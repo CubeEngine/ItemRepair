@@ -1,12 +1,12 @@
 package de.codeinfection.quickwango.ItemRepair;
 
 import de.codeinfection.quickwango.ItemRepair.CommandActions.*;
+import static de.codeinfection.quickwango.Translation.Translator.t;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -62,12 +62,12 @@ public class ItemrepairCommand implements CommandExecutor
                 }
                 else
                 {
-                    sender.sendMessage(ChatColor.RED + "You don't have the permission to use this command!");
+                    sender.sendMessage(t("permissionDeniedCmd"));
                 }
             }
             else
             {
-                sender.sendMessage(ChatColor.RED + "The requested action is not available!");
+                sender.sendMessage(t("actionNotFound"));
             }
         }
         else

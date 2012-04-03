@@ -13,6 +13,8 @@ import org.bukkit.configuration.Configuration;
  */
 public class ItemRepairConfiguration
 {
+    public final String language;
+
     public final double price_enchantMultiplier_base;
     public final double price_enchantMultiplier_factor;
     
@@ -21,11 +23,13 @@ public class ItemRepairConfiguration
     public final Material repairBlocks_normal_block;
     
     public final Material repairBlocks_cheap_block;
+    
     public final int repairBlocks_cheap_breakPercentage;
     public final int repairBlocks_cheap_costPercentage;
     
     public ItemRepairConfiguration(Configuration config)
     {
+        this.language = config.getString("language");
         for (BaseMaterial baseMaterial : BaseMaterial.values())
         {
             config.addDefault("price.materials." + baseMaterial.getName(), baseMaterial.getPrice());
@@ -41,9 +45,9 @@ public class ItemRepairConfiguration
         this.price_enchantMultiplier_base = config.getDouble("price.enchantMultiplier.base");
         this.price_enchantMultiplier_factor = config.getDouble("price.enchantMultiplier.factor");
 
-        this.repairBlocks_normal_block = Material.getMaterial(config.getInt("repairBlocks.normalRepair.block"));
+        this.repairBlocks_normal_block = Material.matchMaterial(config.getString("repairBlocks.normal.block"));
 
-        this.repairBlocks_cheap_block = Material.getMaterial(config.getInt("repairBlocks.cheap.block"));
+        this.repairBlocks_cheap_block = Material.matchMaterial(config.getString("repairBlocks.cheap.block"));
         this.repairBlocks_cheap_breakPercentage = config.getInt("repairBlocks.cheap.breakPercentage");
         this.repairBlocks_cheap_costPercentage = config.getInt("repairBlocks.cheap.costPercentage");
     }

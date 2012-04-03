@@ -1,10 +1,8 @@
 package de.codeinfection.quickwango.ItemRepair;
 
-import de.codeinfection.quickwango.ItemRepair.RepairBlocks.CheapRepair;
-import de.codeinfection.quickwango.ItemRepair.RepairBlocks.NormalRepair;
+import de.codeinfection.quickwango.ItemRepair.RepairBlocks.*;
+import de.codeinfection.quickwango.Translation.Translator;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.milkbowl.vault.economy.Economy;
@@ -53,6 +51,10 @@ public class ItemRepair extends JavaPlugin implements RepairPlugin
         configuration.options().copyDefaults(true);
         this.config = new ItemRepairConfiguration(configuration);
         debugMode = configuration.getBoolean("debug");
+        if (!Translator.loadTranslation(config.language))
+        {
+            Translator.loadTranslation("en");
+        }
         this.saveConfig();
 
         this.economy = this.setupEconomy();

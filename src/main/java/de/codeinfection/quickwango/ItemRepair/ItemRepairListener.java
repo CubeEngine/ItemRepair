@@ -1,16 +1,18 @@
 package de.codeinfection.quickwango.ItemRepair;
 
+import static de.codeinfection.quickwango.Translation.Translator.t;
 import java.util.HashMap;
 import java.util.Map;
-import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
 
 /**
  * Listens for a few player related events
@@ -48,10 +50,21 @@ public class ItemRepairListener implements Listener
         {
             return;
         }
+        event.setCancelled(true);
+        event.setUseInteractedBlock(Event.Result.DENY);
+        event.setUseItemInHand(Event.Result.DENY);
+
+        if (!player.hasPermission(repairBlock.getPermission()))
+        {
+            player.sendMessage(t("permissionDeniedBlock"));
+            return;
+        }
+
+        Inventory inventory = repairBlock.getInventory(player);
         
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
         {
-            player.openInventory(repairBlock.getInventory(player));
+            player.openInventory(inventory);
         }
         else if (event.getAction() == Action.LEFT_CLICK_BLOCK)
         {
@@ -62,7 +75,6 @@ public class ItemRepairListener implements Listener
                 if (request.getRepairBlock() == repairBlock)
                 {
                     repairBlock.repair(request);
-
                     this.repairRequests.remove(player);
                 }
             }
@@ -70,7 +82,7 @@ public class ItemRepairListener implements Listener
             {
                 if (!this.repairRequests.containsKey(player))
                 {
-                    RepairRequest request = repairBlock.requestRepair(player);
+                    RepairRequest request = repairBlock.requestRepair(inventory);
                     if (request != null)
                     {
                         this.repairRequests.put(player, request);
@@ -78,17 +90,26 @@ public class ItemRepairListener implements Listener
                 }
             }
         }
+        else
+        {
+            this.cancelRequest(event);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onCancelRepair(PlayerInteractEvent event)
+    {
+        this.cancelRequest(event);
+    }
+
+    private void cancelRequest(PlayerInteractEvent event)
     {
         if (event.getAction() != Action.PHYSICAL)
         {
             final Player player = event.getPlayer();
             if (this.repairRequests.containsKey(player))
             {
-                player.sendMessage(ChatColor.YELLOW + "The repair has been cancelled!");
+                player.sendMessage(t("repairCancelled"));
                 this.repairRequests.remove(player);
                 event.setCancelled(true);
             }

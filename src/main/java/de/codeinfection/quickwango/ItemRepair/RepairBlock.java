@@ -1,7 +1,6 @@
 package de.codeinfection.quickwango.ItemRepair;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
@@ -26,7 +25,7 @@ public abstract class RepairBlock
     private final Server server;
     private final MaterialPriceProvider priceProvider;
 
-    private final String name;
+    private final String title;
     private final Material material;
     private final Permission permission;
 
@@ -42,14 +41,14 @@ public abstract class RepairBlock
         this(plugin, name, Material.getMaterial(material));
     }
 
-    public RepairBlock(RepairPlugin plugin, String name, Material material)
+    public RepairBlock(RepairPlugin plugin, String title, Material material)
     {
         this.plugin = plugin;
         this.economy = plugin.getEconomy();
         this.server = plugin.getServer();
         this.priceProvider = plugin.getMaterialPriceProvider();
         this.permissionBase = this.plugin.getName() + ".block.";
-        this.name = name;
+        this.title = title;
         if (material != null)
         {
             if (material.isBlock())
@@ -65,7 +64,7 @@ public abstract class RepairBlock
         {
             throw new IllegalArgumentException("material must not be null!");
         }
-        this.permission = new Permission(this.permissionBase + name, PermissionDefault.OP);
+        this.permission = new Permission(this.permissionBase + title, PermissionDefault.OP);
         this.inventoryMap = new HashMap<Player, Inventory>();
     }
 
@@ -74,9 +73,9 @@ public abstract class RepairBlock
         return economy;
     }
 
-    public final String getName()
+    public final String getTitle()
     {
-        return this.name;
+        return this.title;
     }
 
     public final Permission getPermission()
@@ -99,12 +98,12 @@ public abstract class RepairBlock
         return player.hasPermission(this.permission);
     }
 
-    public double calculatePrice(List<ItemStack> items)
+    public double calculatePrice(Iterable<ItemStack> items)
     {
         return this.calculatePrice(items, 1, 1);
     }
 
-    public double calculatePrice(List<ItemStack> items, double enchantmentFactor, double enchantmentBase)
+    public double calculatePrice(Iterable<ItemStack> items, double enchantmentFactor, double enchantmentBase)
     {
         double price = 0.0;
 
@@ -137,13 +136,13 @@ public abstract class RepairBlock
         Inventory inventory = this.inventoryMap.get(player);
         if (inventory == null)
         {
-            inventory = this.server.createInventory(player, 9 * 4, this.name);
+            inventory = this.server.createInventory(player, 9 * 4, this.title);
             this.inventoryMap.put(player, inventory);
         }
         return inventory;
     }
 
-    public abstract RepairRequest requestRepair(Player player);
+    public abstract RepairRequest requestRepair(Inventory inventory);
 
     public abstract void repair(RepairRequest request);
 
@@ -176,20 +175,50 @@ public abstract class RepairBlock
 
     public static void repairItems(RepairRequest request)
     {
-        repairItems(request.getItems());
+        repairItems(request.getItems().values());
     }
 
-    public static void repairItems(List<ItemStack> items)
+    public static void repairItems(Iterable<ItemStack> items)
     {
-        repairItems(items, (short) 0);
+        repairItems(items, (short)0);
     }
 
-    public static void repairItems(List<ItemStack> items, short durability)
+    public static void repairItems(Iterable<ItemStack> items, short durability)
     {
         for (ItemStack item : items)
         {
+            repairItem(item, durability);
+        }
+    }
+    
+    public static void repairItem(ItemStack item)
+    {
+        repairItem(item, (short)0);
+    }
+    
+    public static void repairItem(ItemStack item, short durability)
+    {
+        if (item != null)
+        {
             item.setDurability(durability);
         }
+    }
+
+    public static Map<Integer, ItemStack> getRepairableItems(Inventory inventory)
+    {
+        Map<Integer, ItemStack> items = new HashMap<Integer, ItemStack>();
+
+        ItemStack item;
+        for (int i = 0; i < inventory.getSize(); ++i)
+        {
+            item = inventory.getItem(i);
+            if (item != null && Item.getByMaterial(item.getType()) != null && item.getDurability() > 0)
+            {
+                items.put(i, item);
+            }
+        }
+
+        return items;
     }
 
     public static void removeHeldItem(Player player)

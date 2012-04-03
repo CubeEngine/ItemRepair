@@ -1,7 +1,8 @@
 package de.codeinfection.quickwango.ItemRepair;
 
 import java.util.List;
-import org.bukkit.entity.Player;
+import java.util.Map;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -12,22 +13,18 @@ import org.bukkit.inventory.ItemStack;
 public class RepairRequest
 {
     private final RepairBlock repairBlock;
-    private final Player player;
-    private final List<ItemStack> items;
+    private final Inventory inventory;
+    private final Map<Integer, ItemStack> items;
     private final double price;
-    private final int heldItemSlot;
-    private final ItemStack heldItem;
 
-    public RepairRequest(RepairBlock repairBlock, Player player, List<ItemStack> items, double price)
+    public RepairRequest(RepairBlock repairBlock, Inventory inventory, Map<Integer, ItemStack> items, double price)
     {
         if (repairBlock == null)
         {
             throw new IllegalArgumentException("repairBlock must not be null!");
         }
         this.repairBlock = repairBlock;
-        this.player = player;
-        this.heldItem = player.getItemInHand();
-        this.heldItemSlot = player.getInventory().getHeldItemSlot();
+        this.inventory = inventory;
         this.items = items;
         this.price = price;
     }
@@ -37,22 +34,12 @@ public class RepairRequest
         return this.repairBlock;
     }
 
-    public Player getPlayer()
+    public Inventory getInventory()
     {
-        return this.player;
+        return this.inventory;
     }
 
-    public int getHeldItemSlot()
-    {
-        return this.heldItemSlot;
-    }
-
-    public ItemStack getHeldItem()
-    {
-        return this.heldItem;
-    }
-
-    public List<ItemStack> getItems()
+    public Map<Integer, ItemStack> getItems()
     {
         return this.items;
     }
