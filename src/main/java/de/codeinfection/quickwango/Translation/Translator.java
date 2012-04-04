@@ -51,6 +51,7 @@ public class Translator
             {
                 sb.append(new String(buffer, 0, bytesRead, "UTF-8"));
             }
+            is.close();
 
             translations.clear();
             int equalsOffset;
