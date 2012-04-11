@@ -1,8 +1,9 @@
-package de.codeinfection.quickwango.ItemRepair.CommandActions;
+package de.cubeisland.ItemRepair.CommandActions;
 
-import de.codeinfection.quickwango.ItemRepair.RepairBlockManager;
-import static de.codeinfection.quickwango.Translation.Translator.t;
+import de.cubeisland.ItemRepair.RepairBlockManager;
+import static de.cubeisland.Translation.Translator.t;
 import java.util.Set;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,17 +16,17 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.Plugin;
 
 /**
- * Removes a repair block
+ * Adds a repair block
  *
  * @author Phillip Schichtel
  */
-public class RemoveAction implements CommandExecutor, Listener
+public class AddAction implements CommandExecutor, Listener
 {
     private final Set<Player> removeRequests;
     private final Set<Player> addRequests;
     private final RepairBlockManager rbm;
 
-    public RemoveAction(Plugin plugin, Set<Player> addRequests, Set<Player> removeRequests)
+    public AddAction(Plugin plugin, Set<Player> addRequests, Set<Player> removeRequests)
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.addRequests = addRequests;
@@ -38,26 +39,26 @@ public class RemoveAction implements CommandExecutor, Listener
         if (sender instanceof Player)
         {
             Player player = (Player)sender;
-            if (!this.removeRequests.contains(player))
+            if (!this.addRequests.contains(player))
             {
-                if (!this.addRequests.contains(player))
+                if (!this.removeRequests.contains(player))
                 {
-                    this.removeRequests.add(player);
+                    this.addRequests.add(player);
                     player.sendMessage(t("rightclickBlock"));
                 }
                 else
                 {
-                    player.sendMessage(t("alreadyAdding"));
+                    player.sendMessage(t("alreadyRemoving"));
                 }
             }
             else
             {
-                player.sendMessage(t("alreadyRemoving"));
+                player.sendMessage(t("alreadyAdding"));
             }
         }
         else
         {
-            sender.sendMessage(t("onlyPlayersRemove"));
+            sender.sendMessage(t("onlyPlayersAdd"));
         }
 
         return true;
@@ -67,22 +68,30 @@ public class RemoveAction implements CommandExecutor, Listener
     public void onInteraction(PlayerInteractEvent event)
     {
         final Player player = event.getPlayer();
-        if (this.removeRequests.contains(player))
+        if (this.addRequests.contains(player))
         {
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
             {
-                if (this.rbm.detachRepairBlock(event.getClickedBlock()))
+                final Block block = event.getClickedBlock();
+                if (!this.rbm.isRepairBlock(block))
                 {
-                    player.sendMessage(t("removeSuccess"));
+                    if (this.rbm.attachRepairBlock(block))
+                    {
+                        player.sendMessage(t("addSuccess"));
+                    }
+                    else
+                    {
+                        player.sendMessage(t("cantBeUsed"));
+                    }
                 }
                 else
                 {
-                    player.sendMessage(t("notARepairBlock"));
+                    player.sendMessage(t("alreadyARepairBlock"));
                 }
             }
             if (event.getAction() != Action.PHYSICAL)
             {
-                this.removeRequests.remove(player);
+                this.addRequests.remove(player);
                 event.setCancelled(true);
             }
         }

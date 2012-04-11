@@ -1,4 +1,4 @@
-package de.codeinfection.quickwango.Translation;
+package de.cubeisland.Translation;
 
 import java.io.IOException;
 import java.io.InputStream;

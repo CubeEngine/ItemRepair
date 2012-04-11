@@ -1,6 +1,6 @@
-package de.codeinfection.quickwango.ItemRepair.CommandActions;
+package de.cubeisland.ItemRepair.CommandActions;
 
-import de.codeinfection.quickwango.ItemRepair.ItemRepair;
+import de.cubeisland.ItemRepair.ItemRepair;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

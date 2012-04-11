@@ -1,6 +1,6 @@
-package de.codeinfection.quickwango.ItemRepair;
+package de.cubeisland.ItemRepair;
 
-import static de.codeinfection.quickwango.Translation.Translator.t;
+import static de.cubeisland.Translation.Translator.t;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.block.Block;

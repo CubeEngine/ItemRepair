@@ -1,7 +1,8 @@
-package de.codeinfection.quickwango.ItemRepair;
+package de.cubeisland.ItemRepair;
 
-import de.codeinfection.quickwango.ItemRepair.RepairBlocks.*;
-import de.codeinfection.quickwango.Translation.Translator;
+import de.cubeisland.ItemRepair.RepairBlocks.CheapRepair;
+import de.cubeisland.ItemRepair.RepairBlocks.NormalRepair;
+import de.cubeisland.Translation.Translator;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;

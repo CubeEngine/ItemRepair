@@ -1,9 +1,9 @@
-package de.codeinfection.quickwango.ItemRepair.RepairBlocks;
+package de.cubeisland.ItemRepair.RepairBlocks;
 
-import de.codeinfection.quickwango.ItemRepair.ItemRepair;
-import de.codeinfection.quickwango.ItemRepair.RepairBlock;
-import de.codeinfection.quickwango.ItemRepair.RepairRequest;
-import static de.codeinfection.quickwango.Translation.Translator.t;
+import de.cubeisland.ItemRepair.ItemRepair;
+import de.cubeisland.ItemRepair.RepairBlock;
+import de.cubeisland.ItemRepair.RepairRequest;
+import static de.cubeisland.Translation.Translator.t;
 import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

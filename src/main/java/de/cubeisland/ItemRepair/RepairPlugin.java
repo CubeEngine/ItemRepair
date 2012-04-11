@@ -1,4 +1,4 @@
-package de.codeinfection.quickwango.ItemRepair;
+package de.cubeisland.ItemRepair;
 
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.Plugin;

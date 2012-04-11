@@ -1,7 +1,9 @@
-package de.codeinfection.quickwango.ItemRepair;
+package de.cubeisland.ItemRepair;
 
-import de.codeinfection.quickwango.ItemRepair.CommandActions.*;
-import static de.codeinfection.quickwango.Translation.Translator.t;
+import de.cubeisland.ItemRepair.CommandActions.RemoveAction;
+import de.cubeisland.ItemRepair.CommandActions.AddAction;
+import de.cubeisland.ItemRepair.CommandActions.ReloadAction;
+import static de.cubeisland.Translation.Translator.t;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
