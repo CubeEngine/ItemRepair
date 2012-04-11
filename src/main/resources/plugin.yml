@@ -1,6 +1,7 @@
 name: ItemRepair
-version: "${project.version}"
-main: de.codeinfection.quickwango.ItemRepair.ItemRepair
+main: de.cubeisland.ItemRepair.ItemRepair
+version: ${project.version}
+website: http://cubeisland.de
 dev-url: http://dev.bukkit.org/server-mods/itemrepair
 commands:
   itemrepair:
@@ -10,7 +11,6 @@ commands:
       - ir
 depend:
   - Vault
-website: "http://parallel-universe.de"
 description: "Adds repair functionality to minecraft"
 authors:
   - "Quick_Wango"
