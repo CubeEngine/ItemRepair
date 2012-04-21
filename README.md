@@ -12,6 +12,19 @@ configurable. The repair blocks are configurable as well.
 
 Supports [CraftBukkitUpToDate](http://dev.bukkit.org/server-mods/craftbukkituptodate/)
 
+How it works:
+-------------
+After someone added a repair block via command (see below) you right-click
+a block. This opens an inventory where you can place your damaged items.
+When all items are in there close the inventory and left-click the block.
+After that, the repair request message appears in your chat which tells you
+how much the repair will cost and how much you have. Left-clicking the block
+again will confirm the request, any other interaction or disconnecting will
+cancel it.
+
+if the administrator specified a server bank or player, the money you paid
+will be transfered to that.
+
 Features:
 ---------
 - different repair blocks:
@@ -32,6 +45,7 @@ Installation:
 - make sure Vault is installed
 - restart/reload your server
 - The configuration file will be generated/updated as soon as the plugin gets enabled
+- it is recommended to remove your old config.yml when you're updating from 1.x
 
 Permissions:
 ------------
@@ -45,7 +59,7 @@ Permissions:
 ***IMPORTANT***
 ===============
 
-I'm searching for a Java developer who continues this plugin! Please contact me if you're interessted.
+I'm searching for a Java developer who continues this plugin! Please contact me if you're interested.
 
 ***README***
 ============
