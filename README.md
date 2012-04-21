@@ -4,9 +4,10 @@ ItemRepair
 Description:
 ------------
 ItemRepair adds repair blocks to minecraft, which are used to repair your items for a dynamic price.
-The price depends on how damaged the item is, how many items you want to repair and on the enchantment
-level of the item. Enchanted items get exponential more expensive based on a formlar.
-The base price per repaired damage and the parameters of the enchantment formular are all
+The price depends on how damaged the item is, what the item is made of, how many items you want to
+repair and on the enchantment level of the item. Enchanted items get exponential more expensive based
+on a formlar.
+The base price of the materials and the parameters of the enchantment formular are all
 configurable. The repair blocks are configurable as well.
 
 Supports [CraftBukkitUpToDate](http://dev.bukkit.org/server-mods/craftbukkituptodate/)
@@ -14,9 +15,8 @@ Supports [CraftBukkitUpToDate](http://dev.bukkit.org/server-mods/craftbukkitupto
 Features:
 ---------
 - different repair blocks:
-    - single item repair: repairs the item in your hand (default: iron block)
-    - complete repair: repairs **all** your items (default: gold block)
-    - cheap repair: repairs the item in your hand cheaper, but the item may break (chances configurable, default: diamond block)
+    - normal repair: repairs the items for the normal price (default: iron block)
+    - cheap repair: repairs the items for a cheaper price, but some items may break (chances configurable, default: diamond block)
 - uses [Vault](http://dev.bukkit.org/server-mods/Vault/)
 - dynamic pricing
 
@@ -51,7 +51,7 @@ I'm searching for a Java developer who continues this plugin! Please contact me 
 ***README***
 ============
 
-Plugin developed by Quick_Wango - [Parallel Universe](http://parallel-universe.de)
+Plugin developed by Quick_Wango - [Cube Island](http://cubeisland.de)
 
 - You want new features?
 - You want the plugin to be always up to date?
@@ -63,6 +63,6 @@ I'm doing this for literally nothing in my freetime, so keep me interessted in m
 
 Thanks in advance!
 
-***[Talk to the developer](http://webchat.esper.net/?channels=code-infection&nick=)*** (#code-infection on EsperNet)
+***[Talk to the developers](http://webchat.esper.net/?channels=cubeisland-dev&nick=)*** (#cubeisland-dev on EsperNet)
 
-***[Source on Github](https://github.com/quickwango/ItemRepair)***
+***[Source on Github](https://github.com/CubeIsland/ItemRepair)***
