@@ -36,8 +36,7 @@ Installation:
 Permissions:
 ------------
 - **itemrepair.allblocks** -- Allows the player to use all blocks
-    - **itemrepair.block.single** -- Allows the player to use single repair blocks
-    - **itemrepair.block.complete** -- Allows the player to use complete repair blocks
+    - **itemrepair.block.normal** -- Allows the player to use normal repair blocks
     - **itemrepair.block.cheap** -- Allows the player to use cheap repair blocks
 - **itemrepair.commands.\*** -- Allows the player to use all commands
     - **itemrepair.commands.add** -- Allows the player to add repair blocks

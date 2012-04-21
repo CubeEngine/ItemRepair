@@ -25,7 +25,7 @@ public class CheapRepair extends RepairBlock
 
     public CheapRepair(ItemRepair plugin)
     {
-        super(ItemRepair.getInstance(), _("cheapRepair"), plugin.getConfiguration().repairBlocks_cheap_block);
+        super(ItemRepair.getInstance(), "cheap", _("cheapRepair"), plugin.getConfiguration().repairBlocks_cheap_block);
         this.config = plugin.getConfiguration();
         this.rand = new Random(System.currentTimeMillis());
     }

@@ -65,11 +65,11 @@ public class ItemRepair extends JavaPlugin implements RepairPlugin
         this.economy = this.setupEconomy();
         this.priceProvider = new ItemrepairMaterialPriceProvider(this.config);
 
-        RepairBlockManager.initialize(this)
-                .setPersister(new RepairBlockPersister(new File(dataFolder, "blocks.yml")))
-                .addRepairBlock(new NormalRepair(this))
-                .addRepairBlock(new CheapRepair(this))
-                .loadBlocks();
+        RepairBlockManager.getInstance()
+            .setPersister(new RepairBlockPersister(new File(dataFolder, "blocks.yml")))
+            .addRepairBlock(new NormalRepair(this))
+            .addRepairBlock(new CheapRepair(this))
+            .loadBlocks();
 
         this.pm.registerEvents(new ItemRepairListener(), this);
 

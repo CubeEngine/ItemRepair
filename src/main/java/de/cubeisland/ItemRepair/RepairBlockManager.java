@@ -3,6 +3,7 @@ package de.cubeisland.ItemRepair;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.permissions.Permission;
@@ -25,12 +26,12 @@ public class RepairBlockManager
     private final PluginManager pm;
     private final Permission parentPermission;
 
-    private RepairBlockManager(Plugin plugin)
+    private RepairBlockManager()
     {
         this.repairBlocks = new EnumMap<Material, RepairBlock>(Material.class);
         this.blockMap = new HashMap<Block, Material>();
         this.persister = null;
-        this.pm = plugin.getServer().getPluginManager();
+        this.pm = Bukkit.getPluginManager();
         this.parentPermission = new Permission("itemrepair.allblocks", PermissionDefault.OP);
         try
         {
@@ -39,18 +40,12 @@ public class RepairBlockManager
         catch (IllegalArgumentException e)
         {}
     }
-
-    public static RepairBlockManager initialize(Plugin plugin)
+    public static RepairBlockManager getInstance()
     {
         if (instance == null)
         {
-            instance = new RepairBlockManager(plugin);
+            instance = new RepairBlockManager();
         }
-        return instance;
-    }
-
-    public static RepairBlockManager getInstance()
-    {
         return instance;
     }
 

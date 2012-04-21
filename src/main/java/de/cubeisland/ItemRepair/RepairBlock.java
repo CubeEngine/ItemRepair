@@ -19,33 +19,33 @@ import org.bukkit.permissions.PermissionDefault;
  */
 public abstract class RepairBlock
 {
-    private final String permissionBase;
     private final RepairPlugin plugin;
     private final Server server;
     private final MaterialPriceProvider priceProvider;
 
+    private final String name;
     private final String title;
     private final Material material;
     private final Permission permission;
 
     private final Map<Player, Inventory> inventoryMap;
 
-    public RepairBlock(RepairPlugin plugin, String name, String material)
+    public RepairBlock(RepairPlugin plugin, String name, String title, String material)
     {
-        this(plugin, name, Material.matchMaterial(material));
+        this(plugin, name, title, Material.matchMaterial(material));
     }
 
-    public RepairBlock(RepairPlugin plugin, String name, int material)
+    public RepairBlock(RepairPlugin plugin, String name, String title, int material)
     {
-        this(plugin, name, Material.getMaterial(material));
+        this(plugin, name, title, Material.getMaterial(material));
     }
 
-    public RepairBlock(RepairPlugin plugin, String title, Material material)
+    public RepairBlock(RepairPlugin plugin, String name, String title, Material material)
     {
         this.plugin = plugin;
         this.server = plugin.getServer();
         this.priceProvider = plugin.getMaterialPriceProvider();
-        this.permissionBase = this.plugin.getName() + ".block.";
+        this.name = name;
         this.title = title;
         if (material != null)
         {
@@ -62,7 +62,7 @@ public abstract class RepairBlock
         {
             throw new IllegalArgumentException("material must not be null!");
         }
-        this.permission = new Permission(this.permissionBase + title, PermissionDefault.OP);
+        this.permission = new Permission(plugin.getName() + ".block." + name, PermissionDefault.OP);
         this.inventoryMap = new HashMap<Player, Inventory>();
     }
 
@@ -74,6 +74,11 @@ public abstract class RepairBlock
     public final Economy getEconomy()
     {
         return this.plugin.getEconomy();
+    }
+
+    public final String getName()
+    {
+        return this.name;
     }
 
     public final String getTitle()

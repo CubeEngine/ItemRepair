@@ -19,7 +19,7 @@ public class NormalRepair extends RepairBlock
 
     public NormalRepair(ItemRepair plugin)
     {
-        super(plugin, _("repair"), plugin.getConfiguration().repairBlocks_normal_block);
+        super(plugin, "normal", _("repair"), plugin.getConfiguration().repairBlocks_normal_block);
     }
 
     @Override
