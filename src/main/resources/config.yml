@@ -1,5 +1,8 @@
 debug: false
 language: en
+server:
+  bank: 'server'
+  player: ''
 price:
   enchantMultiplier:
     base: 2.0

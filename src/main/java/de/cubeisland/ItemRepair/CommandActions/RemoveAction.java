@@ -1,7 +1,7 @@
 package de.cubeisland.ItemRepair.CommandActions;
 
+import static de.cubeisland.ItemRepair.ItemRepair._;
 import de.cubeisland.ItemRepair.RepairBlockManager;
-import static de.cubeisland.Translation.Translator.t;
 import java.util.Set;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -43,21 +43,21 @@ public class RemoveAction implements CommandExecutor, Listener
                 if (!this.addRequests.contains(player))
                 {
                     this.removeRequests.add(player);
-                    player.sendMessage(t("rightclickBlock"));
+                    player.sendMessage(_("rightclickBlock"));
                 }
                 else
                 {
-                    player.sendMessage(t("alreadyAdding"));
+                    player.sendMessage(_("alreadyAdding"));
                 }
             }
             else
             {
-                player.sendMessage(t("alreadyRemoving"));
+                player.sendMessage(_("alreadyRemoving"));
             }
         }
         else
         {
-            sender.sendMessage(t("onlyPlayersRemove"));
+            sender.sendMessage(_("onlyPlayersRemove"));
         }
 
         return true;
@@ -73,11 +73,11 @@ public class RemoveAction implements CommandExecutor, Listener
             {
                 if (this.rbm.detachRepairBlock(event.getClickedBlock()))
                 {
-                    player.sendMessage(t("removeSuccess"));
+                    player.sendMessage(_("removeSuccess"));
                 }
                 else
                 {
-                    player.sendMessage(t("notARepairBlock"));
+                    player.sendMessage(_("notARepairBlock"));
                 }
             }
             if (event.getAction() != Action.PHYSICAL)

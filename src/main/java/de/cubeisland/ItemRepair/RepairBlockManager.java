@@ -62,8 +62,10 @@ public class RepairBlockManager
 
     /**
      * Loads the blocks from a persister
+     *
+     * @return fluent interface
      */
-    public void loadBlocks()
+    public RepairBlockManager loadBlocks()
     {
         if (this.persister != null)
         {
@@ -72,6 +74,7 @@ public class RepairBlockManager
                 this.attachRepairBlock(block);
             }
         }
+        return this;
     }
 
     /**

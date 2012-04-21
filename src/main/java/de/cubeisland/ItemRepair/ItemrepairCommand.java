@@ -1,9 +1,7 @@
 package de.cubeisland.ItemRepair;
 
-import de.cubeisland.ItemRepair.CommandActions.RemoveAction;
-import de.cubeisland.ItemRepair.CommandActions.AddAction;
-import de.cubeisland.ItemRepair.CommandActions.ReloadAction;
-import static de.cubeisland.Translation.Translator.t;
+import de.cubeisland.ItemRepair.CommandActions.*;
+import static de.cubeisland.ItemRepair.ItemRepair._;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,12 +62,12 @@ public class ItemrepairCommand implements CommandExecutor
                 }
                 else
                 {
-                    sender.sendMessage(t("permissionDeniedCmd"));
+                    sender.sendMessage(_("permissionDeniedCmd"));
                 }
             }
             else
             {
-                sender.sendMessage(t("actionNotFound"));
+                sender.sendMessage(_("actionNotFound"));
             }
         }
         else

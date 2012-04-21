@@ -1,6 +1,6 @@
 package de.cubeisland.ItemRepair;
 
-import static de.cubeisland.Translation.Translator.t;
+import static de.cubeisland.ItemRepair.ItemRepair._;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.block.Block;
@@ -56,7 +56,7 @@ public class ItemRepairListener implements Listener
 
         if (!player.hasPermission(repairBlock.getPermission()))
         {
-            player.sendMessage(t("permissionDeniedBlock"));
+            player.sendMessage(_("permissionDeniedBlock"));
             return;
         }
 
@@ -109,7 +109,7 @@ public class ItemRepairListener implements Listener
             final Player player = event.getPlayer();
             if (this.repairRequests.containsKey(player))
             {
-                player.sendMessage(t("repairCancelled"));
+                player.sendMessage(_("repairCancelled"));
                 this.repairRequests.remove(player);
                 event.setCancelled(true);
             }

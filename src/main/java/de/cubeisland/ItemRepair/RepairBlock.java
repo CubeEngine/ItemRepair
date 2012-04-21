@@ -21,7 +21,6 @@ public abstract class RepairBlock
 {
     private final String permissionBase;
     private final RepairPlugin plugin;
-    private final Economy economy;
     private final Server server;
     private final MaterialPriceProvider priceProvider;
 
@@ -44,7 +43,6 @@ public abstract class RepairBlock
     public RepairBlock(RepairPlugin plugin, String title, Material material)
     {
         this.plugin = plugin;
-        this.economy = plugin.getEconomy();
         this.server = plugin.getServer();
         this.priceProvider = plugin.getMaterialPriceProvider();
         this.permissionBase = this.plugin.getName() + ".block.";
@@ -68,9 +66,14 @@ public abstract class RepairBlock
         this.inventoryMap = new HashMap<Player, Inventory>();
     }
 
+    public final RepairPlugin getPlugin()
+    {
+        return this.plugin;
+    }
+
     public final Economy getEconomy()
     {
-        return economy;
+        return this.plugin.getEconomy();
     }
 
     public final String getTitle()
@@ -140,6 +143,34 @@ public abstract class RepairBlock
             this.inventoryMap.put(player, inventory);
         }
         return inventory;
+    }
+
+    public boolean withdrawPlayer(Player player, double amount)
+    {
+        Economy eco = getEconomy();
+        if (eco.withdrawPlayer(player.getName(), amount).transactionSuccess())
+        {
+            String account = this.plugin.getServerBank();
+            if (eco.hasBankSupport() && !("".equals(account)))
+            {
+                eco.bankDeposit(account, amount);
+            }
+            else
+            {
+                account = this.plugin.getServerPlayer();
+                if (!("".equals(account)) && eco.hasAccount(account))
+                {
+                    eco.depositPlayer(account, amount);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkBalance(Player player, double price)
+    {
+        return (getEconomy().getBalance(player.getName()) >= price);
     }
 
     public abstract RepairRequest requestRepair(Inventory inventory);

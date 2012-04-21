@@ -2,7 +2,7 @@ package de.cubeisland.ItemRepair;
 
 import de.cubeisland.ItemRepair.RepairBlocks.CheapRepair;
 import de.cubeisland.ItemRepair.RepairBlocks.NormalRepair;
-import de.cubeisland.Translation.Translator;
+import de.cubeisland.libMinecraft.Translation;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,6 +18,7 @@ public class ItemRepair extends JavaPlugin implements RepairPlugin
     private static ItemRepair instance = null;
     private static Logger logger = null;
     public static boolean debugMode = false;
+    private static Translation translation = null;
     
     private Server server;
     private PluginManager pm;
@@ -49,27 +50,25 @@ public class ItemRepair extends JavaPlugin implements RepairPlugin
 
         this.reloadConfig();
         Configuration configuration = this.getConfig();
+        configuration.addDefault("language", System.getProperty("user.language", "en"));
         configuration.options().copyDefaults(true);
         this.config = new ItemRepairConfiguration(configuration);
         debugMode = configuration.getBoolean("debug");
-        if (!Translator.loadTranslation(config.language))
-        {
-            Translator.loadTranslation("en");
-        }
         this.saveConfig();
+
+        translation = Translation.get(this.getClass(), config.language);
+        if (translation == null)
+        {
+            translation = Translation.get(this.getClass(), "en");
+        }
 
         this.economy = this.setupEconomy();
         this.priceProvider = new ItemrepairMaterialPriceProvider(this.config);
 
-        RepairBlockManager rbm = RepairBlockManager.initialize(this);
-                rbm.setPersister(new RepairBlockPersister(new File(dataFolder, "blocks.yml")))
-                .addRepairBlock(new NormalRepair(
-                        this.config.repairBlocks_normal_block
-                ))
-                .addRepairBlock(new CheapRepair(
-                        this.config.repairBlocks_cheap_block,
-                        this.config
-                ))
+        RepairBlockManager.initialize(this)
+                .setPersister(new RepairBlockPersister(new File(dataFolder, "blocks.yml")))
+                .addRepairBlock(new NormalRepair(this))
+                .addRepairBlock(new CheapRepair(this))
                 .loadBlocks();
 
         this.pm.registerEvents(new ItemRepairListener(), this);
@@ -80,6 +79,7 @@ public class ItemRepair extends JavaPlugin implements RepairPlugin
     @Override
     public void onDisable()
     {
+        translation = null;
         RepairBlockManager.getInstance().clearBlocks();
     }
 
@@ -99,12 +99,6 @@ public class ItemRepair extends JavaPlugin implements RepairPlugin
         }
         throw new IllegalStateException("Failed to initialize with Vault!");
     }
-
-    /**
-     * Returns the economy API
-     *
-     * @return the economy API
-     */
     public Economy getEconomy()
     {
         return this.economy;
@@ -113,6 +107,16 @@ public class ItemRepair extends JavaPlugin implements RepairPlugin
     public MaterialPriceProvider getMaterialPriceProvider()
     {
         return this.priceProvider;
+    }
+
+    public String getServerPlayer()
+    {
+        return this.config.server_player;
+    }
+
+    public String getServerBank()
+    {
+        return this.config.server_bank;
     }
 
     public ItemRepairConfiguration getConfiguration()
@@ -141,5 +145,10 @@ public class ItemRepair extends JavaPlugin implements RepairPlugin
         {
             log("[debug] " + msg);
         }
+    }
+
+    public static String _(String key, Object... params)
+    {
+        return translation.translate(key, params);
     }
 }

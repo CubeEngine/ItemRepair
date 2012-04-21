@@ -1,11 +1,10 @@
 package de.cubeisland.ItemRepair.RepairBlocks;
 
 import de.cubeisland.ItemRepair.ItemRepair;
+import static de.cubeisland.ItemRepair.ItemRepair._;
 import de.cubeisland.ItemRepair.RepairBlock;
 import de.cubeisland.ItemRepair.RepairRequest;
-import static de.cubeisland.Translation.Translator.t;
 import java.util.Map;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -18,19 +17,9 @@ import org.bukkit.inventory.ItemStack;
 public class NormalRepair extends RepairBlock
 {
 
-    public NormalRepair(Material material)
+    public NormalRepair(ItemRepair plugin)
     {
-        super(ItemRepair.getInstance(), t("repair"), material);
-    }
-
-    public NormalRepair(int blockId)
-    {
-        this(Material.getMaterial(blockId));
-    }
-
-    public NormalRepair(String blockName)
-    {
-        this(Material.getMaterial(blockName));
+        super(plugin, _("repair"), plugin.getConfiguration().repairBlocks_normal_block);
     }
 
     @Override
@@ -42,16 +31,16 @@ public class NormalRepair extends RepairBlock
         {
             double price = calculatePrice(items.values());
 
-            player.sendMessage(t("headline"));
-            player.sendMessage(t("rightClickAgain"));
-            player.sendMessage(t("repairWouldCost", getEconomy().format(price)));
-            player.sendMessage(t("youCurrentlyHave", getEconomy().format(getEconomy().getBalance(player.getName()))));
+            player.sendMessage(_("headline"));
+            player.sendMessage(_("rightClickAgain"));
+            player.sendMessage(_("repairWouldCost", getEconomy().format(price)));
+            player.sendMessage(_("youCurrentlyHave", getEconomy().format(getEconomy().getBalance(player.getName()))));
 
             return new RepairRequest(this, inventory, items, price);
         }
         else
         {
-            player.sendMessage(t("noItems"));
+            player.sendMessage(_("noItems"));
         }
         return null;
     }
@@ -62,21 +51,21 @@ public class NormalRepair extends RepairBlock
         final double price = request.getPrice();
         final Player player = (Player)request.getInventory().getHolder();
 
-        if (getEconomy().getBalance(player.getName()) >= price)
+        if (checkBalance(player, price))
         {
-            if (getEconomy().withdrawPlayer(player.getName(), price).transactionSuccess())
+            if (withdrawPlayer(player, price))
             {
                 repairItems(request);
-                player.sendMessage(t("itemsRepaired", getEconomy().format(price)));
+                player.sendMessage(_("itemsRepaired", getEconomy().format(price)));
             }
             else
             {
-                player.sendMessage(t("somethingWentWrong"));
+                player.sendMessage(_("somethingWentWrong"));
             }
         }
         else
         {
-            player.sendMessage(t("notEnoughMoney"));
+            player.sendMessage(_("notEnoughMoney"));
         }
     }
 }

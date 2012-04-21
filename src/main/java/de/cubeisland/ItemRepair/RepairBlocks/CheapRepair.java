@@ -1,14 +1,13 @@
 package de.cubeisland.ItemRepair.RepairBlocks;
 
 import de.cubeisland.ItemRepair.ItemRepair;
+import static de.cubeisland.ItemRepair.ItemRepair._;
 import de.cubeisland.ItemRepair.ItemRepairConfiguration;
 import de.cubeisland.ItemRepair.RepairBlock;
 import de.cubeisland.ItemRepair.RepairRequest;
-import static de.cubeisland.Translation.Translator.t;
 import java.util.Map;
 import java.util.Random;
 import org.bukkit.Effect;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -24,21 +23,11 @@ public class CheapRepair extends RepairBlock
     private final ItemRepairConfiguration config;
     private final Random rand;
 
-    public CheapRepair(Material material, ItemRepairConfiguration config)
+    public CheapRepair(ItemRepair plugin)
     {
-        super(ItemRepair.getInstance(), t("cheapRepair"), material);
-        this.config = config;
+        super(ItemRepair.getInstance(), _("cheapRepair"), plugin.getConfiguration().repairBlocks_cheap_block);
+        this.config = plugin.getConfiguration();
         this.rand = new Random(System.currentTimeMillis());
-    }
-
-    public CheapRepair(int blockId, ItemRepairConfiguration config)
-    {
-        this(Material.getMaterial(blockId), config);
-    }
-
-    public CheapRepair(String blockName, ItemRepairConfiguration config)
-    {
-        this(Material.getMaterial(blockName), config);
     }
 
     @Override
@@ -50,16 +39,16 @@ public class CheapRepair extends RepairBlock
         {
             double price = calculatePrice(items.values()) * (this.config.repairBlocks_cheap_costPercentage / 100.0);
 
-            player.sendMessage(t("headline"));
-            player.sendMessage(t("rightClickAgain"));
-            player.sendMessage(t("repairWouldCost", getEconomy().format(price)));
-            player.sendMessage(t("youCurrentlyHave", getEconomy().format(getEconomy().getBalance(player.getName()))));
+            player.sendMessage(_("headline"));
+            player.sendMessage(_("rightClickAgain"));
+            player.sendMessage(_("repairWouldCost", getEconomy().format(price)));
+            player.sendMessage(_("youCurrentlyHave", getEconomy().format(getEconomy().getBalance(player.getName()))));
 
             return new RepairRequest(this, inventory, items, price);
         }
         else
         {
-            player.sendMessage(t("noItems"));
+            player.sendMessage(_("noItems"));
         }
         return null;
     }
@@ -71,9 +60,9 @@ public class CheapRepair extends RepairBlock
         final Inventory inventory = request.getInventory();
         final Player player = (Player)inventory.getHolder();
 
-        if (getEconomy().getBalance(player.getName()) >= price)
+        if (checkBalance(player, price))
         {
-            if (getEconomy().withdrawPlayer(player.getName(), price).transactionSuccess())
+            if (withdrawPlayer(player, price))
             {
                 boolean itemsBroken = false;
                 ItemStack item;
@@ -102,19 +91,19 @@ public class CheapRepair extends RepairBlock
                 }
                 if (itemsBroken)
                 {
-                    player.sendMessage(t("someItemsBroke"));
+                    player.sendMessage(_("someItemsBroke"));
                     player.playEffect(player.getLocation(), Effect.GHAST_SHRIEK, 0);
                 }
-                player.sendMessage(t("itemsRepairedCheap", getEconomy().format(price), this.config.repairBlocks_cheap_costPercentage));
+                player.sendMessage(_("itemsRepairedCheap", getEconomy().format(price), this.config.repairBlocks_cheap_costPercentage));
             }
             else
             {
-                player.sendMessage(t("somethingWentWrong"));
+                player.sendMessage(_("somethingWentWrong"));
             }
         }
         else
         {
-            player.sendMessage(t("notEnoughMoney"));
+            player.sendMessage(_("notEnoughMoney"));
         }
     }
 }

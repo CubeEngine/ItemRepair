@@ -1,7 +1,7 @@
 package de.cubeisland.ItemRepair.CommandActions;
 
+import static de.cubeisland.ItemRepair.ItemRepair._;
 import de.cubeisland.ItemRepair.RepairBlockManager;
-import static de.cubeisland.Translation.Translator.t;
 import java.util.Set;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -44,21 +44,21 @@ public class AddAction implements CommandExecutor, Listener
                 if (!this.removeRequests.contains(player))
                 {
                     this.addRequests.add(player);
-                    player.sendMessage(t("rightclickBlock"));
+                    player.sendMessage(_("rightclickBlock"));
                 }
                 else
                 {
-                    player.sendMessage(t("alreadyRemoving"));
+                    player.sendMessage(_("alreadyRemoving"));
                 }
             }
             else
             {
-                player.sendMessage(t("alreadyAdding"));
+                player.sendMessage(_("alreadyAdding"));
             }
         }
         else
         {
-            sender.sendMessage(t("onlyPlayersAdd"));
+            sender.sendMessage(_("onlyPlayersAdd"));
         }
 
         return true;
@@ -77,16 +77,16 @@ public class AddAction implements CommandExecutor, Listener
                 {
                     if (this.rbm.attachRepairBlock(block))
                     {
-                        player.sendMessage(t("addSuccess"));
+                        player.sendMessage(_("addSuccess"));
                     }
                     else
                     {
-                        player.sendMessage(t("cantBeUsed"));
+                        player.sendMessage(_("cantBeUsed"));
                     }
                 }
                 else
                 {
-                    player.sendMessage(t("alreadyARepairBlock"));
+                    player.sendMessage(_("alreadyARepairBlock"));
                 }
             }
             if (event.getAction() != Action.PHYSICAL)

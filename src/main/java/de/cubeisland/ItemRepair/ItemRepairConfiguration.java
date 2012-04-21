@@ -15,6 +15,9 @@ public class ItemRepairConfiguration
 {
     public final String language;
 
+    public final String server_player;
+    public final String server_bank;
+
     public final double price_enchantMultiplier_base;
     public final double price_enchantMultiplier_factor;
     
@@ -30,6 +33,9 @@ public class ItemRepairConfiguration
     public ItemRepairConfiguration(Configuration config)
     {
         this.language = config.getString("language");
+        this.server_bank = config.getString("server.bank", "");
+        this.server_player = config.getString("server.player", "");
+        
         for (BaseMaterial baseMaterial : BaseMaterial.values())
         {
             config.addDefault("price.materials." + baseMaterial.getName(), baseMaterial.getPrice());
