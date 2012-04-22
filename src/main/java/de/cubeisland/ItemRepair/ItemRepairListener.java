@@ -64,6 +64,7 @@ public class ItemRepairListener implements Listener
         
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
         {
+            this.cancelRequest(event);
             player.openInventory(inventory);
         }
         else if (event.getAction() == Action.LEFT_CLICK_BLOCK)
