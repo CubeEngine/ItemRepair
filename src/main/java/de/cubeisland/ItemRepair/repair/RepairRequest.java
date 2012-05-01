@@ -1,6 +1,6 @@
-package de.cubeisland.ItemRepair;
+package de.cubeisland.ItemRepair.repair;
 
-import java.util.List;
+import de.cubeisland.ItemRepair.RepairBlock;
 import java.util.Map;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;

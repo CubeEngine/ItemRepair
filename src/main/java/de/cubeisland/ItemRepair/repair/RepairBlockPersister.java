@@ -1,4 +1,4 @@
-package de.cubeisland.ItemRepair;
+package de.cubeisland.ItemRepair.repair;
 
 import java.io.File;
 import java.io.IOException;

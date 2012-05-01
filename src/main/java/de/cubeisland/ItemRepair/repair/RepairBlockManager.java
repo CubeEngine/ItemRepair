@@ -1,5 +1,7 @@
-package de.cubeisland.ItemRepair;
+package de.cubeisland.ItemRepair.repair;
 
+import de.cubeisland.ItemRepair.ItemRepair;
+import de.cubeisland.ItemRepair.RepairBlock;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 /**

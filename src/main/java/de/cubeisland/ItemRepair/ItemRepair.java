@@ -1,19 +1,26 @@
 package de.cubeisland.ItemRepair;
 
-import de.cubeisland.ItemRepair.RepairBlocks.CheapRepair;
-import de.cubeisland.ItemRepair.RepairBlocks.NormalRepair;
-import de.cubeisland.libMinecraft.Translation;
+import de.cubeisland.ItemRepair.material.ItemRepairMaterialPriceProvider;
+import de.cubeisland.ItemRepair.material.MaterialPriceProvider;
+import de.cubeisland.ItemRepair.repair.RepairBlockManager;
+import de.cubeisland.ItemRepair.repair.RepairBlockPersister;
+import de.cubeisland.ItemRepair.repair.repairblocks.CheapRepair;
+import de.cubeisland.ItemRepair.repair.repairblocks.NormalRepair;
+import de.cubeisland.libMinecraft.command.BaseCommand;
+import de.cubeisland.libMinecraft.translation.TranslatablePlugin;
+import de.cubeisland.libMinecraft.translation.Translation;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Server;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class ItemRepair extends JavaPlugin implements RepairPlugin
+public class ItemRepair extends JavaPlugin implements RepairPlugin, TranslatablePlugin
 {
     private static ItemRepair instance = null;
     private static Logger logger = null;
@@ -63,7 +70,7 @@ public class ItemRepair extends JavaPlugin implements RepairPlugin
         }
 
         this.economy = this.setupEconomy();
-        this.priceProvider = new ItemrepairMaterialPriceProvider(this.config);
+        this.priceProvider = new ItemRepairMaterialPriceProvider(this.config);
 
         RepairBlockManager.getInstance()
             .setPersister(new RepairBlockPersister(new File(dataFolder, "blocks.yml")))
@@ -73,7 +80,11 @@ public class ItemRepair extends JavaPlugin implements RepairPlugin
 
         this.pm.registerEvents(new ItemRepairListener(), this);
 
-        this.getCommand("itemrepair").setExecutor(new ItemrepairCommand(this));
+        this.getCommand("itemrepair").setExecutor(
+            BaseCommand.getInstance(this)
+                .setParentPermission(new Permission("itemrepair.commands.*"))
+                .registerCommands(new ItemRepairCommands(this))
+        );
     }
 
     @Override
@@ -150,5 +161,15 @@ public class ItemRepair extends JavaPlugin implements RepairPlugin
     public static String _(String key, Object... params)
     {
         return translation.translate(key, params);
+    }
+
+    public Translation getTranslation()
+    {
+        return translation;
+    }
+
+    public void setTranslation(Translation newTranslation)
+    {
+        translation = newTranslation;
     }
 }

@@ -1,5 +1,9 @@
 package de.cubeisland.ItemRepair;
 
+import de.cubeisland.ItemRepair.material.BaseMaterial;
+import de.cubeisland.ItemRepair.material.Item;
+import de.cubeisland.ItemRepair.material.MaterialPriceProvider;
+import de.cubeisland.ItemRepair.repair.RepairRequest;
 import java.util.HashMap;
 import java.util.Map;
 import net.milkbowl.vault.economy.Economy;

@@ -1,5 +1,6 @@
 package de.cubeisland.ItemRepair;
 
+import de.cubeisland.ItemRepair.material.BaseMaterial;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;

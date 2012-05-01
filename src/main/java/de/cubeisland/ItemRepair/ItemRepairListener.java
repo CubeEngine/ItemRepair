@@ -1,6 +1,8 @@
 package de.cubeisland.ItemRepair;
 
 import static de.cubeisland.ItemRepair.ItemRepair._;
+import de.cubeisland.ItemRepair.repair.RepairBlockManager;
+import de.cubeisland.ItemRepair.repair.RepairRequest;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.block.Block;

@@ -1,4 +1,4 @@
-package de.cubeisland.ItemRepair;
+package de.cubeisland.ItemRepair.material;
 
 import java.util.EnumMap;
 import java.util.Map;

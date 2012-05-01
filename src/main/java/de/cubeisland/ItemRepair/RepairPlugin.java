@@ -1,5 +1,6 @@
 package de.cubeisland.ItemRepair;
 
+import de.cubeisland.ItemRepair.material.MaterialPriceProvider;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.Plugin;
 

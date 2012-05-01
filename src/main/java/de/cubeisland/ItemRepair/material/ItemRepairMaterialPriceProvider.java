@@ -1,16 +1,17 @@
-package de.cubeisland.ItemRepair;
+package de.cubeisland.ItemRepair.material;
 
+import de.cubeisland.ItemRepair.ItemRepairConfiguration;
 import java.util.Map;
 
 /**
  *
  * @author CodeInfection
  */
-public class ItemrepairMaterialPriceProvider implements MaterialPriceProvider
+public class ItemRepairMaterialPriceProvider implements MaterialPriceProvider
 {
     private final Map<BaseMaterial, Double> prices;
 
-    public ItemrepairMaterialPriceProvider(ItemRepairConfiguration config)
+    public ItemRepairMaterialPriceProvider(ItemRepairConfiguration config)
     {
         this.prices = config.materialPrices;
     }

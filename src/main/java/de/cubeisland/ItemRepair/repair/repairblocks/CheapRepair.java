@@ -1,10 +1,10 @@
-package de.cubeisland.ItemRepair.RepairBlocks;
+package de.cubeisland.ItemRepair.repair.repairblocks;
 
 import de.cubeisland.ItemRepair.ItemRepair;
 import static de.cubeisland.ItemRepair.ItemRepair._;
 import de.cubeisland.ItemRepair.ItemRepairConfiguration;
 import de.cubeisland.ItemRepair.RepairBlock;
-import de.cubeisland.ItemRepair.RepairRequest;
+import de.cubeisland.ItemRepair.repair.RepairRequest;
 import java.util.Map;
 import java.util.Random;
 import org.bukkit.Effect;
@@ -37,10 +37,10 @@ public class CheapRepair extends RepairBlock
         Map<Integer, ItemStack> items = getRepairableItems(inventory);
         if (items.size() > 0)
         {
-            double price = calculatePrice(items.values()) * (this.config.repairBlocks_cheap_costPercentage / 100.0);
+            double price = calculatePrice(items.values(), this.config.price_enchantMultiplier_factor, this.config.price_enchantMultiplier_base) * (this.config.repairBlocks_cheap_costPercentage / 100.0);
 
             player.sendMessage(_("headline"));
-            player.sendMessage(_("rightClickAgain"));
+            player.sendMessage(_("clickAgainCheap"));
             player.sendMessage(_("repairWouldCost", getEconomy().format(price)));
             player.sendMessage(_("youCurrentlyHave", getEconomy().format(getEconomy().getBalance(player.getName()))));
 
