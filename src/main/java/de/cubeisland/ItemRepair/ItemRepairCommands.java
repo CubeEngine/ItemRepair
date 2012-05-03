@@ -2,8 +2,9 @@ package de.cubeisland.ItemRepair;
 
 import static de.cubeisland.ItemRepair.ItemRepair._;
 import de.cubeisland.ItemRepair.repair.RepairBlockManager;
-import de.cubeisland.libMinecraft.command.Args;
 import de.cubeisland.libMinecraft.command.Command;
+import de.cubeisland.libMinecraft.command.CommandArgs;
+import de.cubeisland.libMinecraft.command.CommandPermission;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.block.Block;
@@ -33,8 +34,10 @@ public class ItemRepairCommands implements Listener
         this.addRequests = new HashSet<Player>();
         this.removeRequests = new HashSet<Player>();
     }
-    
-    public boolean reload(CommandSender sender, Command command, String label, String[] args)
+
+    @Command(desc = "Reloads the plugin")
+    @CommandPermission
+    public boolean reload(CommandSender sender, CommandArgs args)
     {
         final ItemRepair plugin = ItemRepair.getInstance();
         final PluginManager pm = plugin.getServer().getPluginManager();
@@ -47,7 +50,8 @@ public class ItemRepairCommands implements Listener
     }
 
     @Command(desc = "Adds a repair block")
-    public void add(CommandSender sender, Args args)
+    @CommandPermission
+    public void add(CommandSender sender, CommandArgs args)
     {
         if (sender instanceof Player)
         {
@@ -76,7 +80,8 @@ public class ItemRepairCommands implements Listener
     }
 
     @Command(desc = "Removes a repair block")
-    public void remove(CommandSender sender, Args args)
+    @CommandPermission
+    public void remove(CommandSender sender, CommandArgs args)
     {
         if (sender instanceof Player)
         {
