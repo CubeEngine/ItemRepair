@@ -15,8 +15,6 @@ import java.util.logging.Logger;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Server;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,7 +25,6 @@ public class ItemRepair extends JavaPlugin implements RepairPlugin, Translatable
     private static Logger logger = null;
     public static boolean debugMode = false;
     private static Translation translation = null;
-    private static final String PERMISSION_BASE = "itemrepair.commands.";
     
     private Server server;
     private PluginManager pm;
@@ -82,7 +79,7 @@ public class ItemRepair extends JavaPlugin implements RepairPlugin, Translatable
 
         this.pm.registerEvents(new ItemRepairListener(), this);
 
-        BaseCommand baseCommand = new BaseCommand(this, new Permission(PERMISSION_BASE + "*", PermissionDefault.OP), PERMISSION_BASE);
+        BaseCommand baseCommand = new BaseCommand(this, "itemrepair.commands.");
         baseCommand.registerCommands(new ItemRepairCommands(this));
 
         this.getCommand("itemrepair").setExecutor(baseCommand);

@@ -4,7 +4,7 @@ import static de.cubeisland.ItemRepair.ItemRepair._;
 import de.cubeisland.ItemRepair.repair.RepairBlockManager;
 import de.cubeisland.libMinecraft.command.Command;
 import de.cubeisland.libMinecraft.command.CommandArgs;
-import de.cubeisland.libMinecraft.command.CommandPermission;
+import de.cubeisland.libMinecraft.command.RequiresPermission;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.block.Block;
@@ -15,7 +15,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.plugin.PluginManager;
 
 /**
  *
@@ -35,22 +34,8 @@ public class ItemRepairCommands implements Listener
         this.removeRequests = new HashSet<Player>();
     }
 
-    @Command(desc = "Reloads the plugin")
-    @CommandPermission
-    public boolean reload(CommandSender sender, CommandArgs args)
-    {
-        final ItemRepair plugin = ItemRepair.getInstance();
-        final PluginManager pm = plugin.getServer().getPluginManager();
-
-        pm.disablePlugin(plugin);
-        pm.enablePlugin(plugin);
-
-        sender.sendMessage(_("reloadSuccessful"));
-        return true;
-    }
-
-    @Command(desc = "Adds a repair block")
-    @CommandPermission
+    @Command
+    @RequiresPermission
     public void add(CommandSender sender, CommandArgs args)
     {
         if (sender instanceof Player)
@@ -79,8 +64,8 @@ public class ItemRepairCommands implements Listener
         }
     }
 
-    @Command(desc = "Removes a repair block")
-    @CommandPermission
+    @Command
+    @RequiresPermission
     public void remove(CommandSender sender, CommandArgs args)
     {
         if (sender instanceof Player)

@@ -3,6 +3,10 @@ Changes
 
 Version 2.0.1
 -------------
+- fixed the enchantment multiplier
+
+Version 2.0.1
+-------------
 - fixed an exploit
 
 Version 2.0.0
