@@ -1,6 +1,10 @@
 Changes
 =======
 
+Version 2.0.3
+-------------
+- fixed items being deleted when players quitted with an open request by dropping them at the players position
+
 Version 2.0.2
 -------------
 - fixed the enchantment multiplier
