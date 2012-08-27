@@ -139,6 +139,11 @@ public abstract class RepairBlock
         return price;
     }
 
+    public Inventory removeInventory(final Player player)
+    {
+        return this.inventoryMap.remove(player);
+    }
+
     public Inventory getInventory(final Player player)
     {
         if (player == null)

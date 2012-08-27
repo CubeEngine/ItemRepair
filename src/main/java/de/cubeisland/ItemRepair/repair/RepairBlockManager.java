@@ -6,8 +6,13 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
@@ -201,5 +206,30 @@ public class RepairBlockManager
     {
         this.repairBlocks.clear();
         return this;
+    }
+
+    public void removePlayer(final Player player)
+    {
+        if (player == null)
+        {
+            return;
+        }
+        Inventory inventory;
+        for (RepairBlock repairBlock : this.repairBlocks.values())
+        {
+            inventory = repairBlock.removeInventory(player);
+            if (inventory != null)
+            {
+                final World world = player.getWorld();
+                final Location loc = player.getLocation();
+                for (ItemStack stack : inventory)
+                {
+                    if (stack != null && stack.getType() != Material.AIR)
+                    {
+                        world.dropItemNaturally(loc, stack);
+                    }
+                }
+            }
+        }
     }
 }
