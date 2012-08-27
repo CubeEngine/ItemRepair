@@ -39,13 +39,14 @@ public class ItemRepairListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event)
     {
+        //TODO Items do not drop if player has not leftklicked the block
         final RepairRequest request = this.repairRequests.remove(event.getPlayer());
         if (request != null)
         {
             final Player player = event.getPlayer();
             final World world = player.getWorld();
             final Location loc = player.getLocation();
-            for (ItemStack stack : request.getInventory())
+            for (ItemStack stack : request.getRepairBlock().getInventory(player))
             {
                 if (stack != null && stack.getType() != Material.AIR)
                 {
