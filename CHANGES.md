@@ -3,7 +3,7 @@ Changes
 
 Version 2.0.3
 -------------
-- fixed items being deleted when players quitted with an open request by dropping them at the players position
+- fixed items being removed when players quitted while still having items in repair inventories
 
 Version 2.0.2
 -------------
