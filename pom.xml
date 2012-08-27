@@ -11,9 +11,9 @@
     <description>Adds repair mechanics to Minecraft</description>
 
     <scm>
-        <connection>scm:git:git://github.com/cubeisland/ItemRepair.git</connection>
-        <url>https://github.com/cubeisland/ItemRepair</url>
-        <developerConnection>scm:git:git@github.com:cubeisland/ItemRepair.git</developerConnection>
+        <connection>scm:git:git://github.com/CubeIsland/ItemRepair.git</connection>
+        <url>https://github.com/CubeIsland/ItemRepair</url>
+        <developerConnection>scm:git:git@github.com:CubeIsland/ItemRepair.git</developerConnection>
     </scm>
 
     <properties>
